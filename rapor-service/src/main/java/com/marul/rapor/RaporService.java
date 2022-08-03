@@ -1,0 +1,55 @@
+package com.marul.rapor;
+
+import lombok.extern.slf4j.Slf4j;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+@Slf4j
+public class RaporService {
+
+
+    public ByteArrayResource generateSimpleReport(List<RaporKriterleriDto> dataList) throws IOException {
+
+        JasperReport compileReport = null;
+        try {
+            compileReport = JasperCompileManager
+                    .compileReport(Files.newInputStream(
+                            Paths.get("C:/Users/hkizildag/Desktop/calisma/Muhasebe/rapor-service/src/main/resources/raporlar/musteri_email_rapor.jrxml")));
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        }
+
+        Map<String, Object> reportParameters = new HashMap<>();
+//        reportParameters.put("musteriAdi", "müşterinin adı burada görünecektir.");
+
+        return exportReportToPDF(compileReport, reportParameters, dataList);
+    }
+
+    private ByteArrayResource exportReportToPDF(JasperReport jasperReport, Map<String, Object> parameters, List<RaporKriterleriDto> data) {
+        try {
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,
+                    new JRBeanCollectionDataSource(data));
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+
+            byte[] reportContent = outputStream.toByteArray();
+            return new ByteArrayResource(reportContent);
+        } catch (Exception e) {
+            log.error("Exporting report to PDF error: {}", e.getMessage());
+            return null;
+        }
+    }
+
+}
