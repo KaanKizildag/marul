@@ -31,6 +31,7 @@
         <spring-boot.version>2.7.1</spring-boot.version>
         <postgresql.version>42.3.6</postgresql.version>
         <spring-boot-starter-mail.version>2.5.4</spring-boot-starter-mail.version>
+        <spring-boot-starter-test.version>2.6.9</spring-boot-starter-test.version>
     </properties>
 
     <dependencyManagement>
@@ -53,6 +54,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring-boot-starter-test.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
