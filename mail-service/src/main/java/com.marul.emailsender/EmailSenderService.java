@@ -54,6 +54,6 @@ public class EmailSenderService {
         mimeMessageHelper.setSubject(subject);
 
         javaMailSender.send(mimeMessage);
-        log.info("Mail with attachment sent successfully..");
+        log.info(emailSenderConfigData.getBasariliMesaj());
     }
 }
