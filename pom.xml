@@ -13,6 +13,8 @@
         <module>ortak</module>
         <module>rapor-service</module>
         <module>mail-service</module>
+        <module>feign-client</module>
+        <module>servive-discovery</module>
     </modules>
 
     <properties>
@@ -22,7 +24,7 @@
         <compiler>net.sf.jasperreports.engine.design.JRJdtCompiler</compiler>
         <apache-poi.version>4.1.2</apache-poi.version>
         <jakarta.validation-api.version>2.0.2</jakarta.validation-api.version>
-        <jasperreports.version>6.17.0</jasperreports.version>
+        <jasperreports.version>6.20.0</jasperreports.version>
         <spring-cloud-openfeign.version>3.1.3</spring-cloud-openfeign.version>
         <feign-client.version>0.0.1-SNAPSHOT</feign-client.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
@@ -32,6 +34,8 @@
         <postgresql.version>42.3.6</postgresql.version>
         <spring-boot-starter-mail.version>2.5.4</spring-boot-starter-mail.version>
         <spring-boot-starter-test.version>2.6.9</spring-boot-starter-test.version>
+        <gson.version>2.8.9</gson.version>
+        <jackson.version>2.13.3</jackson.version>
     </properties>
 
     <dependencyManagement>
@@ -132,6 +136,16 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
     </dependencies>
 

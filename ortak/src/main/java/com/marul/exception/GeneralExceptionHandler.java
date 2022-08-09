@@ -3,23 +3,12 @@ package com.marul.exception;
 import com.marul.dto.MusteriEklemeResponse;
 import com.marul.dto.result.DataResult;
 import com.marul.dto.result.Result;
-//import org.springframework.http.HttpHeaders;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.validation.FieldError;
-//import org.springframework.web.bind.MethodArgumentNotValidException;
-//import org.springframework.web.bind.annotation.ExceptionHandler;
-//import org.springframework.web.bind.annotation.RestControllerAdvice;
-//import org.springframework.web.context.request.WebRequest;
-//import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-//import javax.validation.constraints.NotNull;
-import java.net.http.HttpHeaders;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
-//@RestControllerAdvice
+@RestControllerAdvice
 public class GeneralExceptionHandler {
 
 //    @NotNull
@@ -37,20 +26,20 @@ public class GeneralExceptionHandler {
 //        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 //    }
 //
-//    @ExceptionHandler(EmailDahaOnceAlinmisException.class)
-//    public ResponseEntity<Result> emailDahaOnceAlinmisExceptionHandler(EmailDahaOnceAlinmisException exception) {
-//        MusteriEklemeResponse musteriEklemeResponse = new MusteriEklemeResponse();
-//        musteriEklemeResponse.setCevapMesaji(exception.getMessage());
-//
-//        DataResult<MusteriEklemeResponse> dataResult = new DataResult<>();
-//        dataResult.setData(musteriEklemeResponse);
-//        dataResult.setSuccess(false);
-//        dataResult.setMessage(exception.getMessage());
-//
-//        return ResponseEntity
-//                .status(HttpStatus.NOT_FOUND)
-//                .body(dataResult);
-//    }
+@ExceptionHandler(EmailDahaOnceAlinmisException.class)
+public ResponseEntity<Result> emailDahaOnceAlinmisExceptionHandler(EmailDahaOnceAlinmisException exception) {
+    MusteriEklemeResponse musteriEklemeResponse = new MusteriEklemeResponse();
+    musteriEklemeResponse.setCevapMesaji(exception.getMessage());
+
+    DataResult<MusteriEklemeResponse> dataResult = new DataResult<>();
+    dataResult.setData(musteriEklemeResponse);
+    dataResult.setSuccess(false);
+    dataResult.setMessage(exception.getMessage());
+
+    return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(dataResult);
+}
 //
 //    @ExceptionHandler(RaporOlusturmaException.class)
 //    public ResponseEntity<Result> raporOlustururkenHata(RaporOlusturmaException exception) {

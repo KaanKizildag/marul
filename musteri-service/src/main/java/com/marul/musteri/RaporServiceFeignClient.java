@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
-@FeignClient("rapor-service")
+@FeignClient(value = "rapor-service")
 public interface RaporServiceFeignClient {
-    @PostMapping("/generateSimpleReport")
+    // todo api gateway eklendiginde api gateway uzerinden servise erisecek!
+    @PostMapping("/v1/rapor/generateSimpleReport")
     ResponseEntity<ByteArrayResource> generateSimpleReport(List<RaporKriterleriDto> raporKriterleriDtoList);
 }

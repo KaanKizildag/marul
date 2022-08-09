@@ -7,9 +7,9 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +23,15 @@ public class RaporService {
 
         JasperReport compileReport = null;
         try {
+            // todo jrxml dosyasi baska yerden okunacaktir.
+            String fileName = "raporlar/musteri_email_rapor.jrxml";
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            File configFile = new File(classLoader.getResource(fileName).getFile());
+            FileInputStream inputStream = new FileInputStream(configFile);
             compileReport = JasperCompileManager
-                    .compileReport(Files.newInputStream(
-                            Paths.get("C:/Users/hkizildag/Desktop/calisma/Muhasebe/rapor-service/src/main/resources/raporlar/musteri_email_rapor.jrxml")));
+                    .compileReport(inputStream);
         } catch (JRException e) {
+            // todo custom hata yazilacak ExceptionHandler yapisi kurulacak.
             throw new RuntimeException(e);
         }
 

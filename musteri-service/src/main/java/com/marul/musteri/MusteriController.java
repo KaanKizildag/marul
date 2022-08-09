@@ -4,7 +4,6 @@ import com.marul.dto.MusteriDto;
 import com.marul.dto.MusteriEklemeResponse;
 import com.marul.dto.RaporKriterleriDto;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +34,7 @@ public class MusteriController {
         return ResponseEntity.ok(musteriEklemeResponse);
     }
 
-    @SneakyThrows
+//    @SneakyThrows
     @GetMapping("/rapor/findAll")
     public ResponseEntity<ByteArrayResource> raporFindAll() {
         List<MusteriDto> musteriDtoList = musteriService.findAll();
