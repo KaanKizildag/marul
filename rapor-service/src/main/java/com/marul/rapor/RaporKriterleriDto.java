@@ -1,6 +1,5 @@
 package com.marul.rapor;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +12,6 @@ public class RaporKriterleriDto implements Serializable {
 //    private Long id;
 //    private String title;
 //    private String description;
-//    private String musteriAdi;
+    private String musteriAdi;
     private String email;
 }

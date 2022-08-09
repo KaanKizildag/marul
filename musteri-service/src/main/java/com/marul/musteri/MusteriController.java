@@ -41,6 +41,7 @@ public class MusteriController {
         List<RaporKriterleriDto> raporKriterleriDTOList = musteriDtoList.stream()
                 .map(musteriDto -> RaporKriterleriDto.builder()
                         .email(musteriDto.getEmail())
+                        .musteriAdi(musteriDto.getMusteriAdi())
                         .build())
                 .collect(Collectors.toList());
 

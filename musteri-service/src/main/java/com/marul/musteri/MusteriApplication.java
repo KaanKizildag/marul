@@ -1,11 +1,12 @@
 package com.marul.musteri;
 
+import com.marul.exception.GeneralExceptionHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackageClasses = {GeneralExceptionHandler.class, MusteriApplication.class})
 @EnableDiscoveryClient
 @EnableFeignClients
 public class MusteriApplication {

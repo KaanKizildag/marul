@@ -1,5 +1,6 @@
 package com.marul.rapor;
 
+import com.marul.exception.RaporOlusturmaException;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -18,7 +19,6 @@ import java.util.Map;
 @Slf4j
 public class RaporService {
 
-
     public ByteArrayResource generateSimpleReport(List<RaporKriterleriDto> dataList) throws IOException {
 
         JasperReport compileReport = null;
@@ -31,8 +31,8 @@ public class RaporService {
             compileReport = JasperCompileManager
                     .compileReport(inputStream);
         } catch (JRException e) {
-            // todo custom hata yazilacak ExceptionHandler yapisi kurulacak.
-            throw new RuntimeException(e);
+            log.error("rapor oluştururken hata", e.getMessage());
+            throw new RaporOlusturmaException("rapor oluştururken hata", e.getMessage());
         }
 
         Map<String, Object> reportParameters = new HashMap<>();
