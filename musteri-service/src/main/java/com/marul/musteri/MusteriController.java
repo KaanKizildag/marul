@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
 public class MusteriController {
 
     private final MusteriService musteriService;
-    private final RaporServiceFeignClient raporServiceFeignClient;
-    private final MusteriMapper musteriMapper;
 
     @GetMapping("/findAll")
     public ResponseEntity<List<MusteriDto>> findAll() {
@@ -34,7 +32,7 @@ public class MusteriController {
         return ResponseEntity.ok(musteriEklemeResponse);
     }
 
-//    @SneakyThrows
+    //    @SneakyThrows
     @GetMapping("/rapor/findAll")
     public ResponseEntity<ByteArrayResource> raporFindAll() {
         List<MusteriDto> musteriDtoList = musteriService.findAll();
@@ -45,9 +43,7 @@ public class MusteriController {
                         .build())
                 .collect(Collectors.toList());
 
-        ByteArrayResource raporByteArray = raporServiceFeignClient
-                .generateSimpleReport(raporKriterleriDTOList)
-                .getBody();
+        ByteArrayResource raporByteArray = musteriService.generateSimpleReport(raporKriterleriDTOList);
 
         return ResponseEntity.ok(raporByteArray);
     }
