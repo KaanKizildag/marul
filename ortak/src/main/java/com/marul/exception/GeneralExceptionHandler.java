@@ -25,25 +25,14 @@ public class GeneralExceptionHandler /*extends ResponseEntityExceptionHandler*/ 
 //        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 //    }
 
-    @ExceptionHandler(EmailDahaOnceAlinmisException.class)
-    public ResponseEntity<Result> emailDahaOnceAlinmisExceptionHandler(EmailDahaOnceAlinmisException exception) {
-        Result result = new Result();
-        result.setSuccess(false);
-        result.setMessage(exception.getMessage());
-
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(result);
-    }
-
-    @ExceptionHandler(RaporOlusturmaException.class)
-    public ResponseEntity<Result> raporOlustururkenHata(RaporOlusturmaException exception) {
+    @ExceptionHandler(value = {RaporOlusturmaException.class,
+            EmailGonderirkenException.class,
+            EmailDahaOnceAlinmisException.class})
+    public ResponseEntity<Result> genelServisHatasi(RaporOlusturmaException exception) {
         Result result = new Result();
         result.setMessage(exception.getMessage());
         result.setSuccess(false);
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(result);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
     }
 }

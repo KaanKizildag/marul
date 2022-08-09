@@ -1,6 +1,5 @@
 package com.marul.emailsender;
 
-import com.marul.dto.result.DataResult;
 import com.marul.dto.result.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -27,7 +26,7 @@ public class EmailSenderController {
                                          @RequestBody InputStream inputStream
     ) {
         emailSenderService.sendMailWithAttachment(emailTo, body, subject, inputStream);
-        DataResult<String> dataResult = new DataResult<>();
+        Result dataResult = new Result();
         log.info(emailSenderConfigData.getBasariliMesaj());
         dataResult.setMessage(emailSenderConfigData.getBasariliMesaj());
         return dataResult;
