@@ -7,10 +7,10 @@ package com.marul.musteri;
 
 import com.marul.dto.MusteriDto;
 import com.marul.dto.RaporKriterleriDto;
+import com.marul.dto.result.DataResult;
 import com.marul.exception.EmailDahaOnceAlinmisException;
 import com.marul.tur.TurService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,9 +61,8 @@ public class MusteriService {
         return musteriMapper.getTarget(musteri);
     }
 
-    public ByteArrayResource generateSimpleReport(List<RaporKriterleriDto> raporKriterleriDTOList) {
+    public DataResult<byte[]> generateSimpleReport(List<RaporKriterleriDto> raporKriterleriDTOList) {
         return raporServiceFeignClient
-                .generateSimpleReport(raporKriterleriDTOList)
-                .getBody();
+                .generateSimpleReport(raporKriterleriDTOList);
     }
 }

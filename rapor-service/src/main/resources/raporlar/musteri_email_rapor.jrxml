@@ -54,7 +54,7 @@
 				<text><![CDATA[Müşteri Adı]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="0" width="100" height="20" uuid="4e6bf6f8-aa13-45e0-bba8-d6974ba9606a"/>
+				<reportElement x="120" y="0" width="140" height="20" uuid="4e6bf6f8-aa13-45e0-bba8-d6974ba9606a"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="13" isBold="true"/>
 				</textElement>
@@ -69,7 +69,7 @@
 							   uuid="0b9de9f6-031b-4432-947e-92e138f61fbc"/>
 			</line>
 			<textField>
-				<reportElement x="121" y="0" width="100" height="16" uuid="ed0e6c36-c388-48d2-8a0a-4551ca96f7c5"/>
+				<reportElement x="121" y="0" width="140" height="16" uuid="ed0e6c36-c388-48d2-8a0a-4551ca96f7c5"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
 			</textField>

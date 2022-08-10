@@ -5,7 +5,6 @@ import com.marul.dto.RaporKriterleriDto;
 import com.marul.dto.result.DataResult;
 import com.marul.dto.result.Result;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +35,7 @@ public class MusteriController {
 
     //    @SneakyThrows
     @GetMapping("/rapor/findAll")
-    public ResponseEntity<ByteArrayResource> raporFindAll() {
+    public Result raporFindAll() {
         List<MusteriDto> musteriDtoList = musteriService.findAll();
         List<RaporKriterleriDto> raporKriterleriDTOList = musteriDtoList.stream()
                 .map(musteriDto -> RaporKriterleriDto.builder()
@@ -45,8 +44,8 @@ public class MusteriController {
                         .build())
                 .collect(Collectors.toList());
 
-        ByteArrayResource raporByteArray = musteriService.generateSimpleReport(raporKriterleriDTOList);
+        Result result = musteriService.generateSimpleReport(raporKriterleriDTOList);
 
-        return ResponseEntity.ok(raporByteArray);
+        return result;
     }
 }

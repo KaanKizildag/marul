@@ -5,7 +5,6 @@ import com.marul.dto.result.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -21,14 +20,11 @@ public class RaporController {
 
     @PostMapping("/generateSimpleReport")
 //    @SneakyThrows
-    public ResponseEntity<Result> generateSimpleReport(@RequestBody List<RaporKriterleriDto> raporKriterleriDtoList) throws IOException {
+    public Result generateSimpleReport(@RequestBody List<RaporKriterleriDto> raporKriterleriDtoList) throws IOException {
         log.info("generateSimpleReport");
         ByteArrayResource byteArrayResource = raporService.generateSimpleReport(raporKriterleriDtoList);
-        Result result = new DataResult<>(byteArrayResource.getByteArray());
-        result.setSuccess(true);
-        result.setMessage("rapor başarıyla oluşturuldu");
         log.info("rapor basariyla oluşturuldu");
-        return ResponseEntity.ok(result);
+        return new DataResult<>(byteArrayResource.getByteArray());
     }
 
     @GetMapping("/helloworld")
