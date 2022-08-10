@@ -1,4 +1,4 @@
-package com.marul.musteri;
+package com.marul;
 
 import com.marul.exception.GeneralExceptionHandler;
 import org.springframework.boot.SpringApplication;

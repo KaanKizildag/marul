@@ -1,8 +1,9 @@
 package com.marul.musteri;
 
 import com.marul.dto.MusteriDto;
-import com.marul.dto.MusteriEklemeResponse;
 import com.marul.dto.RaporKriterleriDto;
+import com.marul.dto.result.DataResult;
+import com.marul.dto.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +21,17 @@ public class MusteriController {
     private final MusteriService musteriService;
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<MusteriDto>> findAll() {
-        return ResponseEntity.ok().body(musteriService.findAll());
+    public ResponseEntity<Result> findAll() {
+        List<MusteriDto> musteriDtoList = musteriService.findAll();
+        Result result = new DataResult<>(musteriDtoList);
+        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/save")
-    public ResponseEntity<MusteriEklemeResponse> save(/*@Valid*/ @RequestBody MusteriDto musteriDto) {
+    public ResponseEntity<Result> save(/*@Valid*/ @RequestBody MusteriDto musteriDto) {
         musteriService.save(musteriDto);
-        MusteriEklemeResponse musteriEklemeResponse = new MusteriEklemeResponse();
-        musteriEklemeResponse.setCevapMesaji("Müşteri başarıyla kaydedildi.");
-        return ResponseEntity.ok(musteriEklemeResponse);
+        Result result = new DataResult<>(musteriDto);
+        return ResponseEntity.ok(result);
     }
 
     //    @SneakyThrows

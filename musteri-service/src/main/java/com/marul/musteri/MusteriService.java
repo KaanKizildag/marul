@@ -8,6 +8,7 @@ package com.marul.musteri;
 import com.marul.dto.MusteriDto;
 import com.marul.dto.RaporKriterleriDto;
 import com.marul.exception.EmailDahaOnceAlinmisException;
+import com.marul.tur.TurService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class MusteriService {
 
     private final MusteriRepository musteriRepository;
     private final RaporServiceFeignClient raporServiceFeignClient;
+    private final TurService turService;
     private final MusteriMapper musteriMapper;
 
     public void insert(MusteriDto musteriDto) {
@@ -49,18 +51,19 @@ public class MusteriService {
         musteriRepository.save(musteriMapper.getSource(musteriDto));
     }
 
-    public Musteri save(MusteriDto musteriDto) {
+    public MusteriDto save(MusteriDto musteriDto) {
         if (musteriRepository.existsByEmail(musteriDto.getEmail())) {
             throw new EmailDahaOnceAlinmisException("%s bu email daha önce alınmış.", musteriDto.getEmail());
         }
+        turService.findById(musteriDto.getTurId());
         Musteri musteri = musteriMapper.getSource(musteriDto);
-        return musteriRepository.save(musteri);
+        musteri = musteriRepository.save(musteri);
+        return musteriMapper.getTarget(musteri);
     }
 
     public ByteArrayResource generateSimpleReport(List<RaporKriterleriDto> raporKriterleriDTOList) {
         return raporServiceFeignClient
                 .generateSimpleReport(raporKriterleriDTOList)
                 .getBody();
-
     }
 }

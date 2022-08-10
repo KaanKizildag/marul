@@ -27,8 +27,9 @@ public class GeneralExceptionHandler /*extends ResponseEntityExceptionHandler*/ 
 
     @ExceptionHandler(value = {RaporOlusturmaException.class,
             EmailGonderirkenException.class,
-            EmailDahaOnceAlinmisException.class})
-    public ResponseEntity<Result> genelServisHatasi(RaporOlusturmaException exception) {
+            EmailDahaOnceAlinmisException.class,
+            BulunamadiException.class})
+    public ResponseEntity<Result> genelServisHatasi(RuntimeException exception) {
         Result result = new Result();
         result.setMessage(exception.getMessage());
         result.setSuccess(false);

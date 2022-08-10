@@ -43,7 +43,4 @@ public class Musteri implements Serializable {
 
     @Column(name = "tur_id")
     private Long turId;
-
-//    @OneToMany(mappedBy = "musteri", fetch = FetchType.LAZY)
-//    private List<Satis> satisList;
 }
