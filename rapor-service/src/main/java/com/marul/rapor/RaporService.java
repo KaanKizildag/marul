@@ -36,7 +36,7 @@ public class RaporService {
         }
 
         Map<String, Object> reportParameters = new HashMap<>();
-//        reportParameters.put("musteriAdi", "müşterinin adı burada görünecektir.");
+        reportParameters.put("turAdi", "Ankara");
 
         return exportReportToPDF(compileReport, reportParameters, dataList);
     }
