@@ -26,7 +26,9 @@ public class GeneralExceptionHandler /*extends ResponseEntityExceptionHandler*/ 
     @ExceptionHandler(value = {RaporOlusturmaException.class,
             EmailGonderirkenException.class,
             EmailDahaOnceAlinmisException.class,
-            BulunamadiException.class})
+            BulunamadiException.class,
+            ServisDonusHatasiException.class
+    })
     public Result genelServisHatasi(RuntimeException exception) {
         return new Result(false, exception.getMessage());
     }

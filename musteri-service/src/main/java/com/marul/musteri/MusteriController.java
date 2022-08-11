@@ -35,7 +35,7 @@ public class MusteriController {
 
     //    @SneakyThrows
     @GetMapping("/rapor/findAll")
-    public Result raporFindAll() {
+    public byte[] raporFindAll() {
         List<MusteriDto> musteriDtoList = musteriService.findAll();
         List<RaporKriterleriDto> raporKriterleriDTOList = musteriDtoList.stream()
                 .map(musteriDto -> RaporKriterleriDto.builder()
@@ -44,8 +44,6 @@ public class MusteriController {
                         .build())
                 .collect(Collectors.toList());
 
-        Result result = musteriService.generateSimpleReport(raporKriterleriDTOList);
-
-        return result;
+        return musteriService.generateSimpleReport(raporKriterleriDTOList);
     }
 }
