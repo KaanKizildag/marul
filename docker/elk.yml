@@ -1,0 +1,49 @@
+version: '3.6'
+services:
+  Elasticsearch:
+    image: elasticsearch:7.16.2
+    container_name: elasticsearch
+    volumes:
+      - elastic_data:/usr/share/elasticsearch/data/
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      discovery.type: single-node
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    networks:
+      - elk
+
+  Logstash:
+    image: logstash:7.16.2
+    container_name: logstash
+    volumes:
+      - ./logstash/:/logstash_dir
+      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
+    entrypoint: [ "/usr/share/wait-for-it.sh", "-h", "elasticsearch", "-p", "9200", "-t", "120",
+                  "--", "logstash", "-f", "/usr/share/logstash/pipeline/logstash.conf" ]
+    depends_on:
+      - Elasticsearch
+    ports:
+      - '5000:5000'
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elk
+
+  Kibana:
+    image: kibana:7.16.2
+    container_name: kibana
+    ports:
+      - '5601:5601'
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      - Elasticsearch
+    networks:
+      - elk
+volumes:
+  elastic_data: { }
+
+networks:
+  elk:

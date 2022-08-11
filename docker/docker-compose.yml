@@ -32,6 +32,8 @@ networks:
     driver: bridge
   spring:
     driver: bridge
+  elk:
+    driver: bridge
 
 volumes:
   postgres:

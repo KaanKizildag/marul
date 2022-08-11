@@ -36,6 +36,7 @@
         <spring-boot-starter-test.version>2.6.9</spring-boot-starter-test.version>
         <gson.version>2.8.9</gson.version>
         <jackson.version>2.13.3</jackson.version>
+        <logstash-logback.version>6.6</logstash-logback.version>
     </properties>
 
     <dependencyManagement>
@@ -146,6 +147,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback.version}</version>
         </dependency>
     </dependencies>
 
