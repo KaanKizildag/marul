@@ -28,11 +28,10 @@ public class RaporService {
             ClassLoader classLoader = this.getClass().getClassLoader();
             File configFile = new File(classLoader.getResource(fileName).getFile());
             FileInputStream inputStream = new FileInputStream(configFile);
-            compileReport = JasperCompileManager
-                    .compileReport(inputStream);
+            compileReport = JasperCompileManager.compileReport(inputStream);
         } catch (JRException e) {
-            log.error("rapor oluştururken hata", e.getMessage());
-            throw new RaporOlusturmaException("rapor oluştururken hata", e.getMessage());
+            log.error("rapor oluştururken hata: {}", e.getMessage());
+            throw new RaporOlusturmaException("rapor oluştururken hata: %s", e.getMessage());
         }
 
         Map<String, Object> reportParameters = new HashMap<>();

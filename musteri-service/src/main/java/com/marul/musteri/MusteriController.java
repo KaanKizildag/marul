@@ -41,6 +41,7 @@ public class MusteriController {
                 .map(musteriDto -> RaporKriterleriDto.builder()
                         .email(musteriDto.getEmail())
                         .musteriAdi(musteriDto.getMusteriAdi())
+                        .telefonNo(musteriDto.getTelefonNo())
                         .build())
                 .collect(Collectors.toList());
 

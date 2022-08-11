@@ -16,4 +16,5 @@ public class RaporKriterleriDto implements Serializable {
 //    private String description;
     private String musteriAdi;
     private String email;
+    private String telefonNo;
 }
