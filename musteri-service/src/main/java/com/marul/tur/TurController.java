@@ -1,7 +1,7 @@
 package com.marul.tur;
 
-import com.marul.dto.result.DataResult;
 import com.marul.dto.result.Result;
+import com.marul.dto.result.SuccessDataResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +17,14 @@ public class TurController {
     @GetMapping("/findAll")
     public ResponseEntity<Result> findAll() {
         List<TurDto> turList = turService.findAll();
-        Result result = new DataResult<>(turList);
-        result.setSuccess(true);
+        Result result = new SuccessDataResult<>(turList);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/findById/{id}")
     public ResponseEntity<Result> findById(@PathVariable("id") Long id) {
         TurDto turDto = turService.findById(id);
-        Result result = new DataResult<>(turDto);
-        result.setSuccess(true);
+        Result result = new SuccessDataResult<>(turDto);
         return ResponseEntity.ok(result);
     }
 

@@ -1,7 +1,7 @@
 package com.marul.rapor;
 
-import com.marul.dto.result.DataResult;
 import com.marul.dto.result.Result;
+import com.marul.dto.result.SuccessDataResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
@@ -19,12 +19,11 @@ public class RaporController {
     private final RaporService raporService;
 
     @PostMapping("/generateSimpleReport")
-//    @SneakyThrows
     public Result generateSimpleReport(@RequestBody List<RaporKriterleriDto> raporKriterleriDtoList) throws IOException {
         log.info("generateSimpleReport");
         ByteArrayResource byteArrayResource = raporService.generateSimpleReport(raporKriterleriDtoList);
         log.info("rapor basariyla oluşturuldu");
-        return new DataResult<>(byteArrayResource.getByteArray());
+        return new SuccessDataResult<>(byteArrayResource.getByteArray());
     }
 
     @GetMapping("/helloworld")

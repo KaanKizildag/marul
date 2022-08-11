@@ -2,8 +2,8 @@ package com.marul.musteri;
 
 import com.marul.dto.MusteriDto;
 import com.marul.dto.RaporKriterleriDto;
-import com.marul.dto.result.DataResult;
 import com.marul.dto.result.Result;
+import com.marul.dto.result.SuccessDataResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +22,14 @@ public class MusteriController {
     @GetMapping("/findAll")
     public ResponseEntity<Result> findAll() {
         List<MusteriDto> musteriDtoList = musteriService.findAll();
-        Result result = new DataResult<>(musteriDtoList);
+        Result result = new SuccessDataResult<>(musteriDtoList);
         return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/save")
     public ResponseEntity<Result> save(/*@Valid*/ @RequestBody MusteriDto musteriDto) {
         musteriService.save(musteriDto);
-        Result result = new DataResult<>(musteriDto);
+        Result result = new SuccessDataResult<>(musteriDto);
         return ResponseEntity.ok(result);
     }
 
