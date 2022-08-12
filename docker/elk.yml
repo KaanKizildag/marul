@@ -1,49 +1,85 @@
-version: '3.6'
+version: '3.7'
 services:
-  Elasticsearch:
-    image: elasticsearch:7.16.2
-    container_name: elasticsearch
-    volumes:
-      - elastic_data:/usr/share/elasticsearch/data/
+  elastic-1:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
+    container_name: elastic-1
     environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      discovery.type: single-node
+      - node.name=elastic-1
+      - cluster.name=tts-ms-elastic-cluster
+      - discovery.seed_hosts=elastic-2
+      - cluster.initial_master_nodes=elastic-1,elastic-2
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticData01:/var/lib/elasticsearch/data
     ports:
-      - '9200:9200'
-      - '9300:9300'
+      - "9200:${ELASTIC_PORT}"
+      - "9300:9300"
     networks:
-      - elk
+      - ${GLOBAL_NETWORK:-elk}
 
-  Logstash:
-    image: logstash:7.16.2
+  elastic-2:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
+    container_name: elastic-2
+    environment:
+      - node.name=elastic-2
+      - cluster.name=tts-ms-elastic-cluster
+      - discovery.seed_hosts=elastic-1
+      - cluster.initial_master_nodes=elastic-1,elastic-2
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticData02:/var/lib/elasticsearch/data
+    ports:
+      - "9201:${ELASTIC_PORT}"
+      - "9301:9300"
+    networks:
+      - ${GLOBAL_NETWORK:-elk}
+
+  kibana:
+    image: kibana:${ELK_VERSION}
+    container_name: kibana
+    restart: always
+    ports:
+      - "${KIBANA_PORT}:${KIBANA_PORT}"
+    environment:
+      - ELASTICSEARCH_URL=http://elastic-1:${ELASTIC_PORT}
+      - ELASTICSEARCH_HOSTS=["http://elastic-1:${ELASTIC_PORT}","http://elastic-2:${ELASTIC_PORT}"]
+    depends_on:
+      - elastic-1
+      - elastic-2
+      - logstash
+    networks:
+      - ${GLOBAL_NETWORK:-elk}
+
+  logstash:
+    image: logstash:${ELK_VERSION}
     container_name: logstash
     volumes:
-      - ./logstash/:/logstash_dir
+      - ./logstash/logstash.conf/:/usr/share/logstash/pipeline/logstash.conf
       - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
-    entrypoint: [ "/usr/share/wait-for-it.sh", "-h", "elasticsearch", "-p", "9200", "-t", "120",
-                  "--", "logstash", "-f", "/usr/share/logstash/pipeline/logstash.conf" ]
+    command: bash -c "/usr/share/wait-for-it.sh -h elastic-1 -p ${ELASTIC_PORT} -t 120
+      && logstash -f /usr/share/logstash/pipeline/logstash.conf"
     depends_on:
-      - Elasticsearch
+      - elastic-1
+      - elastic-2
     ports:
-      - '5000:5000'
+      - "${LOGSTASH_PORT}:${LOGSTASH_PORT}"
     environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      - "LS_JAVA_OPTS=-Xms512m -Xmx512m"
     networks:
-      - elk
+      - ${GLOBAL_NETWORK:-elk}
 
-  Kibana:
-    image: kibana:7.16.2
-    container_name: kibana
-    ports:
-      - '5601:5601'
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-    depends_on:
-      - Elasticsearch
-    networks:
-      - elk
 volumes:
-  elastic_data: { }
-
-networks:
-  elk:
+  elasticData01:
+    driver: local
+  elasticData02:
+    driver: local
