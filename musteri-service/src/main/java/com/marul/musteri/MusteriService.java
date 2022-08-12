@@ -5,9 +5,11 @@
  */
 package com.marul.musteri;
 
+import com.marul.dto.MailGondermeDto;
 import com.marul.dto.MusteriDto;
 import com.marul.dto.RaporKriterleriDto;
 import com.marul.dto.result.DataResult;
+import com.marul.dto.result.SuccessResult;
 import com.marul.exception.EmailDahaOnceAlinmisException;
 import com.marul.tur.TurService;
 import com.marul.util.ResultDecoder;
@@ -26,6 +28,7 @@ public class MusteriService {
 
     private final MusteriRepository musteriRepository;
     private final RaporServiceFeignClient raporServiceFeignClient;
+    private final MailSenderFeignClient mailSenderFeignClient;
     private final TurService turService;
     private final MusteriMapper musteriMapper;
 
@@ -66,5 +69,16 @@ public class MusteriService {
         DataResult<byte[]> dataResult = raporServiceFeignClient
                 .generateSimpleReport(raporKriterleriDTOList);
         return ResultDecoder.getDataResult(dataResult);
+    }
+
+    public void mailGonder(byte[] simpleReport) {
+
+        MailGondermeDto mailGondermeDto = new MailGondermeDto();
+        mailGondermeDto.setInputStream(simpleReport);
+        mailGondermeDto.setSubject("bu rapor musteri servisten gelmiştir.");
+        mailGondermeDto.setBody("bu rapor musteri servisten gelmiştir.");
+        mailGondermeDto.setEmailTo("huseyinkaan.kizildag@gmail.com");
+        SuccessResult successResult = mailSenderFeignClient.sendMailWithAttachment(mailGondermeDto);
+        ResultDecoder.utilServiceCheck(successResult);
     }
 }

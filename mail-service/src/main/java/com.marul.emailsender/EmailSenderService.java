@@ -1,5 +1,6 @@
 package com.marul.emailsender;
 
+import com.marul.exception.EmailGonderirkenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
@@ -23,20 +24,20 @@ public class EmailSenderService {
     public void sendMailWithAttachment(String toEmail,
                                        String body,
                                        String subject,
-                                       InputStream attachment) throws MessagingException {
+                                       InputStream attachment) {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessageHelper.setFrom("com.tr.marul@gmail.com");
-        mimeMessageHelper.setTo(toEmail);
-        mimeMessageHelper.setText(body);
-        mimeMessageHelper.setSubject(subject);
-
+        MimeMessageHelper mimeMessageHelper = null;
         try {
+            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper.setFrom("com.tr.marul@gmail.com");
+            mimeMessageHelper.setTo(toEmail);
+            mimeMessageHelper.setText(body);
+            mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.addAttachment(emailSenderConfigData.getEkAdi(), new ByteArrayResource(attachment.readAllBytes()));
-        } catch (IOException e) {
+        } catch (MessagingException | IOException | IllegalArgumentException e) {
             log.error(emailSenderConfigData.getBasarisizMesaj());
-            e.printStackTrace();
+            throw new EmailGonderirkenException(emailSenderConfigData.getBasarisizMesaj(), e.getMessage());
         }
         javaMailSender.send(mimeMessage);
         log.info(emailSenderConfigData.getBasariliMesaj());

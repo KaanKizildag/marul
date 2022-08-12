@@ -8,14 +8,14 @@ import com.marul.exception.ServisDonusHatasiException;
 public interface ResultDecoder {
 
 
-    static boolean utilServiceCheck(Result result) {
-        return result.isSuccess();
+    static void utilServiceCheck(Result result) {
+        if (!result.isSuccess()) {
+            throw new ServisDonusHatasiException("servis dönüş hatası: %s", result.getMessage());
+        }
     }
 
     static <T> T getDataResult(DataResult<T> result) {
-        if (utilServiceCheck(result)) {
-            return result.getData();
-        }
-        throw new ServisDonusHatasiException("servis dönüş hatası: %s", result.getMessage());
+        utilServiceCheck(result);
+        return result.getData();
     }
 }
