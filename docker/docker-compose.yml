@@ -1,4 +1,6 @@
+version: '3.7'
 services:
+
   postgres:
     container_name: postgres
     image: postgres
@@ -13,6 +15,7 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
@@ -26,14 +29,34 @@ services:
       - "5050:80"
     networks:
       - postgres
-    restart: unless-stopped
+
+  musteri-service:
+    container_name: musteri-service
+    image: marul/musteri-service
+    #    volumes:
+    #      - "./wait-for-it.sh/:/usr/share/wait-for-it.sh"
+    #    entrypoint: [ "/usr/share/wait-for-it.sh", "-h", "postgres", "-p", "${POSTGRES_PORT}", "-t", "120",
+    #                  "--", "java", "-jar", "app.jar" ]
+    ports:
+      - "8089:8089"
+    environment:
+      - APPNAME_MUSTERI_SERVICE=${APPNAME_MUSTERI_SERVICE}
+      - MUSTERI_SERVICE_PORT=${MUSTERI_SERVICE_PORT}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+    depends_on:
+      - postgres
+    networks:
+      - postgres
+    env_file: .env
+
 networks:
   postgres:
     driver: bridge
   spring:
     driver: bridge
   elk:
-    driver: bridge
+    driver: bridgecls
 
 volumes:
   postgres:

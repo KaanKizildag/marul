@@ -46,7 +46,7 @@ public class MusteriController {
                 .collect(Collectors.toList());
 
         byte[] simpleReport = musteriService.generateSimpleReport(raporKriterleriDTOList);
-        new Thread(() -> musteriService.mailGonder(simpleReport)).start();
+//        new Thread(() -> musteriService.mailGonder(simpleReport)).start();
         return simpleReport;
     }
 }
