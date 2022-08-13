@@ -56,7 +56,7 @@ networks:
   spring:
     driver: bridge
   elk:
-    driver: bridgecls
+    driver: bridge
 
 volumes:
   postgres:
