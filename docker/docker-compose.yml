@@ -1,6 +1,5 @@
 version: '3.7'
 services:
-
   postgres:
     container_name: postgres
     image: postgres
@@ -33,12 +32,14 @@ services:
   musteri-service:
     container_name: musteri-service
     image: marul/musteri-service
-    #    volumes:
-    #      - "./wait-for-it.sh/:/usr/share/wait-for-it.sh"
-    #    entrypoint: [ "/usr/share/wait-for-it.sh", "-h", "postgres", "-p", "${POSTGRES_PORT}", "-t", "120",
-    #                  "--", "java", "-jar", "app.jar" ]
+    build:
+      context: ../musteri-service
+      dockerfile: ../musteri-service/Dockerfile
+    volumes:
+      - "./wait-for-it.sh/:/usr/share/wait-for-it.sh"
+    #    entrypoint: [ "usr/share/wait-for-it.sh", "-h", "${POSTGRES_HOST}", "-p", "${POSTGRES_PORT}", "-t", "120", "--", "java", "-jar", "app.jar" ]
     ports:
-      - "8089:8089"
+      - "${MUSTERI_SERVICE_PORT}:${MUSTERI_SERVICE_PORT}"
     environment:
       - APPNAME_MUSTERI_SERVICE=${APPNAME_MUSTERI_SERVICE}
       - MUSTERI_SERVICE_PORT=${MUSTERI_SERVICE_PORT}
@@ -49,6 +50,31 @@ services:
     networks:
       - postgres
     env_file: .env
+
+  mail-service:
+    container_name: mail-service
+    image: marul/mail-service
+    build:
+      context: ../mail-service
+      dockerfile: ../mail-service/Dockerfile
+    ports:
+      - "${MAIL_SERVICE_PORT}:${MAIL_SERVICE_PORT}"
+    environment:
+      - SERVICE_DISCOVERY_PORT=${SERVICE_DISCOVERY_PORT}
+      - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
+    networks:
+      - postgres
+
+  service-discovery:
+    container_name: service-discovery
+    image: marul/service-discovery
+    build:
+      context: ../servive-discovery
+      dockerfile: ../servive-discovery/Dockerfile
+    ports:
+      - "${SERVICE_DISCOVERY_PORT}:${SERVICE_DISCOVERY_PORT}"
+    networks:
+      - postgres
 
 networks:
   postgres:

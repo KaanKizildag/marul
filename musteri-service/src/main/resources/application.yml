@@ -1,0 +1,25 @@
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://${SERVICE_DISCOVERY_HOST}:${SERVICE_DISCOVERY_PORT}/eureka
+  instance:
+    hostname: ${SERVICE_DISCOVERY_HOST}
+server:
+  port: '${MUSTERI_SERVICE_PORT}'
+spring:
+  application:
+    name: ${APPNAME_MUSTERI_SERVICE:musteri-service}
+  datasource:
+    password: password
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/musteri
+    username: marul
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        show_sql: true
