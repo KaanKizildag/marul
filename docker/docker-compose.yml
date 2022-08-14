@@ -76,6 +76,25 @@ services:
     networks:
       - postgres
 
+  rapor-service:
+    container_name: rapor-service
+    image: marul/rapor-service
+    build:
+      context: ../rapor-service
+      dockerfile: ../rapor-service/Dockerfile
+    ports:
+      - "${RAPOR_SERVICE_PORT}:${RAPOR_SERVICE_PORT}"
+    environment:
+      - LOGSTASH_PORT=${LOGSTASH_PORT}
+      - LOGSTASH_SERVICE_HOST=${LOGSTASH_SERVICE_HOST}
+      - RAPOR_SERVICE_HOST=${RAPOR_SERVICE_HOST}
+      - RAPOR_SERVICE_PORT=${RAPOR_SERVICE_PORT}
+      - RAPORLAR_DIZINI=${RAPORLAR_DIZINI}
+      - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
+      - SERVICE_DISCOVERY_PORT=${SERVICE_DISCOVERY_PORT}
+    networks:
+      - postgres
+
 networks:
   postgres:
     driver: bridge

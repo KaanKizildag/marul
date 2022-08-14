@@ -1,6 +1,7 @@
 package com.marul.rapor;
 
 import com.marul.exception.RaporOlusturmaException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -17,19 +18,24 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class RaporService {
+
+    private final RaporServiceConfigData raporServiceConfigData;
 
     public ByteArrayResource generateSimpleReport(List<RaporKriterleriDto> dataList) throws IOException {
 
-        JasperReport compileReport = null;
+        JasperReport compileReport;
         try {
             // todo jrxml dosyasi baska yerden okunacaktir.
-            String fileName = "raporlar/musteri_email_rapor.jrxml";
+            String raporDizini = raporServiceConfigData.getRaporlarDizini();
+            String raporAdi = "musteri_email_rapor.jrxml";
+            String fileName = raporDizini + raporAdi;
             ClassLoader classLoader = this.getClass().getClassLoader();
             File configFile = new File(classLoader.getResource(fileName).getFile());
             FileInputStream inputStream = new FileInputStream(configFile);
             compileReport = JasperCompileManager.compileReport(inputStream);
-        } catch (JRException e) {
+        } catch (Exception e) {
             log.error("rapor oluştururken hata: {}", e.getMessage());
             throw new RaporOlusturmaException("rapor oluştururken hata: %s", e.getMessage());
         }

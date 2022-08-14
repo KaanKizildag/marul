@@ -1,0 +1,16 @@
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://${SERVICE_DISCOVERY_HOST}:${SERVICE_DISCOVERY_PORT}/eureka
+  instance:
+    hostname: ${SERVICE_DISCOVERY_HOST}
+server:
+  port: '${RAPOR_SERVICE_PORT}'
+spring:
+  application:
+    name: ${APPNAME_RAPOR_SERVICE:rapor-service}
+
+rapor-service:
+  raporlar_dizini: ${RAPORLAR_DIZINI}
