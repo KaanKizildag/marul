@@ -23,7 +23,7 @@ public class GeneralExceptionHandler /*extends ResponseEntityExceptionHandler*/ 
 //        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 //    }
 
-    @ExceptionHandler(value = {RaporOlusturmaException.class,
+    @ExceptionHandler(value = {RuntimeException.class, RaporOlusturmaException.class,
             EmailGonderirkenException.class,
             EmailDahaOnceAlinmisException.class,
             BulunamadiException.class,

@@ -9,9 +9,8 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +30,9 @@ public class RaporService {
             String raporDizini = raporServiceConfigData.getRaporlarDizini();
             String raporAdi = "musteri_email_rapor.jrxml";
             String fileName = raporDizini + raporAdi;
-            ClassLoader classLoader = this.getClass().getClassLoader();
-            File configFile = new File(classLoader.getResource(fileName).getFile());
-            FileInputStream inputStream = new FileInputStream(configFile);
+            ClassLoader classLoader = getClass().getClassLoader();
+            InputStream inputStream = classLoader.getResourceAsStream(fileName);
+            log.info("file: {}", classLoader.getResource(fileName).getFile());
             compileReport = JasperCompileManager.compileReport(inputStream);
         } catch (Exception e) {
             log.error("rapor oluştururken hata: {}", e.getMessage());
@@ -42,12 +41,14 @@ public class RaporService {
 
         Map<String, Object> reportParameters = new HashMap<>();
         reportParameters.put("turAdi", "Ankara");
+        reportParameters.put("marulLogoPath", System.getenv("MARUL_LOGO_PATH"));
 
         return exportReportToPDF(compileReport, reportParameters, dataList);
     }
 
     private ByteArrayResource exportReportToPDF(JasperReport jasperReport, Map<String, Object> parameters, List<RaporKriterleriDto> data) {
         try {
+            log.info("exportReportToPDF:\n rapor kriterleri: {},\n parametreler: {}\n", data, parameters);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,
                     new JRBeanCollectionDataSource(data));
 
@@ -58,7 +59,7 @@ public class RaporService {
             return new ByteArrayResource(reportContent);
         } catch (Exception e) {
             log.error("Exporting report to PDF error: {}", e.getMessage());
-            return null;
+            throw new RaporOlusturmaException("rapor oluştururken hata: %s", e.getMessage());
         }
     }
 

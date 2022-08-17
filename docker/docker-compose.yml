@@ -36,8 +36,9 @@ services:
       context: ../musteri-service
       dockerfile: ../musteri-service/Dockerfile
     volumes:
-      - "./wait-for-it.sh/:/usr/share/wait-for-it.sh"
-    #    entrypoint: [ "usr/share/wait-for-it.sh", "-h", "${POSTGRES_HOST}", "-p", "${POSTGRES_PORT}", "-t", "120", "--", "java", "-jar", "app.jar" ]
+      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
+    #    entrypoint: [ "/usr/share/wait-for-it.sh", "-h", "logstash", "-p", "${LOGSTASH_PORT}", "-t", "120",
+    #                  "--", "java", "-jar", "app.jar" ]
     ports:
       - "${MUSTERI_SERVICE_PORT}:${MUSTERI_SERVICE_PORT}"
     environment:
@@ -45,6 +46,8 @@ services:
       - MUSTERI_SERVICE_PORT=${MUSTERI_SERVICE_PORT}
       - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_HOST=${POSTGRES_HOST}
+      - LOGSTASH_HOST=${LOGSTASH_HOST}
+      - LOGSTASH_PORT=${LOGSTASH_PORT}
     depends_on:
       - postgres
     networks:
@@ -62,6 +65,8 @@ services:
     environment:
       - SERVICE_DISCOVERY_PORT=${SERVICE_DISCOVERY_PORT}
       - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
+      - LOGSTASH_PORT=${LOGSTASH_PORT}
+      - LOGSTASH_HOST=${LOGSTASH_HOST}
     networks:
       - postgres
 
@@ -69,8 +74,8 @@ services:
     container_name: service-discovery
     image: marul/service-discovery
     build:
-      context: ../servive-discovery
-      dockerfile: ../servive-discovery/Dockerfile
+      context: ../service-discovery
+      dockerfile: ../service-discovery/Dockerfile
     ports:
       - "${SERVICE_DISCOVERY_PORT}:${SERVICE_DISCOVERY_PORT}"
     networks:
@@ -86,12 +91,13 @@ services:
       - "${RAPOR_SERVICE_PORT}:${RAPOR_SERVICE_PORT}"
     environment:
       - LOGSTASH_PORT=${LOGSTASH_PORT}
-      - LOGSTASH_SERVICE_HOST=${LOGSTASH_SERVICE_HOST}
+      - LOGSTASH_HOST=${LOGSTASH_HOST}
       - RAPOR_SERVICE_HOST=${RAPOR_SERVICE_HOST}
       - RAPOR_SERVICE_PORT=${RAPOR_SERVICE_PORT}
       - RAPORLAR_DIZINI=${RAPORLAR_DIZINI}
       - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
       - SERVICE_DISCOVERY_PORT=${SERVICE_DISCOVERY_PORT}
+      - MARUL_LOGO_PATH=${MARUL_LOGO_PATH}
     networks:
       - postgres
 

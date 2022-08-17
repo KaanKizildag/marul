@@ -14,7 +14,7 @@
         <module>rapor-service</module>
         <module>mail-service</module>
         <module>feign-client</module>
-        <module>servive-discovery</module>
+        <module>service-discovery</module>
     </modules>
 
     <properties>

@@ -1,13 +1,13 @@
 version: '3.7'
 services:
-  elastic-1:
+  elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
-    container_name: elastic-1
+    container_name: elasticsearch
     environment:
-      - node.name=elastic-1
+      - node.name=elasticsearch
       - cluster.name=tts-ms-elastic-cluster
       - discovery.seed_hosts=elastic-2
-      - cluster.initial_master_nodes=elastic-1,elastic-2
+      - cluster.initial_master_nodes=elasticsearch,elastic-2
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
@@ -28,8 +28,8 @@ services:
     environment:
       - node.name=elastic-2
       - cluster.name=tts-ms-elastic-cluster
-      - discovery.seed_hosts=elastic-1
-      - cluster.initial_master_nodes=elastic-1,elastic-2
+      - discovery.seed_hosts=elasticsearch
+      - cluster.initial_master_nodes=elasticsearch,elastic-2
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
@@ -51,10 +51,10 @@ services:
     ports:
       - "${KIBANA_PORT}:${KIBANA_PORT}"
     environment:
-      - ELASTICSEARCH_URL=http://elastic-1:${ELASTIC_PORT}
-      - ELASTICSEARCH_HOSTS=["http://elastic-1:${ELASTIC_PORT}","http://elastic-2:${ELASTIC_PORT}"]
+      - ELASTICSEARCH_URL=http://elasticsearch:${ELASTIC_PORT}
+      - ELASTICSEARCH_HOSTS=["http://elasticsearch:${ELASTIC_PORT}","http://elastic-2:${ELASTIC_PORT}"]
     depends_on:
-      - elastic-1
+      - elasticsearch
       - elastic-2
       - logstash
     networks:
@@ -66,10 +66,10 @@ services:
     volumes:
       - ./logstash/logstash.conf/:/usr/share/logstash/pipeline/logstash.conf
       - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
-    command: bash -c "/usr/share/wait-for-it.sh -h elastic-1 -p ${ELASTIC_PORT} -t 120
-      && logstash -f /usr/share/logstash/pipeline/logstash.conf"
+    entrypoint: [ "/usr/share/wait-for-it.sh", "-h", "elasticsearch", "-p", "${ELASTIC_PORT}", "-t", "120",
+                  "--", "logstash", "-f", "/usr/share/logstash/pipeline/logstash.conf" ]
     depends_on:
-      - elastic-1
+      - elasticsearch
       - elastic-2
     ports:
       - "${LOGSTASH_PORT}:${LOGSTASH_PORT}"

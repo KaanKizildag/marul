@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <included>
 
-    <property scope="context" name="LOGSTASH_PORT" value="5000"/>
-    <property scope="context" name="LOGSTASH_SERVICE_HOST" value="localhost"/>
+    <property scope="context" name="LOGSTASH_PORT" value="${LOGSTASH_PORT}"/>
+    <property scope="context" name="LOGSTASH_HOST" value="${LOGSTASH_HOST}"/>
 
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
     <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>${LOGSTASH_SERVICE_HOST}:${LOGSTASH_PORT}</destination>
+        <destination>${LOGSTASH_HOST}:${LOGSTASH_PORT}</destination>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <mdc/>
