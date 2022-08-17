@@ -6,7 +6,7 @@
 			  name="Simple_Blue" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20"
 			  topMargin="20" bottomMargin="20" uuid="4de30c35-1bab-45ce-9de0-9792ddbf4d4b">
 	<parameter name="turAdi" class="java.lang.String"/>
-	<parameter name="marulLogoPath" class="java.lang.String"/>
+<!--	<parameter name="marulLogoPath" class="java.lang.String"/>-->
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -34,7 +34,8 @@
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
-					<imageExpression><![CDATA[$P{marulLogoPath}]]></imageExpression>
+					<!--					<imageExpression><![CDATA[$P{marulLogoPath}]]></imageExpression>-->
+					<imageExpression><![CDATA[System.getenv("MARUL_LOGO_PATH")]]></imageExpression>
 				</image>
 			</frame>
 		</band>

@@ -41,7 +41,7 @@ public class RaporService {
 
         Map<String, Object> reportParameters = new HashMap<>();
         reportParameters.put("turAdi", "Ankara");
-        reportParameters.put("marulLogoPath", System.getenv("MARUL_LOGO_PATH"));
+//        reportParameters.put("marulLogoPath", System.getenv("MARUL_LOGO_PATH"));
 
         return exportReportToPDF(compileReport, reportParameters, dataList);
     }
