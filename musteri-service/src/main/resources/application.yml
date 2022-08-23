@@ -8,6 +8,9 @@ eureka:
     hostname: ${SERVICE_DISCOVERY_HOST}
 server:
   port: '${MUSTERI_SERVICE_PORT}'
+  servlet:
+    context-path: /musteri-service
+
 spring:
   application:
     name: ${APPNAME_MUSTERI_SERVICE:musteri-service}

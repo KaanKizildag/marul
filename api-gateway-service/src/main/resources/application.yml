@@ -1,0 +1,62 @@
+server:
+  port: '${API_GATEWAY_PORT}'
+spring:
+  application:
+    name: ${APPNAME_API_GATEWAY}
+  cloud:
+    gateway:
+      routes:
+        - id: ${APPNAME_MUSTERI_SERVICE}
+          uri: lb://${APPNAME_MUSTERI_SERVICE}
+          predicates:
+            - Path=/${APPNAME_MUSTERI_SERVICE}/**
+        #          filters:
+        #            - name: CircuitBreaker
+        #              args:
+        #                name: circuit-breaker
+        #                fallbackUri: forward:/musteri-service-fallback
+        - id: ${APPNAME_RAPOR_SERVICE}
+          uri: lb://${APPNAME_RAPOR_SERVICE}
+          predicates:
+            - Path=/${APPNAME_RAPOR_SERVICE}/**
+        #          filters:
+        #            - name: CircuitBreaker
+        #              args:
+        #                name: circuit-breaker
+        #                fallbackUri: forward:/${APPNAME_RAPOR_SERVICE}-fallback
+        - id: ${APPNAME_MAIL_SERVICE}
+          uri: lb://${APPNAME_MAIL_SERVICE}
+          predicates:
+            - Path=/${APPNAME_MAIL_SERVICE}/**
+#          filters:
+#            - name: CircuitBreaker
+#              args:
+#                name: circuit-breaker
+#                fallbackUri: forward:/${APPNAME_MAIL_SERVICE}-fallback
+
+
+eureka:
+  instance:
+    hostname: ${SERVICE_DISCOVERY_HOST:localhost}
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://${SERVICE_DISCOVERY_HOST}:${SERVICE_DISCOVERY_PORT}/eureka
+
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 50
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10
+      permittedNumberOfCallsInHalfOpenState: 10
+
+resilience4j.timelimiter:
+  configs:
+    default:
+      timeoutDuration: 5s
+
+
