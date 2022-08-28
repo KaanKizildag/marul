@@ -1,16 +1,17 @@
-package com.marul.rapor;
+package com.marul.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
-@ToString
-public class RaporKriterleriDto implements Serializable {
+public class RaporDto implements Serializable {
     // burada tanımlanan field'lar jrxml dosyasındaki isimlerle aynı olmalıdır.
+//    private Long id;
+//    private String title;
+//    private String description;
     private String musteriAdi;
     private String email;
     private String telefonNo;

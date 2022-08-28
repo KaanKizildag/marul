@@ -7,7 +7,7 @@ package com.marul.musteri;
 
 import com.marul.dto.MailGondermeDto;
 import com.marul.dto.MusteriDto;
-import com.marul.dto.RaporKriterleriDto;
+import com.marul.dto.RaporDto;
 import com.marul.dto.result.DataResult;
 import com.marul.dto.result.SuccessResult;
 import com.marul.exception.EmailDahaOnceAlinmisException;
@@ -65,9 +65,9 @@ public class MusteriService {
         return musteriMapper.getTarget(musteri);
     }
 
-    public byte[] generateSimpleReport(List<RaporKriterleriDto> raporKriterleriDTOList) {
+    public byte[] generateSimpleReport(List<RaporDto> raporDTOList) {
         DataResult<byte[]> dataResult = raporServiceFeignClient
-                .generateSimpleReport(raporKriterleriDTOList);
+                .generateSimpleReport(raporDTOList);
         return ResultDecoder.getDataResult(dataResult);
     }
 
@@ -78,7 +78,16 @@ public class MusteriService {
         mailGondermeDto.setSubject("bu rapor musteri servisten gelmiştir.");
         mailGondermeDto.setBody("bu rapor musteri servisten gelmiştir.");
         mailGondermeDto.setEmailTo("huseyinkaan.kizildag@gmail.com");
+
         SuccessResult successResult = mailSenderFeignClient.sendMailWithAttachment(mailGondermeDto);
         ResultDecoder.utilServiceCheck(successResult);
+    }
+
+    public byte[] musteriRaporla() {
+        List<MusteriDto> musteriDtoList = findAll();
+        List<RaporDto> raporDtoList = musteriMapper.getRaporDtoList(musteriDtoList);
+        byte[] simpleReport = generateSimpleReport(raporDtoList);
+//        new Thread(() -> mailGonder(simpleReport)).start();
+        return simpleReport;
     }
 }

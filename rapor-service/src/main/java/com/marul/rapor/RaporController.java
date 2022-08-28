@@ -1,5 +1,6 @@
 package com.marul.rapor;
 
+import com.marul.dto.RaporDto;
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,9 @@ public class RaporController {
     private final RaporService raporService;
 
     @PostMapping("/generateSimpleReport")
-    public Result generateSimpleReport(@RequestBody List<RaporKriterleriDto> raporKriterleriDtoList) throws IOException {
+    public Result generateSimpleReport(@RequestBody List<RaporDto> raporDtoList) throws IOException {
         log.info("generateSimpleReport");
-        ByteArrayResource byteArrayResource = raporService.generateSimpleReport(raporKriterleriDtoList);
+        ByteArrayResource byteArrayResource = raporService.generateSimpleReport(raporDtoList);
         log.info("rapor basariyla oluşturuldu");
         return new SuccessDataResult<>(byteArrayResource.getByteArray());
     }

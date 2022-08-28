@@ -1,5 +1,6 @@
 package com.marul.rapor;
 
+import com.marul.dto.RaporDto;
 import com.marul.exception.RaporOlusturmaException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class RaporService {
 
     private final RaporServiceConfigData raporServiceConfigData;
 
-    public ByteArrayResource generateSimpleReport(List<RaporKriterleriDto> dataList) throws IOException {
+    public ByteArrayResource generateSimpleReport(List<RaporDto> dataList) throws IOException {
 
         JasperReport compileReport;
         try {
@@ -41,12 +42,11 @@ public class RaporService {
 
         Map<String, Object> reportParameters = new HashMap<>();
         reportParameters.put("turAdi", "Ankara");
-//        reportParameters.put("marulLogoPath", System.getenv("MARUL_LOGO_PATH"));
 
         return exportReportToPDF(compileReport, reportParameters, dataList);
     }
 
-    private ByteArrayResource exportReportToPDF(JasperReport jasperReport, Map<String, Object> parameters, List<RaporKriterleriDto> data) {
+    private ByteArrayResource exportReportToPDF(JasperReport jasperReport, Map<String, Object> parameters, List<RaporDto> data) {
         try {
             log.info("exportReportToPDF:\n rapor kriterleri: {},\n parametreler: {}\n", data, parameters);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,

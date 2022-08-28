@@ -1,7 +1,6 @@
 package com.marul.musteri;
 
 import com.marul.dto.MusteriDto;
-import com.marul.dto.RaporKriterleriDto;
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequestMapping("v1/musteri")
 @RestController
@@ -35,18 +33,7 @@ public class MusteriController {
 
     //    @SneakyThrows
     @GetMapping("/rapor/findAll")
-    public byte[] raporFindAll() {
-        List<MusteriDto> musteriDtoList = musteriService.findAll();
-        List<RaporKriterleriDto> raporKriterleriDTOList = musteriDtoList.stream()
-                .map(musteriDto -> RaporKriterleriDto.builder()
-                        .email(musteriDto.getEmail())
-                        .musteriAdi(musteriDto.getMusteriAdi())
-                        .telefonNo(musteriDto.getTelefonNo())
-                        .build())
-                .collect(Collectors.toList());
-
-        byte[] simpleReport = musteriService.generateSimpleReport(raporKriterleriDTOList);
-//        new Thread(() -> musteriService.mailGonder(simpleReport)).start();
-        return simpleReport;
+    public Result raporFindAll() {
+        return new SuccessDataResult<>(musteriService.musteriRaporla(), "rapor başarıyla oluşturulddu");
     }
 }

@@ -10,29 +10,29 @@ spring:
           uri: lb://${APPNAME_MUSTERI_SERVICE}
           predicates:
             - Path=/${APPNAME_MUSTERI_SERVICE}/**
-        #          filters:
-        #            - name: CircuitBreaker
-        #              args:
-        #                name: circuit-breaker
-        #                fallbackUri: forward:/musteri-service-fallback
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: circuit-breaker
+                fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
         - id: ${APPNAME_RAPOR_SERVICE}
           uri: lb://${APPNAME_RAPOR_SERVICE}
           predicates:
             - Path=/${APPNAME_RAPOR_SERVICE}/**
-        #          filters:
-        #            - name: CircuitBreaker
-        #              args:
-        #                name: circuit-breaker
-        #                fallbackUri: forward:/${APPNAME_RAPOR_SERVICE}-fallback
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: circuit-breaker
+                fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
         - id: ${APPNAME_MAIL_SERVICE}
           uri: lb://${APPNAME_MAIL_SERVICE}
           predicates:
             - Path=/${APPNAME_MAIL_SERVICE}/**
-#          filters:
-#            - name: CircuitBreaker
-#              args:
-#                name: circuit-breaker
-#                fallbackUri: forward:/${APPNAME_MAIL_SERVICE}-fallback
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: circuit-breaker
+                fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
 
 
 eureka:

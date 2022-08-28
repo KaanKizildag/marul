@@ -1,6 +1,7 @@
 package com.marul.musteri;
 
 import com.marul.dto.MusteriDto;
+import com.marul.dto.RaporDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -17,4 +18,8 @@ public interface MusteriMapper {
     List<Musteri> getSourceList(List<MusteriDto> musteri);
 
     List<MusteriDto> getTargetList(List<Musteri> musteri);
+
+    RaporDto getRaporDto(MusteriDto musteriDto);
+
+    List<RaporDto> getRaporDtoList(List<MusteriDto> musteriDtoList);
 }
