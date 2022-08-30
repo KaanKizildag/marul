@@ -10,6 +10,7 @@ import com.marul.dto.MusteriDto;
 import com.marul.dto.RaporDto;
 import com.marul.dto.result.DataResult;
 import com.marul.dto.result.SuccessResult;
+import com.marul.exception.BulunamadiException;
 import com.marul.exception.EmailDahaOnceAlinmisException;
 import com.marul.tur.TurService;
 import com.marul.util.ResultDecoder;
@@ -41,10 +42,10 @@ public class MusteriService {
         return musteriMapper.getTargetList(musteriList);
     }
 
-    public Optional<MusteriDto> findById(Integer id) {
-        Musteri musteri = musteriRepository.getById(id);
-        MusteriDto musteriDto = musteriMapper.getTarget(musteri);
-        return Optional.of(musteriDto);
+    public MusteriDto findById(Integer id) {
+        Musteri musteri = musteriRepository.findById(id)
+                .orElseThrow(() -> new BulunamadiException("%s ile bir müşteri bulunamadı", id.toString()));
+        return musteriMapper.getTarget(musteri);
     }
 
     public void delete(Integer id) {

@@ -15,6 +15,7 @@
         <module>mail-service</module>
         <module>service-discovery</module>
         <module>api-gateway-service</module>
+        <module>satis-service</module>
     </modules>
 
     <properties>

@@ -33,6 +33,16 @@ spring:
               args:
                 name: circuit-breaker
                 fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
+        - id: ${APPNAME_SATIS_SERVICE}
+          uri: lb://${APPNAME_SATIS_SERVICE}
+          predicates:
+            - Path=/${APPNAME_SATIS_SERVICE}/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: circuit-breaker
+                fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
+
 
 
 eureka:
@@ -49,14 +59,14 @@ resilience4j.circuitbreaker:
   configs:
     default:
       registerHealthIndicator: true
-      slidingWindowSize: 50
+      slidingWindowSize: 5
       failureRateThreshold: 50
-      waitDurationInOpenState: 10
-      permittedNumberOfCallsInHalfOpenState: 10
+      waitDurationInOpenState: 1
+      permittedNumberOfCallsInHalfOpenState: 2
 
 resilience4j.timelimiter:
   configs:
     default:
-      timeoutDuration: 5s
+      timeoutDuration: 10s
 
 

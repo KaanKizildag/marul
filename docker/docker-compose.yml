@@ -1,7 +1,7 @@
 version: '3.7'
 services:
-  postgres:
-    container_name: postgres
+  postgres-musteri:
+    container_name: postgres-musteri
     image: postgres
     environment:
       POSTGRES_USER: marul
@@ -11,6 +11,21 @@ services:
       - postgres:/data/postgres
     ports:
       - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  postgres-satis:
+    container_name: postgres-satis
+    image: postgres
+    environment:
+      POSTGRES_USER: marul
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5433:5432"
     networks:
       - postgres
     restart: unless-stopped
