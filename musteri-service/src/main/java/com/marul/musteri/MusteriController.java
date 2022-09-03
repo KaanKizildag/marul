@@ -23,7 +23,7 @@ public class MusteriController {
     }
 
     @GetMapping("/findById/{musteriId}")
-    public Result findById(@PathVariable("musteriId") Integer musteriId) {
+    public Result findById(@PathVariable("musteriId") Long musteriId) {
         MusteriDto musteriDto = musteriService.findById(musteriId);
         return new SuccessDataResult<>(musteriDto, "müşteri başariyla bulundu");
     }

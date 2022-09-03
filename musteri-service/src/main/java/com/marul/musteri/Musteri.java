@@ -24,7 +24,7 @@ public class Musteri implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @Column(name = "musteri_adi", nullable = false)
     private String musteriAdi;

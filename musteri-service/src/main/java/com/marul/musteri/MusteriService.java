@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author kaan
@@ -42,13 +41,13 @@ public class MusteriService {
         return musteriMapper.getTargetList(musteriList);
     }
 
-    public MusteriDto findById(Integer id) {
+    public MusteriDto findById(Long id) {
         Musteri musteri = musteriRepository.findById(id)
                 .orElseThrow(() -> new BulunamadiException("%s ile bir müşteri bulunamadı", id.toString()));
         return musteriMapper.getTarget(musteri);
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         musteriRepository.deleteById(id);
     }
 
