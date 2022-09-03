@@ -30,7 +30,7 @@ public class MusteriController {
 
     @PostMapping("/save")
     public Result save(/*@Valid*/ @RequestBody MusteriDto musteriDto) {
-        musteriService.save(musteriDto);
+        musteriDto = musteriService.save(musteriDto);
         return new SuccessDataResult<>(musteriDto, "Müşteri başarıyla kaydedildi.");
     }
 

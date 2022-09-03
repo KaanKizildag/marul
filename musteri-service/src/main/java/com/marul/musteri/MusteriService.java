@@ -56,13 +56,17 @@ public class MusteriService {
     }
 
     public MusteriDto save(MusteriDto musteriDto) {
-        if (musteriRepository.existsByEmail(musteriDto.getEmail())) {
-            throw new EmailDahaOnceAlinmisException("%s bu email daha önce alınmış.", musteriDto.getEmail());
-        }
-        turService.findById(musteriDto.getTurId());
+        existsByEmail(musteriDto);
+        turService.existsByTurId(musteriDto.getTurId());
         Musteri musteri = musteriMapper.getSource(musteriDto);
         musteri = musteriRepository.save(musteri);
         return musteriMapper.getTarget(musteri);
+    }
+
+    private void existsByEmail(MusteriDto musteriDto) {
+        if (musteriRepository.existsByEmail(musteriDto.getEmail())) {
+            throw new EmailDahaOnceAlinmisException("%s bu email daha önce alınmış.", musteriDto.getEmail());
+        }
     }
 
     public byte[] generateSimpleReport(List<RaporDto> raporDTOList) {
