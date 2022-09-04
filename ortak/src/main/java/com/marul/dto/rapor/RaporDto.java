@@ -1,4 +1,4 @@
-package com.marul.dto;
+package com.marul.dto.rapor;
 
 import lombok.Getter;
 import lombok.Setter;

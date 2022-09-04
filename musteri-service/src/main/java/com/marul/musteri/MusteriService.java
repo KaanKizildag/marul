@@ -7,7 +7,8 @@ package com.marul.musteri;
 
 import com.marul.dto.MailGondermeDto;
 import com.marul.dto.MusteriDto;
-import com.marul.dto.RaporDto;
+import com.marul.dto.rapor.RaporDto;
+import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.dto.result.DataResult;
 import com.marul.dto.result.SuccessResult;
 import com.marul.exception.BulunamadiException;
@@ -17,8 +18,9 @@ import com.marul.util.ResultDecoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 /**
  * @author kaan
@@ -66,9 +68,9 @@ public class MusteriService {
         return musteriMapper.getTarget(musteri);
     }
 
-    public byte[] generateSimpleReport(List<RaporDto> raporDTOList) {
+    public byte[] generateSimpleReport(RaporOlusturmaDto raporOlusturmaDto) {
         DataResult<byte[]> dataResult = raporServiceFeignClient
-                .generateSimpleReport(raporDTOList);
+                .generateSimpleReport(raporOlusturmaDto);
         return ResultDecoder.getDataResult(dataResult);
     }
 
@@ -87,7 +89,12 @@ public class MusteriService {
     public byte[] musteriRaporla() {
         List<MusteriDto> musteriDtoList = findAll();
         List<RaporDto> raporDtoList = musteriMapper.getRaporDtoList(musteriDtoList);
-        byte[] simpleReport = generateSimpleReport(raporDtoList);
+        RaporOlusturmaDto raporOlusturmaDto = new RaporOlusturmaDto();
+        raporOlusturmaDto.setRaporDtoList(raporDtoList);
+        Map<String, Object> raporParametreleri = new HashMap<>();
+        raporParametreleri.put("turAdi", "Ankara");
+        raporOlusturmaDto.setRaporParametreleri(raporParametreleri);
+        byte[] simpleReport = generateSimpleReport(raporOlusturmaDto);
 //        new Thread(() -> mailGonder(simpleReport)).start();
         return simpleReport;
     }

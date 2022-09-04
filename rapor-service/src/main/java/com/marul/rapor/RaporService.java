@@ -1,6 +1,7 @@
 package com.marul.rapor;
 
-import com.marul.dto.RaporDto;
+import com.marul.dto.rapor.RaporDto;
+import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.exception.RaporOlusturmaException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public class RaporService {
 
     private final RaporServiceConfigData raporServiceConfigData;
 
-    public byte[] generateSimpleReport(List<RaporDto> dataList) throws IOException {
+    public byte[] generateSimpleReport(RaporOlusturmaDto raporOlusturmaDto) throws IOException {
 
         JasperReport compileReport;
         try {
@@ -39,10 +39,10 @@ public class RaporService {
             throw new RaporOlusturmaException("rapor oluştururken hata: %s", e.getMessage());
         }
 
-        Map<String, Object> reportParameters = new HashMap<>();
-        reportParameters.put("turAdi", "Ankara");
+        List<RaporDto> raporDtoList = raporOlusturmaDto.getRaporDtoList();
+        Map<String, Object> raporParametreleri = raporOlusturmaDto.getRaporParametreleri();
 
-        return exportReportToPDF(compileReport, reportParameters, dataList);
+        return exportReportToPDF(compileReport, raporParametreleri, raporDtoList);
     }
 
     private byte[] exportReportToPDF(JasperReport jasperReport, Map<String, Object> parameters, List<RaporDto> data) {

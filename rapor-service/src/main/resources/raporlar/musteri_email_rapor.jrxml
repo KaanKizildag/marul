@@ -25,7 +25,8 @@
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
-					<imageExpression><![CDATA[System.getenv("MARUL_LOGO_PATH")]]></imageExpression>
+					<imageExpression>
+						<![CDATA["https://raw.githubusercontent.com/KaanKizildag/marul/master/logo.png"]]></imageExpression>
 				</image>
 				<textField>
 					<reportElement x="20" y="40" width="270" height="20" forecolor="#FFFFFF"
@@ -33,7 +34,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="13" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Listelenen Tur: ".concat($P{turAdi})]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Listelenen Tur: " + $P{turAdi}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -42,7 +43,7 @@
 		<band height="13"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="25">
+		<band height="21">
 			<line>
 				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666"
 							   uuid="38f324ba-2b0c-4641-8360-6ae10d329389"/>
@@ -52,17 +53,17 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Müşteri Adı]]></text>
+				<text><![CDATA[Musteri Adi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="142" y="0" width="140" height="20" uuid="4e6bf6f8-aa13-45e0-bba8-d6974ba9606a"/>
+				<reportElement x="142" y="0" width="164" height="20" uuid="4e6bf6f8-aa13-45e0-bba8-d6974ba9606a"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Teslimat Noktası]]></text>
+				<text><![CDATA[Teslimat Noktasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="282" y="0" width="140" height="20" uuid="a30e71c6-632a-4cc2-aa7e-f4cf9903952d"/>
+				<reportElement x="307" y="0" width="140" height="20" uuid="a30e71c6-632a-4cc2-aa7e-f4cf9903952d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="13" isBold="true"/>
 				</textElement>
@@ -84,7 +85,9 @@
 							   uuid="0b9de9f6-031b-4432-947e-92e138f61fbc"/>
 			</line>
 			<textField>
-				<reportElement x="143" y="0" width="140" height="16" uuid="ed0e6c36-c388-48d2-8a0a-4551ca96f7c5"/>
+				<reportElement x="143" y="0" width="164" height="16" uuid="ed0e6c36-c388-48d2-8a0a-4551ca96f7c5">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{teslimatNoktasi}]]></textFieldExpression>
 			</textField>
@@ -96,12 +99,12 @@
 				<textFieldExpression><![CDATA[$F{musteriAdi}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="283" y="0" width="140" height="16" uuid="dd10ba21-b6f6-47c8-b36c-6705a19bb1c5"/>
+				<reportElement x="308" y="0" width="140" height="16" uuid="dd10ba21-b6f6-47c8-b36c-6705a19bb1c5"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{telefonNo}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="0" y="0" width="16" height="16" uuid="3d431ec5-8bcb-4b5c-bcc3-41ed52c1e5d0">
+				<reportElement x="0" y="2" width="16" height="16" uuid="3d431ec5-8bcb-4b5c-bcc3-41ed52c1e5d0">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>

@@ -1,15 +1,13 @@
 package com.marul.rapor;
 
-import com.marul.dto.RaporDto;
+import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/rapor")
@@ -20,11 +18,11 @@ public class RaporController {
     private final RaporService raporService;
 
     @PostMapping("/generateSimpleReport")
-    public Result generateSimpleReport(@RequestBody List<RaporDto> raporDtoList) throws IOException {
+    public Result generateSimpleReport(@RequestBody RaporOlusturmaDto raporOlusturmaDto) throws IOException {
         log.info("generateSimpleReport");
-        ByteArrayResource byteArrayResource = raporService.generateSimpleReport(raporDtoList);
+        byte[] report = raporService.generateSimpleReport(raporOlusturmaDto);
         log.info("rapor basariyla oluşturuldu");
-        return new SuccessDataResult<>(byteArrayResource.getByteArray());
+        return new SuccessDataResult<>(report, "rapor başarıyla oluşturuldu");
     }
 
     @GetMapping("/helloworld")
