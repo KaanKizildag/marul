@@ -38,4 +38,9 @@ public class MusteriController {
     public Result raporFindAll() {
         return new SuccessDataResult<>(musteriService.musteriRaporla(), "rapor başarıyla oluşturulddu");
     }
+
+    @GetMapping("/rapor/findAll-dev")
+    public byte[] raporFindAllDev() {
+        return musteriService.musteriRaporla();
+    }
 }

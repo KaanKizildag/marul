@@ -9,10 +9,8 @@ import java.io.Serializable;
 @Setter
 public class RaporDto implements Serializable {
     // burada tanımlanan field'lar jrxml dosyasındaki isimlerle aynı olmalıdır.
-//    private Long id;
-//    private String title;
-//    private String description;
     private String musteriAdi;
-    private String email;
+    private String teslimatNoktasi;
+    private Double borc;
     private String telefonNo;
 }
