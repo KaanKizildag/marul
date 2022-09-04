@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -23,7 +22,7 @@ public class RaporService {
 
     private final RaporServiceConfigData raporServiceConfigData;
 
-    public ByteArrayResource generateSimpleReport(List<RaporDto> dataList) throws IOException {
+    public byte[] generateSimpleReport(List<RaporDto> dataList) throws IOException {
 
         JasperReport compileReport;
         try {
@@ -46,7 +45,7 @@ public class RaporService {
         return exportReportToPDF(compileReport, reportParameters, dataList);
     }
 
-    private ByteArrayResource exportReportToPDF(JasperReport jasperReport, Map<String, Object> parameters, List<RaporDto> data) {
+    private byte[] exportReportToPDF(JasperReport jasperReport, Map<String, Object> parameters, List<RaporDto> data) {
         try {
             log.info("exportReportToPDF:\n rapor kriterleri: {},\n parametreler: {}\n", data, parameters);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,
@@ -55,8 +54,7 @@ public class RaporService {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
-            byte[] reportContent = outputStream.toByteArray();
-            return new ByteArrayResource(reportContent);
+            return outputStream.toByteArray();
         } catch (Exception e) {
             log.error("Exporting report to PDF error: {}", e.getMessage());
             throw new RaporOlusturmaException("rapor oluştururken hata: %s", e.getMessage());
