@@ -2,6 +2,7 @@ package com.marul.satis;
 
 import com.marul.dto.MusteriDto;
 import com.marul.dto.SatisDto;
+import com.marul.urun.UrunService;
 import com.marul.util.ResultDecoder;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class SatisService {
     private final SatisRepository satisRepository;
     private final MusteriFeignClient musteriFeignClient;
     private final SatisMapper satisMapper;
+    private final UrunService urunService;
 
     public List<SatisDto> findAll() {
         List<Satis> satisList = satisRepository.findAll();
@@ -34,6 +36,7 @@ public class SatisService {
     public SatisDto save(SatisDto satisDto) {
         Satis satis = satisMapper.getEntity(satisDto);
         ResultDecoder.getDataResult(musteriFeignClient.findById(satis.getMusteriId()));
+        urunService.findById(satis.getUrunId());
         satis = this.satisRepository.save(satis);
         return satisMapper.getDto(satis);
     }
