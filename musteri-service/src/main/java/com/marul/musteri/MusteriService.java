@@ -44,13 +44,13 @@ public class MusteriService {
         return musteriMapper.getTargetList(musteriList);
     }
 
-    public MusteriDto findById(Integer id) {
+    public MusteriDto findById(Long id) {
         Musteri musteri = musteriRepository.findById(id)
                 .orElseThrow(() -> new BulunamadiException("%s ile bir müşteri bulunamadı", id.toString()));
         return musteriMapper.getTarget(musteri);
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         musteriRepository.deleteById(id);
     }
 
@@ -59,13 +59,17 @@ public class MusteriService {
     }
 
     public MusteriDto save(MusteriDto musteriDto) {
-        if (musteriRepository.existsByEmail(musteriDto.getEmail())) {
-            throw new EmailDahaOnceAlinmisException("%s bu email daha önce alınmış.", musteriDto.getEmail());
-        }
-        turService.findById(musteriDto.getTurId());
+        existsByEmail(musteriDto);
+        turService.existsByTurId(musteriDto.getTurId());
         Musteri musteri = musteriMapper.getSource(musteriDto);
         musteri = musteriRepository.save(musteri);
         return musteriMapper.getTarget(musteri);
+    }
+
+    private void existsByEmail(MusteriDto musteriDto) {
+        if (musteriRepository.existsByEmail(musteriDto.getEmail())) {
+            throw new EmailDahaOnceAlinmisException("%s bu email daha önce alınmış.", musteriDto.getEmail());
+        }
     }
 
     public byte[] generateSimpleReport(RaporOlusturmaDto raporOlusturmaDto) {

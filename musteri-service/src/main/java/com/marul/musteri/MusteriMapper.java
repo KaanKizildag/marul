@@ -12,12 +12,12 @@ public interface MusteriMapper {
 
     MusteriDto getTarget(Musteri musteri);
 
-    @Mapping(target = "borc", expression = "java( musteri.getBorc() / 100 )")
-    Musteri getSource(MusteriDto musteri);
+    @Mapping(target = "borc", expression = "java( musteriDto.getBorc() / 100 )")
+    Musteri getSource(MusteriDto musteriDto);
 
-    List<Musteri> getSourceList(List<MusteriDto> musteri);
+    List<Musteri> getSourceList(List<MusteriDto> musteriDtoList);
 
-    List<MusteriDto> getTargetList(List<Musteri> musteri);
+    List<MusteriDto> getTargetList(List<Musteri> musteriList);
 
     RaporDto getRaporDto(MusteriDto musteriDto);
 

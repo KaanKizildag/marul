@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 public class MusteriDto {
 
-    private Integer id;
-//    @NotNull
+    private Long id;
+    //    @NotNull
     private String musteriAdi;
 
 //    @NotNull
