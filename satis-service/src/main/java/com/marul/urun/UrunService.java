@@ -5,6 +5,7 @@
 package com.marul.urun;
 
 import com.marul.exception.BulunamadiException;
+import com.marul.exception.ZatenKayitliException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,21 @@ public class UrunService {
     public UrunDto save(UrunDto urunDto) {
         String urunAdi = urunDto.getUrunAdi();
 
-        if (urunRepository.existsByUrunAdi(urunAdi)) {
-            throw new BulunamadiException("%s adıyla bir ürün zaten sisteme kayıtlı", urunAdi);
+        if (existsByUrunAdi(urunAdi)) {
+            throw new ZatenKayitliException("%s adıyla bir ürün zaten sisteme kayıtlı", urunAdi);
         }
 
         Urun urun = urunMapper.getEntity(urunDto);
         urun = urunRepository.save(urun);
         return urunMapper.getDto(urun);
+    }
+
+    public boolean existsByUrunAdi(String urunAdi) {
+        return urunRepository.existsByUrunAdi(urunAdi);
+    }
+
+    public boolean existsById(Long id) {
+        return urunRepository.existsById(id);
     }
 
     public List<UrunDto> findAll() {
@@ -39,7 +48,7 @@ public class UrunService {
 
     public UrunDto findById(Long id) {
         Urun urun = urunRepository.findById(id)
-                .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı"));
+                .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", id.toString()));
         return urunMapper.getDto(urun);
     }
 }

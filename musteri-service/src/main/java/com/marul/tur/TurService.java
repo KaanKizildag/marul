@@ -1,7 +1,7 @@
 package com.marul.tur;
 
 import com.marul.exception.BulunamadiException;
-import com.marul.exception.TurZatenKayitliException;
+import com.marul.exception.ZatenKayitliException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class TurService {
     public void save(TurDto turDto) {
         if (turRepository.existsByTurAdi(turDto.getTurAdi())) {
             log.error("{} ile kaydedilmiş bir tur sisteme kayıtlıdır.", turDto.getTurAdi());
-            throw new TurZatenKayitliException("%s ile kaydedilmiş bir tur sisteme kayıtlıdır.", turDto.getTurAdi());
+            throw new ZatenKayitliException("%s ile kaydedilmiş bir tur sisteme kayıtlıdır.", turDto.getTurAdi());
         }
         Tur tur = turMapper.getSource(turDto);
         turRepository.save(tur);

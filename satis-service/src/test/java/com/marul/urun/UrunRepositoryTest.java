@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
@@ -15,7 +16,7 @@ class UrunRepositoryTest {
     private UrunRepository urunRepository;
 
     @Test
-    void urunAdiIleKaydinvarOlupOlmadigiBulunabilmeli() {
+    void urunAdiileUrunVarsaTrueDonmeli() {
         // given
         String urunAdi = "Marul";
         Urun urun = new Urun();
@@ -30,6 +31,18 @@ class UrunRepositoryTest {
 
         //then
         assertTrue(expected);
+    }
+
+    @Test
+    void urunAdiileUrunYoksaFalseDonmeli() {
+        // given
+        String urunAdi = "Marul";
+
+        //when
+        boolean expected = urunRepository.existsByUrunAdi(urunAdi);
+
+        //then
+        assertFalse(expected);
     }
 
 }

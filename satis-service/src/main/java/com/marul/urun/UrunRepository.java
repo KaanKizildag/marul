@@ -13,4 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UrunRepository extends JpaRepository<Urun, Long> {
     boolean existsByUrunAdi(String urunAdi);
+
+    boolean existsById(Long id);
 }
