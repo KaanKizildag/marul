@@ -1,6 +1,7 @@
 package com.marul.stokservice;
 
-import com.marul.exception.BulunamadiException;
+import com.marul.dto.result.SuccessDataResult;
+import com.marul.exception.ServisDonusHatasiException;
 import com.marul.stokservice.stok.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,9 +20,9 @@ class StokServiceTest {
 
     @Mock
     private StokRepository stokRepository;
-//
-//    @Mock
-//    private UrunService urunService;
+
+    @Mock
+    private SatisFeignClient satisFeignClient;
 
     @Mock
     private StokMapper stokMapper;
@@ -34,7 +35,8 @@ class StokServiceTest {
     void itShould_returnTrue_WhenStockIsAvailable() {
         //given
         long urunId = 1L;
-//        when(urunService.existsById(urunId)).thenReturn(Boolean.TRUE);
+        when(satisFeignClient.existsById(urunId))
+                .thenReturn(new SuccessDataResult<>(Boolean.TRUE));
 
         long stok = 10L;
         when(stokRepository.yeterliStokVarMi(urunId, stok))
@@ -49,12 +51,12 @@ class StokServiceTest {
     void itShould_ThrowsException_WhenProductIfNotExists() {
         //given
         long urunId = 1L;
-//        when(urunService.existsById(urunId)).thenThrow(BulunamadiException.class);
+        when(satisFeignClient.existsById(urunId)).thenThrow(ServisDonusHatasiException.class);
 
         long stok = 10L;
         //when
         //then
-        Assertions.assertThrows(BulunamadiException.class,
+        Assertions.assertThrows(ServisDonusHatasiException.class,
                 () -> stokService.yeterliStokVarMi(urunId, stok));
         verify(stokRepository, times(0)).yeterliStokVarMi(urunId, stok);
     }
