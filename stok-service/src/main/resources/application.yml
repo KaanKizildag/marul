@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: stok-service
+
+server:
+  port: 8088
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://${SERVICE_DISCOVERY_HOST}:${SERVICE_DISCOVERY_PORT}/eureka
+  instance:
+    hostname: ${SERVICE_DISCOVERY_HOST}
