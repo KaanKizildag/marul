@@ -2,6 +2,7 @@ package com.marul.stokservice.stok;
 
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
+import com.marul.dto.stok.StokDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

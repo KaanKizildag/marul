@@ -1,5 +1,7 @@
 package com.marul.urun;
 
+import com.marul.dto.result.SuccessDataResult;
+import com.marul.dto.stok.StokDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,12 +29,15 @@ class UrunServiceTest {
     @Mock
     private UrunMapper urunMapper;
 
+    @Mock
+    private StokFeignClient stokFeignClient;
+
     @MockBean
     private UrunService urunService;
 
     @BeforeEach
     void setUp() {
-        urunService = new UrunService(urunRepository, urunMapper);
+        urunService = new UrunService(urunRepository, urunMapper, stokFeignClient);
     }
 
     @Test
@@ -49,6 +54,9 @@ class UrunServiceTest {
         urun.setFiyat(BigDecimal.ZERO);
         urun.setKdv(0);
 
+        StokDto stokDto = new StokDto();
+
+
         when(urunMapper.getEntity(urunDto))
                 .thenReturn(urun);
 
@@ -57,6 +65,9 @@ class UrunServiceTest {
 
         when(urunRepository.existsByUrunAdi(urunAdi))
                 .thenReturn(false);
+
+        when(stokFeignClient.save(any()))
+                .thenReturn(new SuccessDataResult<>());
 
         when(urunRepository.save(urun))
                 .thenReturn(urun);

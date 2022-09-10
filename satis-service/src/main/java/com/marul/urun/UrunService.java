@@ -4,6 +4,7 @@
  */
 package com.marul.urun;
 
+import com.marul.dto.stok.StokDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.ZatenKayitliException;
@@ -21,7 +22,7 @@ public class UrunService {
 
     private final UrunRepository urunRepository;
     private final UrunMapper urunMapper;
-//    private final StokService stokService;
+    private final StokFeignClient stokFeignClient;
 
     public UrunDto save(UrunDto urunDto) {
         String urunAdi = urunDto.getUrunAdi();
@@ -32,17 +33,17 @@ public class UrunService {
 
         Urun urun = urunMapper.getEntity(urunDto);
         urun = urunRepository.save(urun);
-//        varsayilanStokAtamasi();
+        varsayilanStokAtamasi(urun.getId());
         return urunMapper.getDto(urun);
     }
 
-//    private void varsayilanStokAtamasi() {
-//        long varsayilanStok = 0L;
-//        StokDto stokDto = new StokDto();
-//        stokDto.setUrunId(stokDto.getUrunId());
-//        stokDto.setAdet(varsayilanStok);
-//        stokService.save(stokDto);
-//    }
+    private void varsayilanStokAtamasi(Long urunId) {
+        long varsayilanStok = 0L;
+        StokDto stokDto = new StokDto();
+        stokDto.setUrunId(urunId);
+        stokDto.setAdet(varsayilanStok);
+        stokFeignClient.save(stokDto);
+    }
 
     public boolean existsByUrunAdi(String urunAdi) {
         return urunRepository.existsByUrunAdi(urunAdi);

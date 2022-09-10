@@ -1,5 +1,6 @@
 package com.marul.stokservice.stok;
 
+import com.marul.dto.stok.StokDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.util.ResultDecoder;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,6 @@
 package com.marul.stokservice.stok;
 
+import com.marul.dto.stok.StokDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;
