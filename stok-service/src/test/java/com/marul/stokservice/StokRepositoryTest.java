@@ -1,5 +1,7 @@
-package com.marul.stok;
+package com.marul.stokservice;
 
+import com.marul.stokservice.stok.Stok;
+import com.marul.stokservice.stok.StokRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

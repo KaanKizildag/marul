@@ -1,7 +1,7 @@
-package com.marul.stok;
+package com.marul.stokservice.stok;
 
 import com.marul.exception.BulunamadiException;
-import com.marul.urun.UrunService;
+import com.marul.util.ResultDecoder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,14 @@ import java.util.Optional;
 public class StokService {
 
     private final StokRepository stokRepository;
-    private final UrunService urunService;
+    private final SatisFeignClient satisFeignClient;
     private final StokMapper stokMapper;
 
     public boolean yeterliStokVarMi(Long urunId, Long stok) {
-        if (!urunService.existsById(urunId)) {
+        boolean urunVarMi = ResultDecoder.getDataResult(satisFeignClient.existsById(urunId));
+        if (!urunVarMi) {
             log.error("{} id ile ürün bulunamadı", urunId);
-            throw new BulunamadiException("%d id ile ürün bulunamadı", urunId.toString());
+            throw new BulunamadiException("%s id ile ürün bulunamadı", urunId.toString());
         }
         return stokRepository.yeterliStokVarMi(urunId, stok);
     }

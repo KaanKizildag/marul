@@ -2,7 +2,6 @@ server:
   port: '${SATIS_SERVICE_PORT}'
   servlet:
     context-path: /${APPNAME_SATIS_SERVICE}
-
 spring:
   application:
     name: satis-service
@@ -18,3 +17,5 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         show_sql: true
+  main:
+    allow-circular-references: true

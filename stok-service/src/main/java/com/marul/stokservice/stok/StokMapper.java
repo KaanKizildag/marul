@@ -1,10 +1,10 @@
-package com.marul.stok;
+package com.marul.stokservice.stok;
 
 import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface StokMapper {
     Stok getEntity(StokDto stokDto);
 

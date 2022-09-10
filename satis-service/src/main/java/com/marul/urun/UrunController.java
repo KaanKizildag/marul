@@ -2,6 +2,7 @@ package com.marul.urun;
 
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
+import com.marul.dto.urun.UrunDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,13 @@ public class UrunController {
         UrunDto urunDto = urunService.findById(id);
         log.info("{} id ile ürün başarıyla bulundu", id);
         return new SuccessDataResult<>(urunDto, "ürün başarıyla getirildi.");
+    }
+
+    @GetMapping("/existsById")
+    public Result existsById(@RequestParam(value = "id") Long id) {
+        boolean exists = urunService.existsById(id);
+        log.info("{} id ile ürün başarıyla bulundu", id);
+        return new SuccessDataResult<>(exists, "ürün bilgisi başarıyla getirildi.");
     }
 
     @PostMapping("/save")

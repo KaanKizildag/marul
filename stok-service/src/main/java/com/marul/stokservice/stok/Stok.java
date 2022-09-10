@@ -1,4 +1,4 @@
-package com.marul.stok;
+package com.marul.stokservice.stok;
 
 import lombok.Getter;
 import lombok.Setter;

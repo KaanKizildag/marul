@@ -1,7 +1,7 @@
-package com.marul.stok;
+package com.marul.stokservice;
 
 import com.marul.exception.BulunamadiException;
-import com.marul.urun.UrunService;
+import com.marul.stokservice.stok.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,9 +19,9 @@ class StokServiceTest {
 
     @Mock
     private StokRepository stokRepository;
-
-    @Mock
-    private UrunService urunService;
+//
+//    @Mock
+//    private UrunService urunService;
 
     @Mock
     private StokMapper stokMapper;
@@ -34,7 +34,7 @@ class StokServiceTest {
     void itShould_returnTrue_WhenStockIsAvailable() {
         //given
         long urunId = 1L;
-        when(urunService.existsById(urunId)).thenReturn(Boolean.TRUE);
+//        when(urunService.existsById(urunId)).thenReturn(Boolean.TRUE);
 
         long stok = 10L;
         when(stokRepository.yeterliStokVarMi(urunId, stok))
@@ -49,7 +49,7 @@ class StokServiceTest {
     void itShould_ThrowsException_WhenProductIfNotExists() {
         //given
         long urunId = 1L;
-        when(urunService.existsById(urunId)).thenThrow(BulunamadiException.class);
+//        when(urunService.existsById(urunId)).thenThrow(BulunamadiException.class);
 
         long stok = 10L;
         //when

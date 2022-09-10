@@ -14,6 +14,20 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+  postgres-stok:
+    container_name: postgres-stok
+    image: postgres
+    environment:
+      POSTGRES_USER: marul
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5434:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
 
   postgres-satis:
     container_name: postgres-satis

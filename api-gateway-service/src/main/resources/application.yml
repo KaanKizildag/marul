@@ -42,6 +42,16 @@ spring:
               args:
                 name: circuit-breaker
                 fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
+        - id: stok-service
+          uri: lb://stok-service
+          predicates:
+            - Path=/stok-service/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: circuit-breaker
+                fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
+
 
 
 

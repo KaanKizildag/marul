@@ -1,4 +1,4 @@
-package com.marul.urun;
+package com.marul.dto.urun;
 
 import lombok.Getter;
 import lombok.Setter;
