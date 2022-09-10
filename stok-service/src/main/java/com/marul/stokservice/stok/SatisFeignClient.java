@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(value = "satis-service")
 public interface SatisFeignClient {
-    // {{api-gateway}}/satis-service/v1/urun/existsById?id=1
     @GetMapping("/satis-service/v1/urun/existsById")
     SuccessDataResult<Boolean> existsById(@RequestParam(value = "id") Long id);
 }

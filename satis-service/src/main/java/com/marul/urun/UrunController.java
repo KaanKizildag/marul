@@ -42,6 +42,6 @@ public class UrunController {
     @PostMapping("/save")
     public Result save(@RequestBody UrunDto urunDto) {
         urunDto = urunService.save(urunDto);
-        return new SuccessDataResult<>(urunDto);
+        return new SuccessDataResult<>(urunDto, "ürün başarıyla kaydedildi.");
     }
 }
