@@ -16,14 +16,14 @@ public class SatisController {
     private final SatisService satisService;
 
     @GetMapping("/findAll")
-    public Result findAll(){
+    public Result findAll() {
         List<SatisDto> satisList = satisService.findAll();
         return new SuccessDataResult<>(satisList,
                 String.format("%d tane satış başarıyla listelendi", satisList.size()));
     }
 
     @PostMapping("/save")
-    public Result save(@RequestBody SatisDto satisDto){
+    public Result save(@RequestBody SatisDto satisDto) {
         SatisDto satisDtoResult = satisService.save(satisDto);
         return new SuccessDataResult<>(satisDtoResult, "satis basariyla kaydedildi.");
     }

@@ -77,8 +77,8 @@ class MusteriControllerTest {
         musteriDto.setEmail(musteriAdi + "@marul.com.tr");
 
         Mockito.when(musteriService.findById(musteriId)).thenReturn(musteriDto);
-        ResultActions resultActions = mockMvc.perform(get("/v1/musteri/findById/" + musteriId).
-                contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mockMvc.perform(get("/v1/musteri/findById/" + musteriId)
+                .contentType(MediaType.APPLICATION_JSON));
         resultActions
                 .andExpect(content().string(Matchers.containsString("\"success\":true")));
         resultActions
