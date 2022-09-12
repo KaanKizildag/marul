@@ -35,10 +35,6 @@ public class MusteriService {
     private final TurService turService;
     private final MusteriMapper musteriMapper;
 
-    public void insert(MusteriDto musteriDto) {
-        musteriRepository.save(musteriMapper.getSource(musteriDto));
-    }
-
     public List<MusteriDto> findAll() {
         List<Musteri> musteriList = musteriRepository.findAll();
         return musteriMapper.getTargetList(musteriList);
@@ -50,25 +46,39 @@ public class MusteriService {
         return musteriMapper.getTarget(musteri);
     }
 
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         musteriRepository.deleteById(id);
     }
-
-    public void update(MusteriDto musteriDto) {
-        musteriRepository.save(musteriMapper.getSource(musteriDto));
-    }
+//
+//    public void update(Long musteriId, MusteriDto musteriDto) {
+//        MusteriDto byId = findById(musteriId);
+//
+//        byId.setMusteriAdi(musteriDto.getMusteriAdi());
+//        byId.setBorc(musteriDto.getBorc());
+//        byId.setTelefonNo(musteriDto.getTelefonNo());
+//        byId.setTurId(musteriDto.getTurId());
+//        byId.setTeslimatNoktasi(musteriDto.getTeslimatNoktasi());
+//        byId.setEmail(musteriDto.getEmail());
+//
+//        Musteri musteri = musteriMapper.getSource(byId);
+//        musteriRepository.save(musteri);
+//    }
 
     public MusteriDto save(MusteriDto musteriDto) {
-        existsByEmail(musteriDto);
-        turService.existsByTurId(musteriDto.getTurId());
+        emailAlinmisMiKontrol(musteriDto.getEmail());
+        turMevcutMuKontrol(musteriDto.getTurId());
         Musteri musteri = musteriMapper.getSource(musteriDto);
         musteri = musteriRepository.save(musteri);
         return musteriMapper.getTarget(musteri);
     }
 
-    private void existsByEmail(MusteriDto musteriDto) {
-        if (musteriRepository.existsByEmail(musteriDto.getEmail())) {
-            throw new EmailDahaOnceAlinmisException("%s bu email daha önce alınmış.", musteriDto.getEmail());
+    private void turMevcutMuKontrol(long turId) {
+        turService.existsByTurId(turId);
+    }
+
+    private void emailAlinmisMiKontrol(String email) {
+        if (musteriRepository.existsByEmail(email)) {
+            throw new EmailDahaOnceAlinmisException("%s bu email daha önce alınmış.", email);
         }
     }
 
