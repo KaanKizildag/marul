@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,9 +60,9 @@ class MusteriControllerTest {
         ResultActions resultActions = mockMvc.perform(get("/v1/musteri/findAll").
                 contentType(MediaType.APPLICATION_JSON));
         resultActions
-                .andExpect(content().string(Matchers.containsString("\"success\":true")));
-        resultActions
-                .andExpect(status().isOk());
+                .andExpect(content().string(Matchers.containsString("\"success\":true")))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test
@@ -82,6 +83,7 @@ class MusteriControllerTest {
         resultActions
                 .andExpect(content().string(Matchers.containsString("\"success\":true")));
         resultActions
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 }

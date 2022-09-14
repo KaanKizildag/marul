@@ -30,7 +30,7 @@ class SatisServiceTest {
     @Mock
     private MusteriFeignClient musteriFeignClient;
     @Mock
-    private SatisMapper satisMapper;
+    private SatisMapperImpl satisMapper;
     @Mock
     private UrunService urunService;
 

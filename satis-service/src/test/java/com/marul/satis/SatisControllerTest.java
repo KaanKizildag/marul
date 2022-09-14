@@ -3,8 +3,8 @@ package com.marul.satis;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marul.dto.MusteriDto;
 import com.marul.dto.SatisDto;
+import com.marul.exception.BulunamadiException;
 import com.marul.exception.GeneralExceptionHandler;
-import com.marul.exception.ServisDonusHatasiException;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -107,12 +108,13 @@ class SatisControllerTest {
         SatisDto satisDto = getMockSatisDto();
 
         Mockito.when(satisService.save(any()))
-                .thenThrow(new ServisDonusHatasiException("1 id ile ürün bulunamadı"));
+                .thenThrow(new BulunamadiException("1 id ile ürün bulunamadı"));
         mockMvc.perform(post("/v1/satis/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(satisDto))
                 )
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ServisDonusHatasiException))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BulunamadiException))
+                .andExpect(status().is(HttpStatus.INTERNAL_SERVER_ERROR.value()))
                 .andDo(print());
     }
 }
