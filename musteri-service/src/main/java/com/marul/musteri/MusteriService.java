@@ -107,6 +107,7 @@ public class MusteriService {
         List<RaporDto> raporDtoList = musteriMapper.getRaporDtoList(musteriDtoList);
         log.info("{} tane müşteri raporlanacak ", raporDtoList.size());
         RaporOlusturmaDto raporOlusturmaDto = new RaporOlusturmaDto();
+        raporOlusturmaDto.setRaporAdi("musteri_email_rapor.jrxml");
         raporOlusturmaDto.setRaporDtoList(raporDtoList);
         Map<String, Object> raporParametreleri = new HashMap<>();
         raporParametreleri.put("turAdi", "Ankara");

@@ -9,6 +9,7 @@ import java.util.Map;
 @Getter
 @Setter
 public class RaporOlusturmaDto {
-    List<RaporDto> raporDtoList;
-    Map<String, Object> raporParametreleri;
+    private String raporAdi;
+    private List<RaporDto> raporDtoList;
+    private Map<String, Object> raporParametreleri;
 }

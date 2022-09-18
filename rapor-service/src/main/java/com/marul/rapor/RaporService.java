@@ -26,9 +26,8 @@ public class RaporService {
 
         JasperReport compileReport;
         try {
-            // todo jrxml dosyasi baska yerden okunacaktir.
             String raporDizini = raporServiceConfigData.getRaporlarDizini();
-            String raporAdi = "musteri_email_rapor.jrxml";
+            String raporAdi = raporOlusturmaDto.getRaporAdi();
             String fileName = raporDizini + raporAdi;
             ClassLoader classLoader = getClass().getClassLoader();
             InputStream inputStream = classLoader.getResourceAsStream(fileName);
