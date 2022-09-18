@@ -11,7 +11,7 @@
 		<![CDATA[]]>
 	</queryString>
 	<field name="urunAdi" class="java.lang.String"/>
-	<field name="miktar" class="java.lang.String"/>
+	<field name="miktar" class="java.lang.Long"/>
 	<field name="tutar" class="java.math.BigDecimal"/>
 	<variable name="toplamTutar" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{tutar}]]></variableExpression>
