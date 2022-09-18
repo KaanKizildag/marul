@@ -36,7 +36,7 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="29" isBold="true"/>
+					<font fontName="SansSerif" pdfEncoding="Cp1254" size="29" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Satış faturası]]></text>
 			</staticText>
@@ -67,7 +67,7 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="13" isBold="true"/>
+					<font fontName="SansSerif" pdfEncoding="Cp1254" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ürün adı]]></text>
 			</staticText>
@@ -76,7 +76,7 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="13" isBold="true"/>
+					<font fontName="SansSerif" pdfEncoding="Cp1254" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Miktar]]></text>
 			</staticText>
@@ -85,7 +85,7 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="13" isBold="true"/>
+					<font fontName="SansSerif" pdfEncoding="Cp1254" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tutar]]></text>
 			</staticText>
@@ -99,7 +99,7 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="13"/>
+					<font fontName="SansSerif" pdfEncoding="Cp1254" size="13"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{urunAdi}]]></textFieldExpression>
 			</textField>
@@ -108,7 +108,7 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="13"/>
+					<font fontName="SansSerif" pdfEncoding="Cp1254" size="13"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{miktar}]]></textFieldExpression>
 			</textField>
@@ -117,9 +117,9 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="13"/>
+					<font fontName="SansSerif" pdfEncoding="Cp1254" size="13"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{tutar} + " ₺"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{tutar} + " tl"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -132,7 +132,7 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="13" isBold="true"/>
+					<font fontName="SansSerif" pdfEncoding="Cp1254" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Toplam]]></text>
 			</staticText>
@@ -143,9 +143,9 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="13"/>
+					<font fontName="SansSerif" pdfEncoding="Cp1254" size="13"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{toplamTutar} + " ₺"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{toplamTutar} + " tl"]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="0" width="400" height="1" uuid="2fde4f77-e5ef-4386-83bb-2e9bc422a33c">
