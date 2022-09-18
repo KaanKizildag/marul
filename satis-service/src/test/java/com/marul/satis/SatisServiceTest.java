@@ -53,7 +53,7 @@ class SatisServiceTest {
 
         MusteriDto musteriDto = new MusteriDto();
         musteriDto.setId(musteriId);
-        when(musteriFeignClient.findById(satis.getMusteriId())).thenReturn(new SuccessDataResult<>(true));
+        when(musteriFeignClient.existsById(satis.getMusteriId())).thenReturn(new SuccessDataResult<>(true));
 
         //when
         List<SatisDto> satisDtoList = satisService.findAll();
@@ -85,7 +85,7 @@ class SatisServiceTest {
         when(satisMapper.getEntity(satisDto))
                 .thenReturn(satis);
 
-        when(musteriFeignClient.findById(musteriId))
+        when(musteriFeignClient.existsById(musteriId))
                 .thenReturn(new SuccessDataResult<>(true));
 
         when(satisRepository.save(satis))
@@ -104,7 +104,7 @@ class SatisServiceTest {
         Assertions.assertEquals(actual.getUrunId(), satisDto.getUrunId());
 
         verify(satisMapper).getEntity(satisDto);
-        verify(musteriFeignClient).findById(musteriId);
+        verify(musteriFeignClient).existsById(musteriId);
         verify(urunService).findById(urunId);
         verify(satisRepository).save(satis);
         verify(satisMapper).getDto(satis);
@@ -127,7 +127,7 @@ class SatisServiceTest {
         when(satisMapper.getEntity(satisDto))
                 .thenReturn(satis);
 
-        when(musteriFeignClient.findById(musteriId))
+        when(musteriFeignClient.existsById(musteriId))
                 .thenThrow(BulunamadiException.class);
 
         // when
@@ -135,7 +135,7 @@ class SatisServiceTest {
 
         //then
         verify(satisMapper).getEntity(satisDto);
-        verify(musteriFeignClient).findById(musteriId);
+        verify(musteriFeignClient).existsById(musteriId);
         verify(satisRepository, Mockito.times(0)).save(satis);
         verify(satisMapper, Mockito.times(0)).getDto(satis);
     }
@@ -159,7 +159,7 @@ class SatisServiceTest {
         when(satisMapper.getEntity(satisDto))
                 .thenReturn(satis);
 
-        when(musteriFeignClient.findById(musteriId))
+        when(musteriFeignClient.existsById(musteriId))
                 .thenReturn(new SuccessDataResult<>(true));
 
         when(urunService.findById(urunId))
@@ -170,7 +170,7 @@ class SatisServiceTest {
 
         //then
         verify(satisMapper).getEntity(satisDto);
-        verify(musteriFeignClient).findById(musteriId);
+        verify(musteriFeignClient).existsById(musteriId);
         verify(urunService).findById(urunId);
         verify(satisRepository, Mockito.times(0)).save(satis);
         verify(satisMapper, Mockito.times(0)).getDto(satis);

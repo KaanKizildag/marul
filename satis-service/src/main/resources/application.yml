@@ -4,7 +4,7 @@ server:
     context-path: /${APPNAME_SATIS_SERVICE}
 spring:
   application:
-    name: satis-service
+    name: ${APPNAME_SATIS_SERVICE:satis-service}
   datasource:
     password: password
     url: jdbc:postgresql://${POSTGRES_SATIS_HOST}:${POSTGRES_SATIS_PORT}/satis
@@ -17,5 +17,3 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         show_sql: true
-  main:
-    allow-circular-references: true

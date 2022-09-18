@@ -1,6 +1,6 @@
 spring:
   application:
-    name: stok-service
+    name: ${APPNAME_STOK_SERVICE:stok-service}
   datasource:
     password: password
     url: jdbc:postgresql://${POSTGRES_STOK_HOST}:${POSTGRES_STOK_PORT}/stok
@@ -14,9 +14,9 @@ spring:
         format_sql: true
         show_sql: true
 server:
-  port: 8088
+  port: ${STOK_SERVICE_PORT:8088}
   servlet:
-    context-path: /stok-service
+    context-path: /${APPNAME_STOK_SERVICE:stok-service}
 
 eureka:
   client:

@@ -1,6 +1,7 @@
 package com.marul.satis;
 
 import com.marul.dto.SatisDto;
+import com.marul.exception.BulunamadiException;
 import com.marul.urun.UrunService;
 import com.marul.util.ResultDecoder;
 import lombok.AllArgsConstructor;
@@ -25,8 +26,16 @@ public class SatisService {
     }
 
     public SatisDto save(SatisDto satisDto) {
-        ResultDecoder.getDataResult(musteriFeignClient.findById(satisDto.getMusteriId()));
-        urunService.findById(satisDto.getUrunId());
+        Long musteriId = satisDto.getMusteriId();
+        Boolean musteriBulunduMu = ResultDecoder.getDataResult(musteriFeignClient.existsById(musteriId));
+        if (!musteriBulunduMu) {
+            throw new BulunamadiException("%s id ile müşteri bulunamadı", musteriId.toString());
+        }
+        Long urunId = satisDto.getUrunId();
+        boolean urunBulunduMu = urunService.existsById(urunId);
+        if (!urunBulunduMu) {
+            throw new BulunamadiException("%s id ile ürün bulunamadı", urunId.toString());
+        }
         Satis satis = satisMapper.getEntity(satisDto);
         satis = this.satisRepository.save(satis);
         return satisMapper.getDto(satis);

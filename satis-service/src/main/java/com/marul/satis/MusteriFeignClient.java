@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(value = "musteri-service")
 public interface MusteriFeignClient {
 
-    @GetMapping("/musteri-service/v1/musteri/existsByMusteriId/{musteriId}")
-    SuccessDataResult<Boolean> findById(@PathVariable("musteriId") Long musteriId);
+    @GetMapping("/musteri-service/v1/musteri/existsById/{musteriId}")
+    SuccessDataResult<Boolean> existsById(@PathVariable("musteriId") Long musteriId);
 }
+

@@ -41,7 +41,7 @@
 				<text><![CDATA[Satış faturası]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="79" width="400" height="3" uuid="324c3e4b-6144-4491-9ee6-3574ffce2f98">
+				<reportElement x="0" y="79" width="400" height="1" uuid="324c3e4b-6144-4491-9ee6-3574ffce2f98">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -50,7 +50,7 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="0" width="400" height="3" uuid="28e38ddb-7c95-4691-9f84-b88c841f62cc">
+				<reportElement x="0" y="0" width="400" height="1" uuid="28e38ddb-7c95-4691-9f84-b88c841f62cc">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -127,7 +127,7 @@
 				<textFieldExpression><![CDATA[$V{toplamTutar}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="0" width="400" height="3" uuid="03d88d7b-4157-4eea-9b9f-abb021baa19a">
+				<reportElement x="0" y="0" width="400" height="1" uuid="03d88d7b-4157-4eea-9b9f-abb021baa19a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<graphicElement>
@@ -140,7 +140,7 @@
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="32" width="400" height="3" uuid="b34adafe-1d7b-433c-8d64-d5e89e514e3f">
+				<reportElement x="0" y="32" width="400" height="1" uuid="b34adafe-1d7b-433c-8d64-d5e89e514e3f">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<graphicElement>

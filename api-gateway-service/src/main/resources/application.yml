@@ -33,6 +33,15 @@ spring:
               args:
                 name: circuit-breaker
                 fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
+        - id: ${APPNAME_STOK_SERVICE}
+          uri: lb://${APPNAME_STOK_SERVICE}
+          predicates:
+            - Path=/${APPNAME_STOK_SERVICE}/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: circuit-breaker
+                fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
         - id: ${APPNAME_SATIS_SERVICE}
           uri: lb://${APPNAME_SATIS_SERVICE}
           predicates:
