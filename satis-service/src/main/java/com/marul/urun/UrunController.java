@@ -26,7 +26,7 @@ public class UrunController {
     }
 
     @GetMapping("/findById")
-    public Result findById(@RequestParam Long id) {
+    public Result findById(@RequestParam(value = "id") Long id) {
         UrunDto urunDto = urunService.findById(id);
         log.info("{} id ile ürün başarıyla bulundu", id);
         return new SuccessDataResult<>(urunDto, "ürün başarıyla getirildi.");
