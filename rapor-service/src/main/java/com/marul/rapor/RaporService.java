@@ -46,7 +46,7 @@ public class RaporService {
 
     private byte[] exportReportToPDF(JasperReport jasperReport, Map<String, Object> parameters, List<RaporDto> data) {
         try {
-            log.info("exportReportToPDF:\n rapor kriterleri: {},\n parametreler: {}\n", data, parameters);
+            log.info("exportReportToPDF: rapor kriterleri: {} tane , parametreler: {}", data.size(), parameters);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,
                     new JRBeanCollectionDataSource(data));
 

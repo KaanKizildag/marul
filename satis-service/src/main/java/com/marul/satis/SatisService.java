@@ -1,6 +1,5 @@
 package com.marul.satis;
 
-import com.marul.dto.MusteriDto;
 import com.marul.dto.SatisDto;
 import com.marul.urun.UrunService;
 import com.marul.util.ResultDecoder;
@@ -21,22 +20,14 @@ public class SatisService {
 
     public List<SatisDto> findAll() {
         List<Satis> satisList = satisRepository.findAll();
-        return satisList.stream().map(this::getSatisDto)
+        return satisList.stream().map(satisMapper::getDto)
                 .collect(Collectors.toList());
     }
 
-    private SatisDto getSatisDto(Satis satis) {
-        Long musteriId = satis.getMusteriId();
-        MusteriDto musteriDto = ResultDecoder.getDataResult(musteriFeignClient.findById(musteriId));
-        SatisDto satisDto = new SatisDto();
-        satisDto.setMusteriDto(musteriDto);
-        return satisDto;
-    }
-
     public SatisDto save(SatisDto satisDto) {
+        ResultDecoder.getDataResult(musteriFeignClient.findById(satisDto.getMusteriId()));
+        urunService.findById(satisDto.getUrunId());
         Satis satis = satisMapper.getEntity(satisDto);
-        ResultDecoder.getDataResult(musteriFeignClient.findById(satis.getMusteriId()));
-        urunService.findById(satis.getUrunId());
         satis = this.satisRepository.save(satis);
         return satisMapper.getDto(satis);
     }

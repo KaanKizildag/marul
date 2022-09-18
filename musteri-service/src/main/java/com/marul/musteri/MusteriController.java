@@ -28,6 +28,12 @@ public class MusteriController {
         return new SuccessDataResult<>(musteriDto, "müşteri başariyla bulundu");
     }
 
+    @GetMapping("/existsById/{musteriId}")
+    public Result existsById(@PathVariable("musteriId") Long musteriId) {
+        boolean musteriBulunduMu = musteriService.existsById(musteriId);
+        return new SuccessDataResult<>(musteriBulunduMu, "müşteri sorgulandı");
+    }
+
     @PostMapping("/save")
     public Result save(/*@Valid*/ @RequestBody MusteriDto musteriDto) {
         musteriDto = musteriService.save(musteriDto);

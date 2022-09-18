@@ -53,7 +53,7 @@ class SatisServiceTest {
 
         MusteriDto musteriDto = new MusteriDto();
         musteriDto.setId(musteriId);
-        when(musteriFeignClient.findById(satis.getMusteriId())).thenReturn(new SuccessDataResult<>(musteriDto));
+        when(musteriFeignClient.findById(satis.getMusteriId())).thenReturn(new SuccessDataResult<>(true));
 
         //when
         List<SatisDto> satisDtoList = satisService.findAll();
@@ -61,11 +61,9 @@ class SatisServiceTest {
         //then
         SatisDto satisDto = new SatisDto();
         satisDto.setUrunId(urunId);
-        satisDto.setMusteriDto(musteriDto);
+        satisDto.setMusteriId(musteriId);
         List<SatisDto> beklenen = Collections.singletonList(satisDto);
         Assertions.assertEquals(beklenen.size(), satisDtoList.size());
-        Assertions.assertEquals(beklenen.get(0).getMusteriDto().getMusteriAdi(),
-                satisDtoList.get(0).getMusteriDto().getMusteriAdi());
         verify(satisRepository).findAll();
     }
 
@@ -74,12 +72,10 @@ class SatisServiceTest {
     void save() {
         // given
         SatisDto satisDto = new SatisDto();
-        MusteriDto musteriDto = new MusteriDto();
         long musteriId = 1L;
         long urunId = 1L;
-        musteriDto.setId(musteriId);
 
-        satisDto.setMusteriDto(musteriDto);
+        satisDto.setMusteriId(musteriId);
         satisDto.setUrunId(urunId);
 
         Satis satis = new Satis();
@@ -90,7 +86,7 @@ class SatisServiceTest {
                 .thenReturn(satis);
 
         when(musteriFeignClient.findById(musteriId))
-                .thenReturn(new SuccessDataResult<>(musteriDto));
+                .thenReturn(new SuccessDataResult<>(true));
 
         when(satisRepository.save(satis))
                 .thenReturn(satis);
@@ -105,8 +101,6 @@ class SatisServiceTest {
         SatisDto actual = satisService.save(satisDto);
 
         //then
-        Assertions.assertEquals(actual.getMusteriDto().getMusteriAdi(), satisDto.getMusteriDto().getMusteriAdi());
-        Assertions.assertEquals(actual.getMusteriDto().getEmail(), satisDto.getMusteriDto().getEmail());
         Assertions.assertEquals(actual.getUrunId(), satisDto.getUrunId());
 
         verify(satisMapper).getEntity(satisDto);
@@ -120,12 +114,10 @@ class SatisServiceTest {
     void itShouldNot_Save_WhenCustomerIsNotExists() {
         // given
         SatisDto satisDto = new SatisDto();
-        MusteriDto musteriDto = new MusteriDto();
         long musteriId = 1L;
         long urunId = 1L;
-        musteriDto.setId(musteriId);
 
-        satisDto.setMusteriDto(musteriDto);
+        satisDto.setMusteriId(musteriId);
         satisDto.setUrunId(urunId);
 
         Satis satis = new Satis();
@@ -157,7 +149,7 @@ class SatisServiceTest {
         long urunId = 1L;
         musteriDto.setId(musteriId);
 
-        satisDto.setMusteriDto(musteriDto);
+        satisDto.setMusteriId(musteriId);
         satisDto.setUrunId(urunId);
 
         Satis satis = new Satis();
@@ -168,7 +160,7 @@ class SatisServiceTest {
                 .thenReturn(satis);
 
         when(musteriFeignClient.findById(musteriId))
-                .thenReturn(new SuccessDataResult<>(musteriDto));
+                .thenReturn(new SuccessDataResult<>(true));
 
         when(urunService.findById(urunId))
                 .thenThrow(BulunamadiException.class);

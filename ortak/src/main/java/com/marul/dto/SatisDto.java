@@ -7,7 +7,8 @@ import lombok.Setter;
 @Setter
 public class SatisDto {
     private Long id;
-    private MusteriDto musteriDto;
+    private Long musteriId;
     // todo UrunDto eklenecek.
     private Long urunId;
+    private Long satilanAdet;
 }

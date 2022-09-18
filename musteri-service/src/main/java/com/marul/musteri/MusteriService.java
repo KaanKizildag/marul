@@ -48,6 +48,10 @@ public class MusteriService {
         return musteriMapper.getTarget(musteri);
     }
 
+    public boolean existsById(Long musteriId) {
+        return musteriRepository.existsById(musteriId);
+    }
+
     public void deleteById(Long id) {
         musteriRepository.deleteById(id);
     }

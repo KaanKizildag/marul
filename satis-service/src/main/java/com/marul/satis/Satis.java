@@ -14,9 +14,12 @@ public class Satis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "musteri_id")
+    @Column(name = "musteri_id", nullable = false)
     private Long musteriId;
 
-    @Column(name = "urun_id")
+    @Column(name = "urun_id", nullable = false)
     private Long urunId;
+
+    @Column(name = "satilan_adet", nullable = false)
+    private Long satilanAdet;
 }

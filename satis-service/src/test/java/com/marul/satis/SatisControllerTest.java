@@ -75,13 +75,8 @@ class SatisControllerTest {
         long musteriId = 1L;
         String musteriAdi = "Kaan";
 
-        musteriDto.setId(musteriId);
-        musteriDto.setMusteriAdi(musteriAdi);
-        musteriDto.setTeslimatNoktasi("Çankaya");
-        musteriDto.setTelefonNo("00000");
-        musteriDto.setEmail(musteriAdi + "@marul.com.tr");
 
-        satisDto.setMusteriDto(musteriDto);
+        satisDto.setMusteriId(musteriId);
         satisDto.setUrunId(urunId);
         satisDto.setId(satisId);
         return satisDto;
