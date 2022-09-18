@@ -3,20 +3,20 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://${SERVICE_DISCOVERY_HOST}:${SERVICE_DISCOVERY_PORT}/eureka
+      defaultZone: http://${APPNAME_SERVICE_DISCOVERY}:${SERVICE_DISCOVERY_PORT}/eureka
   instance:
-    hostname: ${SERVICE_DISCOVERY_HOST}
+    hostname: ${APPNAME_SERVICE_DISCOVERY}
 server:
-  port: '${MUSTERI_SERVICE_PORT}'
+  port: ${MUSTERI_SERVICE_PORT:8080}
   servlet:
-    context-path: /musteri-service
+    context-path: /${APPNAME_MUSTERI_SERVICE:musteri-service}
 
 spring:
   application:
     name: ${APPNAME_MUSTERI_SERVICE:musteri-service}
   datasource:
     password: password
-    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/musteri
+    url: jdbc:postgresql://${POSTGRES_MUSTERI_HOST}:${POSTGRES_MUSTERI_PORT}/musteri
     username: marul
   jpa:
     hibernate:

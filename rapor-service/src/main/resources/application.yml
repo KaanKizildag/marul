@@ -3,14 +3,17 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://${SERVICE_DISCOVERY_HOST}:${SERVICE_DISCOVERY_PORT}/eureka
+      defaultZone: http://${APPNAME_SERVICE_DISCOVERY}:${SERVICE_DISCOVERY_PORT}/eureka
   instance:
-    hostname: ${SERVICE_DISCOVERY_HOST}
+    hostname: ${APPNAME_SERVICE_DISCOVERY}
 server:
-  port: '${RAPOR_SERVICE_PORT}'
+  port: ${RAPOR_SERVICE_PORT:8081}
+  servlet:
+    context-path: /${APPNAME_RAPOR_SERVICE:rapor-service}
 spring:
   application:
     name: ${APPNAME_RAPOR_SERVICE:rapor-service}
+
 
 rapor-service:
   raporlar_dizini: ${RAPORLAR_DIZINI}

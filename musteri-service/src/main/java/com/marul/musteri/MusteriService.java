@@ -16,6 +16,7 @@ import com.marul.exception.EmailDahaOnceAlinmisException;
 import com.marul.tur.TurService;
 import com.marul.util.ResultDecoder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -27,6 +28,7 @@ import java.util.Map;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MusteriService {
 
     private final MusteriRepository musteriRepository;
@@ -103,12 +105,15 @@ public class MusteriService {
     public byte[] musteriRaporla() {
         List<MusteriDto> musteriDtoList = findAll();
         List<RaporDto> raporDtoList = musteriMapper.getRaporDtoList(musteriDtoList);
+        log.info("{} tane müşteri raporlanacak ", raporDtoList.size());
         RaporOlusturmaDto raporOlusturmaDto = new RaporOlusturmaDto();
         raporOlusturmaDto.setRaporDtoList(raporDtoList);
         Map<String, Object> raporParametreleri = new HashMap<>();
         raporParametreleri.put("turAdi", "Ankara");
         raporOlusturmaDto.setRaporParametreleri(raporParametreleri);
+        log.info("rapor feign çağrılıyor.");
         byte[] simpleReport = generateSimpleReport(raporOlusturmaDto);
+        log.info("rapor oluşturuldu rapor boyutu {}B ", simpleReport.length);
 //        new Thread(() -> mailGonder(simpleReport)).start();
         return simpleReport;
     }

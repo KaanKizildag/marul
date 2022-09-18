@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(value = "mail-service")
 public interface MailSenderFeignClient {
-    @PostMapping("v1/email-service/email-gonder")
+    @PostMapping("mail-service/v1/email-service/email-gonder")
     SuccessResult sendMailWithAttachment(@RequestBody MailGondermeDto mailGondermeDto);
 }
