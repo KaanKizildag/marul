@@ -17,3 +17,11 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         show_sql: true
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://${SERVICE_DISCOVERY_HOST:localhost}:${SERVICE_DISCOVERY_PORT:8761}/eureka
+  instance:
+    hostname: ${SATIS_SERVICE_HOST}

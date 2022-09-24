@@ -58,15 +58,12 @@ logging:
     reactor.netty.http.client: DEBUG
 eureka:
   instance:
-    prefer-ip-address: true
-    #    ip-address: ${server.address}
-    instance-id: ${spring.application.name}:${server.port}
-    hostname: localhost
+    hostname: ${API_GATEWAY_HOST}
   client:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://${APPNAME_SERVICE_DISCOVERY:localhost}:${SERVICE_DISCOVERY_PORT:8761}/eureka
+      defaultZone: http://${SERVICE_DISCOVERY_HOST:localhost}:${SERVICE_DISCOVERY_PORT:8761}/eureka
 
 
 resilience4j.circuitbreaker:

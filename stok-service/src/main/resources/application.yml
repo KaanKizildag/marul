@@ -23,7 +23,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://${APPNAME_SERVICE_DISCOVERY}:${SERVICE_DISCOVERY_PORT}/eureka
+      defaultZone: http://${SERVICE_DISCOVERY_HOST:localhost}:${SERVICE_DISCOVERY_PORT:8761}/eureka
   instance:
-    hostname: ${spring.application.name}
+    hostname: ${STOK_SERVICE_HOST}
 
