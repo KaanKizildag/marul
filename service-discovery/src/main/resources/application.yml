@@ -3,8 +3,7 @@ eureka:
     fetch-registry: false
     register-with-eureka: false
   instance:
-    appname: ${APPNAME_SERVICE_DISCOVERY}
-    hostname: ${APPNAME_SERVICE_DISCOVERY}
+    hostname: ${spring.application.name}
 
 server:
   port: ${SERVICE_DISCOVERY_PORT:8761}

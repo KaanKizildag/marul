@@ -52,15 +52,21 @@ spring:
                 name: circuit-breaker
                 fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
 
-
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
 eureka:
   instance:
-    hostname: ${APPNAME_SERVICE_DISCOVERY}
+    prefer-ip-address: true
+    #    ip-address: ${server.address}
+    instance-id: ${spring.application.name}:${server.port}
+    hostname: localhost
   client:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://${APPNAME_SERVICE_DISCOVERY}:${SERVICE_DISCOVERY_PORT}/eureka
+      defaultZone: http://${APPNAME_SERVICE_DISCOVERY:localhost}:${SERVICE_DISCOVERY_PORT:8761}/eureka
 
 
 resilience4j.circuitbreaker:
@@ -76,5 +82,4 @@ resilience4j.timelimiter:
   configs:
     default:
       timeoutDuration: 10s
-
 

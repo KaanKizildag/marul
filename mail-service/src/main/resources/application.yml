@@ -24,7 +24,7 @@ eureka:
     service-url:
       defaultZone: http://${APPNAME_SERVICE_DISCOVERY}:${SERVICE_DISCOVERY_PORT}/eureka
   instance:
-    hostname: ${APPNAME_SERVICE_DISCOVERY}
+    hostname: ${spring.application.name}
 
 email-sender:
   basariliMesaj: Email başarıyla gönderildi
