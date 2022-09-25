@@ -52,10 +52,6 @@ spring:
                 name: circuit-breaker
                 fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
 
-logging:
-  level:
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty.http.client: DEBUG
 eureka:
   instance:
     hostname: ${API_GATEWAY_HOST}
