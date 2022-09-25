@@ -4,6 +4,10 @@ import com.marul.dto.MusteriDto;
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,7 +50,13 @@ public class MusteriController {
     }
 
     @GetMapping("/rapor/findAll-dev")
-    public byte[] raporFindAllDev() {
-        return musteriService.musteriRaporla();
+    public ResponseEntity<byte[]> raporFindAllDev() {
+        byte[] report = musteriService.musteriRaporla();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename = "output.pdf";
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        return new ResponseEntity<>(report, headers, HttpStatus.OK);
     }
 }
