@@ -2,6 +2,7 @@ package com.marul.stokservice.stok;
 
 import com.marul.dto.stok.StokDto;
 import com.marul.exception.BulunamadiException;
+import com.marul.exception.YeterliStokYokException;
 import com.marul.util.ResultDecoder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,5 +46,21 @@ public class StokService {
         stok = stokRepository.save(stok);
         log.info("stok kaydedildi.");
         return stokMapper.getDto(stok);
+    }
+
+    public boolean stokGuncelle(Long urunId, Long satilanAdet) {
+        Stok stok = stokRepository.findByUrunId(urunId)
+                .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", urunId.toString()));
+        long stokAdet = stok.getAdet();
+
+        boolean yeterliStokVarMi = yeterliStokVarMi(urunId, satilanAdet);
+        if (!yeterliStokVarMi) {
+            log.error("yeterli stok yok stok durumu: {}, satilmak istenen {}", stokAdet, satilanAdet);
+            throw new YeterliStokYokException("%d idli üründen yeterli stok yok stok durumu: %d, satilmak istenen %d.", urunId, stokAdet, satilanAdet);
+        }
+
+        stok.setAdet(stokAdet - satilanAdet);
+        stok = stokRepository.save(stok);
+        return stok.getId() != null;
     }
 }

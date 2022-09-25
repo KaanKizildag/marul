@@ -6,6 +6,7 @@ import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
+import com.marul.urun.StokFeignClient;
 import com.marul.urun.UrunService;
 import com.marul.util.ResultDecoder;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class SatisService {
     private final SatisRepository satisRepository;
     private final MusteriFeignClient musteriFeignClient;
     private final RaporServiceFeignClient raporServiceFeignClient;
+    private final StokFeignClient stokFeignClient;
     private final SatisMapper satisMapper;
     private final UrunService urunService;
 
@@ -43,18 +45,32 @@ public class SatisService {
 
     public SatisDto save(SatisDto satisDto) {
         Long musteriId = satisDto.getMusteriId();
+        Long urunId = satisDto.getUrunId();
+        musteriKontrolu(musteriId);
+        urunKontrolu(urunId);
+        stokGuncelle(satisDto, urunId);
+        Satis satis = satisMapper.getEntity(satisDto);
+        satis = this.satisRepository.save(satis);
+        return satisMapper.getDto(satis);
+    }
+
+    private void stokGuncelle(SatisDto satisDto, Long urunId) {
+        Long satilanAdet = satisDto.getSatilanAdet();
+        ResultDecoder.utilServiceCheck(stokFeignClient.stokGuncelle(urunId, satilanAdet));
+    }
+
+    private void musteriKontrolu(Long musteriId) {
         boolean musteriBulunduMu = ResultDecoder.getDataResult(musteriFeignClient.existsById(musteriId));
         if (!musteriBulunduMu) {
             throw new BulunamadiException("%s id ile müşteri bulunamadı", musteriId.toString());
         }
-        Long urunId = satisDto.getUrunId();
+    }
+
+    private void urunKontrolu(Long urunId) {
         boolean urunBulunduMu = urunService.existsById(urunId);
         if (!urunBulunduMu) {
             throw new BulunamadiException("%s id ile ürün bulunamadı", urunId.toString());
         }
-        Satis satis = satisMapper.getEntity(satisDto);
-        satis = this.satisRepository.save(satis);
-        return satisMapper.getDto(satis);
     }
 
     public byte[] satisRaporuGetir(Long musteriId) {

@@ -1,5 +1,6 @@
 package com.marul.exception;
 
+import com.marul.dto.result.ErrorResult;
 import com.marul.dto.result.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,10 +31,11 @@ public class GeneralExceptionHandler /*extends ResponseEntityExceptionHandler*/ 
             EmailGonderirkenException.class,
             EmailDahaOnceAlinmisException.class,
             BulunamadiException.class,
-            ServisDonusHatasiException.class
+            ServisDonusHatasiException.class,
+            YeterliStokYokException.class
     })
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result genelServisHatasi(RuntimeException exception) {
-        return new Result(false, exception.getMessage());
+        return new ErrorResult(exception.getMessage());
     }
 }
