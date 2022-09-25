@@ -43,7 +43,7 @@ public class SatisService {
 
     public SatisDto save(SatisDto satisDto) {
         Long musteriId = satisDto.getMusteriId();
-        Boolean musteriBulunduMu = ResultDecoder.getDataResult(musteriFeignClient.existsById(musteriId));
+        boolean musteriBulunduMu = ResultDecoder.getDataResult(musteriFeignClient.existsById(musteriId));
         if (!musteriBulunduMu) {
             throw new BulunamadiException("%s id ile müşteri bulunamadı", musteriId.toString());
         }

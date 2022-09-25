@@ -19,8 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SatisServiceTest {
@@ -51,9 +50,6 @@ class SatisServiceTest {
 
         when(satisRepository.findAll()).thenReturn(Collections.singletonList(satis));
 
-        MusteriDto musteriDto = new MusteriDto();
-        musteriDto.setId(musteriId);
-        when(musteriFeignClient.existsById(satis.getMusteriId())).thenReturn(new SuccessDataResult<>(true));
 
         //when
         List<SatisDto> satisDtoList = satisService.findAll();
@@ -68,7 +64,6 @@ class SatisServiceTest {
     }
 
     @Test
-    @Description("Müşteri kaydedilebilmelidir.")
     void save() {
         // given
         SatisDto satisDto = new SatisDto();
@@ -94,8 +89,8 @@ class SatisServiceTest {
         when(satisMapper.getDto(satis))
                 .thenReturn(satisDto);
 
-        when(urunService.findById(urunId))
-                .thenReturn(new UrunDto());
+        when(urunService.existsById(urunId))
+                .thenReturn(true);
 
         // when
         SatisDto actual = satisService.save(satisDto);
@@ -105,7 +100,7 @@ class SatisServiceTest {
 
         verify(satisMapper).getEntity(satisDto);
         verify(musteriFeignClient).existsById(musteriId);
-        verify(urunService).findById(urunId);
+        verify(urunService).existsById(urunId);
         verify(satisRepository).save(satis);
         verify(satisMapper).getDto(satis);
     }
@@ -124,9 +119,6 @@ class SatisServiceTest {
         satis.setMusteriId(musteriId);
         satis.setUrunId(urunId);
 
-        when(satisMapper.getEntity(satisDto))
-                .thenReturn(satis);
-
         when(musteriFeignClient.existsById(musteriId))
                 .thenThrow(BulunamadiException.class);
 
@@ -134,10 +126,10 @@ class SatisServiceTest {
         assertThrows(BulunamadiException.class, () -> satisService.save(satisDto));
 
         //then
-        verify(satisMapper).getEntity(satisDto);
+        verify(satisMapper, times(0)).getEntity(satisDto);
         verify(musteriFeignClient).existsById(musteriId);
-        verify(satisRepository, Mockito.times(0)).save(satis);
-        verify(satisMapper, Mockito.times(0)).getDto(satis);
+        verify(satisRepository, times(0)).save(satis);
+        verify(satisMapper, times(0)).getDto(satis);
     }
 
     @Test
@@ -156,24 +148,21 @@ class SatisServiceTest {
         satis.setMusteriId(musteriId);
         satis.setUrunId(urunId);
 
-        when(satisMapper.getEntity(satisDto))
-                .thenReturn(satis);
-
         when(musteriFeignClient.existsById(musteriId))
                 .thenReturn(new SuccessDataResult<>(true));
 
-        when(urunService.findById(urunId))
-                .thenThrow(BulunamadiException.class);
+        when(urunService.existsById(urunId))
+                .thenReturn(false);
 
         // when
         assertThrows(BulunamadiException.class, () -> satisService.save(satisDto));
 
         //then
-        verify(satisMapper).getEntity(satisDto);
+        verify(satisMapper, times(0)).getEntity(satisDto);
         verify(musteriFeignClient).existsById(musteriId);
-        verify(urunService).findById(urunId);
-        verify(satisRepository, Mockito.times(0)).save(satis);
-        verify(satisMapper, Mockito.times(0)).getDto(satis);
+        verify(urunService).existsById(urunId);
+        verify(satisRepository, times(0)).save(satis);
+        verify(satisMapper, times(0)).getDto(satis);
     }
 
 }
