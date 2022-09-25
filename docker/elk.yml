@@ -24,7 +24,6 @@ services:
   kibana:
     image: kibana:${ELK_VERSION}
     container_name: kibana
-    restart: always
     ports:
       - "${KIBANA_PORT}:${KIBANA_PORT}"
     environment:

@@ -66,8 +66,6 @@ services:
       dockerfile: ../musteri-service/Dockerfile
     volumes:
       - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
-    #    entrypoint: [ "/usr/share/wait-for-it.sh", "-h", "logstash", "-p", "${LOGSTASH_PORT}", "-t", "120",
-    #                  "--", "java", "-jar", "app.jar" ]
     ports:
       - "${MUSTERI_SERVICE_PORT}:${MUSTERI_SERVICE_PORT}"
     environment:
