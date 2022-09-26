@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/v1/stok")
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ public class StokController {
     private final StokService stokService;
 
     @PostMapping("/save")
-    public Result save(@RequestBody StokDto stokDto) {
+    public Result save(@RequestBody @Valid StokDto stokDto) {
         stokDto = stokService.save(stokDto);
         log.info("{} stok başarıyla kaydedildi.", stokDto);
         return new SuccessDataResult<>(stokDto);

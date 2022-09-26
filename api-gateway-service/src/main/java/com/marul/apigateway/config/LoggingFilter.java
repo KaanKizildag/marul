@@ -1,4 +1,4 @@
-package com.marul.apigateway;
+package com.marul.apigateway.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
