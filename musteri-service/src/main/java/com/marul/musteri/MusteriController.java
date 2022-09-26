@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("v1/musteri")
@@ -39,7 +40,7 @@ public class MusteriController {
     }
 
     @PostMapping("/save")
-    public Result save(/*@Valid*/ @RequestBody MusteriDto musteriDto) {
+    public Result save(/*@Valid*/ @RequestBody @Valid MusteriDto musteriDto) {
         musteriDto = musteriService.save(musteriDto);
         return new SuccessDataResult<>(musteriDto, "Müşteri başarıyla kaydedildi.");
     }

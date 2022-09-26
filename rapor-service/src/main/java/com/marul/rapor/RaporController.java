@@ -3,6 +3,7 @@ package com.marul.rapor;
 import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +23,7 @@ public class RaporController {
     private final RaporService raporService;
 
     @PostMapping("/generateSimpleReport")
-    public Result generateSimpleReport(@RequestBody RaporOlusturmaDto raporOlusturmaDto) throws IOException {
+    public Result generateSimpleReport(@RequestBody @Valid RaporOlusturmaDto raporOlusturmaDto) throws IOException {
         log.info("generateSimpleReport");
         byte[] report = raporService.generateSimpleReport(raporOlusturmaDto);
         log.info("rapor basariyla oluşturuldu");
@@ -30,7 +31,7 @@ public class RaporController {
     }
 
     @PostMapping("/generateSimpleReport-dev")
-    public ResponseEntity<byte[]> generateSimpleReportDev(@RequestBody RaporOlusturmaDto raporOlusturmaDto) throws IOException {
+    public ResponseEntity<byte[]> generateSimpleReportDev(@RequestBody @Valid RaporOlusturmaDto raporOlusturmaDto) throws IOException {
         log.info("generateSimpleReport");
         byte[] report = raporService.generateSimpleReport(raporOlusturmaDto);
         log.info("rapor basariyla oluşturuldu");
