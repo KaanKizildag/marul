@@ -1,5 +1,6 @@
 package com.marul.exception;
 
+import com.marul.dto.result.ErrorDataResult;
 import com.marul.dto.result.ErrorResult;
 import com.marul.dto.result.Result;
 import org.springframework.http.HttpHeaders;
@@ -33,7 +34,8 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        Result errorDataResult = new ErrorDataResult(errors);
+        return new ResponseEntity<>(errorDataResult, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = {RuntimeException.class,
