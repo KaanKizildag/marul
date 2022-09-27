@@ -6,7 +6,7 @@
 package com.marul.musteri;
 
 import com.marul.dto.MailGondermeDto;
-import com.marul.dto.MusteriDto;
+import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.dto.result.DataResult;
@@ -79,7 +79,9 @@ public class MusteriService {
     }
 
     private void turMevcutMuKontrol(long turId) {
-        turService.existsByTurId(turId);
+        if (!turService.existsByTurId(turId)) {
+            throw new BulunamadiException("%s id ile tur bulunamadı.", String.valueOf(turId));
+        }
     }
 
     private void emailAlinmisMiKontrol(String email) {

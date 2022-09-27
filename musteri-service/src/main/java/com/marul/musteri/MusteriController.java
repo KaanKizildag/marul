@@ -1,6 +1,6 @@
 package com.marul.musteri;
 
-import com.marul.dto.MusteriDto;
+import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +27,14 @@ public class MusteriController {
         return new SuccessDataResult<>(musteriDtoList, String.format("%d tane müşteri listelendi.", musteriDtoList.size()));
     }
 
-    @GetMapping("/findById/{musteriId}")
-    public Result findById(@PathVariable("musteriId") Long musteriId) {
+    @GetMapping("/findById")
+    public Result findById(@RequestParam("musteriId") Long musteriId) {
         MusteriDto musteriDto = musteriService.findById(musteriId);
         return new SuccessDataResult<>(musteriDto, "müşteri başariyla bulundu");
     }
 
-    @GetMapping("/existsById/{musteriId}")
-    public Result existsById(@PathVariable("musteriId") Long musteriId) {
+    @GetMapping("/existsById")
+    public Result existsById(@RequestParam("musteriId") Long musteriId) {
         boolean musteriBulunduMu = musteriService.existsById(musteriId);
         return new SuccessDataResult<>(musteriBulunduMu, "müşteri sorgulandı");
     }
