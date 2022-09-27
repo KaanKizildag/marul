@@ -38,14 +38,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDataResult, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {RuntimeException.class,
-            RaporOlusturmaException.class,
-            EmailGonderirkenException.class,
-            EmailDahaOnceAlinmisException.class,
-            BulunamadiException.class,
-            ServisDonusHatasiException.class,
-            YeterliStokYokException.class
-    })
+    @ExceptionHandler(value = {RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result genelServisHatasi(RuntimeException exception) {
         return new ErrorResult(exception.getMessage());
