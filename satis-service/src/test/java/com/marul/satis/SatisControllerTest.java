@@ -1,8 +1,8 @@
 package com.marul.satis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marul.dto.MusteriDto;
 import com.marul.dto.SatisDto;
+import com.marul.dto.musteri.MusteriDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.GeneralExceptionHandler;
 import lombok.SneakyThrows;

@@ -1,6 +1,6 @@
 package com.marul.musteri;
 
-import com.marul.dto.MusteriDto;
+import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

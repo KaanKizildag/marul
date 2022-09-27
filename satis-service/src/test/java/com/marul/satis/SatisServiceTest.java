@@ -1,9 +1,8 @@
 package com.marul.satis;
 
-import com.marul.dto.MusteriDto;
 import com.marul.dto.SatisDto;
+import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.result.SuccessDataResult;
-import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.urun.UrunService;
 import org.junit.jupiter.api.Assertions;
@@ -11,9 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.annotation.Description;
 
 import java.util.Collections;
 import java.util.List;

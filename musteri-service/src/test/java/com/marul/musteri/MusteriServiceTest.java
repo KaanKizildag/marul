@@ -1,6 +1,6 @@
 package com.marul.musteri;
 
-import com.marul.dto.MusteriDto;
+import com.marul.dto.musteri.MusteriDto;
 import com.marul.exception.EmailDahaOnceAlinmisException;
 import com.marul.tur.TurService;
 import org.junit.jupiter.api.Assertions;

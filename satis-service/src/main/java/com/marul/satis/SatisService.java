@@ -1,7 +1,7 @@
 package com.marul.satis;
 
-import com.marul.dto.MusteriDto;
 import com.marul.dto.SatisDto;
+import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.dto.urun.UrunDto;
