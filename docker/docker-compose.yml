@@ -169,7 +169,6 @@ services:
       - postgres
       - spring
 
-
   stok-service:
     container_name: stok-service
     image: marul/stok-service
@@ -197,6 +196,32 @@ services:
       - postgres
       - spring
 
+  satis-service:
+    container_name: satis-service
+    image: marul/satis-service
+    build:
+      context: ../satis-service
+      dockerfile: ../satis-service/Dockerfile
+    volumes:
+      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
+    ports:
+      - "${SATIS_SERVICE_PORT}:${SATIS_SERVICE_PORT}"
+    environment:
+      - APPNAME_SATIS_SERVICE=${APPNAME_SATIS_SERVICE}
+      - SATIS_SERVICE_PORT=${SATIS_SERVICE_PORT}
+      - POSTGRES_SATIS_PORT=${POSTGRES_SATIS_PORT}
+      - POSTGRES_SATIS_HOST=${POSTGRES_SATIS_HOST}
+      - LOGSTASH_HOST=${LOGSTASH_HOST}
+      - LOGSTASH_PORT=${LOGSTASH_PORT}
+      - SERVICE_DISCOVERY_PORT=${SERVICE_DISCOVERY_PORT}
+      - APPNAME_SERVICE_DISCOVERY=${APPNAME_SERVICE_DISCOVERY}
+      - SATIS_SERVICE_HOST=${SATIS_SERVICE_HOST}
+      - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
+    depends_on:
+      - postgres-satis
+    networks:
+      - postgres
+      - spring
 
 networks:
   postgres:
