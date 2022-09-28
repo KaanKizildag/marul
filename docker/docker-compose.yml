@@ -169,6 +169,35 @@ services:
       - postgres
       - spring
 
+
+  stok-service:
+    container_name: stok-service
+    image: marul/stok-service
+    build:
+      context: ../stok-service
+      dockerfile: ../stok-service/Dockerfile
+    volumes:
+      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
+    ports:
+      - "${STOK_SERVICE_PORT}:${STOK_SERVICE_PORT}"
+    environment:
+      - APPNAME_STOK_SERVICE=${APPNAME_STOK_SERVICE}
+      - STOK_SERVICE_PORT=${STOK_SERVICE_PORT}
+      - POSTGRES_STOK_PORT=${POSTGRES_STOK_PORT}
+      - POSTGRES_STOK_HOST=${POSTGRES_STOK_HOST}
+      - LOGSTASH_HOST=${LOGSTASH_HOST}
+      - LOGSTASH_PORT=${LOGSTASH_PORT}
+      - SERVICE_DISCOVERY_PORT=${SERVICE_DISCOVERY_PORT}
+      - APPNAME_SERVICE_DISCOVERY=${APPNAME_SERVICE_DISCOVERY}
+      - STOK_SERVICE_HOST=${STOK_SERVICE_HOST}
+      - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
+    depends_on:
+      - postgres-stok
+    networks:
+      - postgres
+      - spring
+
+
 networks:
   postgres:
     driver: bridge
