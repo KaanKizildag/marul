@@ -33,6 +33,12 @@ public class SatisController {
         return new SuccessDataResult<>(satisDtoResult, "satis basariyla kaydedildi.");
     }
 
+    @GetMapping("/find-urun-adi-by-satisId")
+    public Result findUrunAdiBySatisId(@RequestParam("satisId") Long satisId) {
+        String urunAdi = satisService.findUrunAdiBySatisId(satisId);
+        return new SuccessDataResult(urunAdi, "ürün adı başarıyla getirildi");
+    }
+
     @GetMapping("/satis-faturasi")
     public Result satisFaturasiGetir(@RequestParam("musteriId") Long musteriId) {
         byte[] satisRaporu = satisService.satisRaporuGetir(musteriId);

@@ -8,5 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "satis-service")
 public interface SatisFeignClient {
     @GetMapping("/satis-service/v1/urun/existsById")
-    SuccessDataResult<Boolean> existsById(@RequestParam(value = "id") Long id);
+    SuccessDataResult<Boolean> existsUrunById(@RequestParam(value = "id") Long id);
+
+    @GetMapping("/satis-service/v1/urun/findUrunAdiById")
+    SuccessDataResult<String> findUrunAdiById(@RequestParam("id") Long id);
 }

@@ -22,8 +22,8 @@ public class StokHareketi {
     @Column(name = "hareket_zamani")
     private LocalDateTime hareketZamani;
 
-    @Column(name = "adet")
-    private Long adet;
+    @Column(name = "miktar")
+    private Long miktar;
 
     @Formula("adet > 0")
     private Boolean satisMi;

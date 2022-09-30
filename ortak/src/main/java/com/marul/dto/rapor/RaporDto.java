@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,4 +21,6 @@ public class RaporDto implements Serializable {
     private String urunAdi;
     private Long miktar;
     private BigDecimal tutar;
+
+    private LocalDateTime hareketZamani;
 }

@@ -23,7 +23,7 @@ public class StokService {
     private final StokHarektiService stokHareketiService;
 
     public boolean yeterliStokVarMi(Long urunId, Long stok) {
-        boolean urunVarMi = ResultDecoder.getDataResult(satisFeignClient.existsById(urunId));
+        boolean urunVarMi = ResultDecoder.getDataResult(satisFeignClient.existsUrunById(urunId));
         if (!urunVarMi) {
             log.error("{} id ile ürün bulunamadı", urunId);
             throw new BulunamadiException("%s id ile ürün bulunamadı", urunId.toString());
@@ -73,8 +73,13 @@ public class StokService {
     private void stokHareketiOlustur(Long satilanAdet, Long stokId) {
         StokHareketiDto stokHareketiDto = StokHareketiDto.builder()
                 .stokId(stokId)
-                .adet(satilanAdet)
+                .miktar(satilanAdet)
                 .build();
         stokHareketiService.save(stokHareketiDto);
+    }
+
+    public Long findUrunIdByStokId(Long stokId) {
+        return stokRepository.findUrunIdById(stokId)
+                .orElseThrow(() -> new BulunamadiException("Stok Id ile ürün bulunamadı"));
     }
 }

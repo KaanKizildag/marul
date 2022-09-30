@@ -1,4 +1,4 @@
-package com.marul.musteri;
+package com.marul.stokservice.stokhareketi;
 
 import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.dto.result.SuccessDataResult;

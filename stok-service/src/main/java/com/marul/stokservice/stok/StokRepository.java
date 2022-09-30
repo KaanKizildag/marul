@@ -14,4 +14,7 @@ public interface StokRepository extends JpaRepository<Stok, Long> {
                              @Param("stok") Long stok);
 
     Optional<Stok> findByUrunId(Long urunId);
+
+    @Query("Select s.urunId From Stok s Where s.id = :stokId")
+    Optional<Long> findUrunIdById(@Param("stokId") Long stokId);
 }

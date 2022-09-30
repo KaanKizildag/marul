@@ -26,7 +26,7 @@ public class RaporController {
     public Result generateSimpleReport(@RequestBody @Valid RaporOlusturmaDto raporOlusturmaDto) throws IOException {
         log.info("generateSimpleReport");
         byte[] report = raporService.generateSimpleReport(raporOlusturmaDto);
-        log.info("rapor basariyla oluşturuldu");
+        log.info("rapor basariyla oluşturuldu rapor boyutu: {}B", report.length);
         return new SuccessDataResult<>(report, "rapor başarıyla oluşturuldu");
     }
 

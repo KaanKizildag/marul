@@ -54,6 +54,11 @@ public class SatisService {
         return satisMapper.getDto(satis);
     }
 
+    public String findUrunAdiBySatisId(Long satisId) {
+        return satisRepository.findUrunAdiBySatisId(satisId)
+                .orElseThrow(() -> new BulunamadiException("%s satis id ile urun bulunamadı.", satisId.toString()));
+    }
+
     private void stokGuncelle(SatisDto satisDto, Long urunId) {
         Long satilanAdet = satisDto.getSatilanAdet();
         ResultDecoder.utilServiceCheck(stokFeignClient.stokGuncelle(urunId, satilanAdet));

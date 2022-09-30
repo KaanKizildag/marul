@@ -25,7 +25,6 @@ public class StokController {
     }
 
     @GetMapping("/yeterli-stok-var-mi")
-    @Deprecated(forRemoval = true)
     /**
      * @deprecated iş kuralları stok servisi içinde yapılacağı için dışarı açılması gereksiz.
      */
@@ -43,6 +42,5 @@ public class StokController {
         log.info("stok guncelleme durumu: {}", stokGuncellendiMi ? "başarılı" : "başarısız");
         return new SuccessDataResult<>(stokGuncellendiMi, stokGuncellendiMi ? "başarılı" : "başarısız");
     }
-
 
 }
