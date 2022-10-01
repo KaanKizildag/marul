@@ -23,4 +23,5 @@ public class RaporDto implements Serializable {
     private BigDecimal tutar;
 
     private LocalDateTime hareketZamani;
+    private boolean satisMi;
 }

@@ -18,4 +18,6 @@ public class StokHareketiDto {
     private Long miktar;
     @NotNull
     private LocalDateTime hareketZamani;
+    @NotNull
+    private boolean satisMi;
 }

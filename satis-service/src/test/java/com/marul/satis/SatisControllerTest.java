@@ -6,6 +6,7 @@ import com.marul.dto.musteri.MusteriDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.GeneralExceptionHandler;
 import lombok.SneakyThrows;
+import org.assertj.core.util.Lists;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +55,7 @@ class SatisControllerTest {
     @Test
     void findAll() {
         SatisDto satisDto = getMockSatisDto();
-        List<SatisDto> satisDtoList = List.of(satisDto);
+        List<SatisDto> satisDtoList = Lists.list(satisDto);
 
         Mockito.when(satisService.findAll()).thenReturn(satisDtoList);
 

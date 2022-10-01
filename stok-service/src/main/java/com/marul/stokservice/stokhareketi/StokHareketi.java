@@ -25,6 +25,6 @@ public class StokHareketi {
     @Column(name = "miktar")
     private Long miktar;
 
-    @Formula("adet > 0")
+    @Formula("miktar > 0")
     private Boolean satisMi;
 }
