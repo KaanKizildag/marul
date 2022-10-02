@@ -1,29 +1,29 @@
-package com.marul.dto;
+package com.marul.dto.musteri;
 
 import lombok.Getter;
 import lombok.Setter;
 
-//import javax.validation.constraints.NotNull;
-//import javax.validation.constraints.Null;
-//import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
 public class MusteriDto {
 
     private Long id;
-    //    @NotNull
+    @NotNull
     private String musteriAdi;
 
-//    @NotNull
-//    @Pattern(regexp = "([0-9])*")
+    @NotNull
+    @Pattern(regexp = "([0-9])*")
     private String telefonNo;
 
-//    @NotNull
+    @Email
     private String email;
-//    @NotNull
+    @NotNull
     private String teslimatNoktasi;
     private Double borc = 0D;
-//    @NotNull
+    @NotNull
     private Long turId;
 }

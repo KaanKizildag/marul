@@ -1,6 +1,6 @@
 package com.marul.musteri;
 
-import com.marul.dto.MusteriDto;
+import com.marul.dto.musteri.MusteriDto;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

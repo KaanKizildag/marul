@@ -1,11 +1,12 @@
 package com.marul.satis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marul.dto.MusteriDto;
 import com.marul.dto.SatisDto;
+import com.marul.dto.musteri.MusteriDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.GeneralExceptionHandler;
 import lombok.SneakyThrows;
+import org.assertj.core.util.Lists;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +55,7 @@ class SatisControllerTest {
     @Test
     void findAll() {
         SatisDto satisDto = getMockSatisDto();
-        List<SatisDto> satisDtoList = List.of(satisDto);
+        List<SatisDto> satisDtoList = Lists.list(satisDto);
 
         Mockito.when(satisService.findAll()).thenReturn(satisDtoList);
 
@@ -75,13 +76,8 @@ class SatisControllerTest {
         long musteriId = 1L;
         String musteriAdi = "Kaan";
 
-        musteriDto.setId(musteriId);
-        musteriDto.setMusteriAdi(musteriAdi);
-        musteriDto.setTeslimatNoktasi("Çankaya");
-        musteriDto.setTelefonNo("00000");
-        musteriDto.setEmail(musteriAdi + "@marul.com.tr");
 
-        satisDto.setMusteriDto(musteriDto);
+        satisDto.setMusteriId(musteriId);
         satisDto.setUrunId(urunId);
         satisDto.setId(satisId);
         return satisDto;

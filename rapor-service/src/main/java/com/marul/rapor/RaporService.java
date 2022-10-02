@@ -26,9 +26,8 @@ public class RaporService {
 
         JasperReport compileReport;
         try {
-            // todo jrxml dosyasi baska yerden okunacaktir.
             String raporDizini = raporServiceConfigData.getRaporlarDizini();
-            String raporAdi = "musteri_email_rapor.jrxml";
+            String raporAdi = raporOlusturmaDto.getRaporAdi();
             String fileName = raporDizini + raporAdi;
             ClassLoader classLoader = getClass().getClassLoader();
             InputStream inputStream = classLoader.getResourceAsStream(fileName);
@@ -47,7 +46,7 @@ public class RaporService {
 
     private byte[] exportReportToPDF(JasperReport jasperReport, Map<String, Object> parameters, List<RaporDto> data) {
         try {
-            log.info("exportReportToPDF:\n rapor kriterleri: {},\n parametreler: {}\n", data, parameters);
+            log.info("exportReportToPDF: rapor kriterleri: {} tane , parametreler: {}", data.size(), parameters);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,
                     new JRBeanCollectionDataSource(data));
 

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @FeignClient(value = "rapor-service")
 public interface RaporServiceFeignClient {
-    // todo api gateway eklendiginde api gateway uzerinden servise erisecek!
     @PostMapping("/rapor-service/v1/rapor/generateSimpleReport")
     SuccessDataResult<byte[]> generateSimpleReport(RaporOlusturmaDto raporOlusturmaDto);
 }

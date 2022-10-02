@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,10 +27,17 @@ public class UrunController {
     }
 
     @GetMapping("/findById")
-    public Result findById(@RequestParam Long id) {
+    public Result findById(@RequestParam(value = "id") Long id) {
         UrunDto urunDto = urunService.findById(id);
         log.info("{} id ile ürün başarıyla bulundu", id);
         return new SuccessDataResult<>(urunDto, "ürün başarıyla getirildi.");
+    }
+
+    @GetMapping("/findUrunAdiById")
+    public Result findUrunAdiById(@RequestParam(value = "id") Long id) {
+        UrunDto urunDto = urunService.findById(id);
+        String urunAdi = urunDto.getUrunAdi();
+        return new SuccessDataResult<>(urunAdi, "ürün başarıyla getirildi.");
     }
 
     @GetMapping("/existsById")
@@ -40,7 +48,7 @@ public class UrunController {
     }
 
     @PostMapping("/save")
-    public Result save(@RequestBody UrunDto urunDto) {
+    public Result save(@RequestBody @Valid UrunDto urunDto) {
         urunDto = urunService.save(urunDto);
         return new SuccessDataResult<>(urunDto, "ürün başarıyla kaydedildi.");
     }

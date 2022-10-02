@@ -28,10 +28,8 @@ public class TurService {
         return tur.map(turMapper::getTarget).orElseThrow(() -> new BulunamadiException("%s id ile tur bulunamadı", id.toString()));
     }
 
-    public void existsByTurId(Long id) {
-        if (!turRepository.existsById(id)) {
-            throw new BulunamadiException("%s id ile tur bulunamadı", id.toString());
-        }
+    public Boolean existsByTurId(Long id) {
+        return turRepository.existsById(id);
     }
 
     public void save(TurDto turDto) {

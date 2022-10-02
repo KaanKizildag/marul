@@ -3,15 +3,63 @@ server:
 spring:
   application:
     name: ${APPNAME_API_GATEWAY}
+  cloud:
+    gateway:
+      routes:
+        - id: ${APPNAME_MUSTERI_SERVICE}
+          uri: lb://${APPNAME_MUSTERI_SERVICE}
+          predicates:
+            - Path=/${APPNAME_MUSTERI_SERVICE}/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: circuit-breaker
+                fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
+        - id: ${APPNAME_RAPOR_SERVICE}
+          uri: lb://${APPNAME_RAPOR_SERVICE}
+          predicates:
+            - Path=/${APPNAME_RAPOR_SERVICE}/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: circuit-breaker
+                fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
+        - id: ${APPNAME_MAIL_SERVICE}
+          uri: lb://${APPNAME_MAIL_SERVICE}
+          predicates:
+            - Path=/${APPNAME_MAIL_SERVICE}/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: circuit-breaker
+                fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
+        - id: ${APPNAME_STOK_SERVICE}
+          uri: lb://${APPNAME_STOK_SERVICE}
+          predicates:
+            - Path=/${APPNAME_STOK_SERVICE}/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: circuit-breaker
+                fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
+        - id: ${APPNAME_SATIS_SERVICE}
+          uri: lb://${APPNAME_SATIS_SERVICE}
+          predicates:
+            - Path=/${APPNAME_SATIS_SERVICE}/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: circuit-breaker
+                fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
 
 eureka:
   instance:
-    hostname: ${APPNAME_SERVICE_DISCOVERY}
+    hostname: ${API_GATEWAY_HOST}
   client:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://${APPNAME_SERVICE_DISCOVERY}:${SERVICE_DISCOVERY_PORT}/eureka
+      defaultZone: http://${SERVICE_DISCOVERY_HOST:localhost}:${SERVICE_DISCOVERY_PORT:8761}/eureka
 
 
 resilience4j.circuitbreaker:
@@ -27,5 +75,4 @@ resilience4j.timelimiter:
   configs:
     default:
       timeoutDuration: 10s
-
 

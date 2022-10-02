@@ -32,4 +32,11 @@ public class Urun {
 
     @Column(name = "kdv")
     private int kdv;
+
+    @Column(name = "kategori_id")
+    private Long kategoriId;
+
+    @Column(name = "barkod")
+    private String barkod;
+
 }

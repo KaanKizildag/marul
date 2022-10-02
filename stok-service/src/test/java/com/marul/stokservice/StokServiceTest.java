@@ -36,7 +36,7 @@ class StokServiceTest {
     void itShould_returnTrue_WhenStockIsAvailable() {
         //given
         long urunId = 1L;
-        when(satisFeignClient.existsById(urunId))
+        when(satisFeignClient.existsUrunById(urunId))
                 .thenReturn(new SuccessDataResult<>(Boolean.TRUE));
 
         long stok = 10L;
@@ -52,7 +52,7 @@ class StokServiceTest {
     void itShould_ThrowsException_WhenProductIfNotExists() {
         //given
         long urunId = 1L;
-        when(satisFeignClient.existsById(urunId)).thenThrow(ServisDonusHatasiException.class);
+        when(satisFeignClient.existsUrunById(urunId)).thenThrow(ServisDonusHatasiException.class);
 
         long stok = 10L;
         //when

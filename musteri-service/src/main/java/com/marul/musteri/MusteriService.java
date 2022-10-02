@@ -6,7 +6,7 @@
 package com.marul.musteri;
 
 import com.marul.dto.MailGondermeDto;
-import com.marul.dto.MusteriDto;
+import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.dto.result.DataResult;
@@ -48,6 +48,10 @@ public class MusteriService {
         return musteriMapper.getTarget(musteri);
     }
 
+    public boolean existsById(Long musteriId) {
+        return musteriRepository.existsById(musteriId);
+    }
+
     public void deleteById(Long id) {
         musteriRepository.deleteById(id);
     }
@@ -75,7 +79,9 @@ public class MusteriService {
     }
 
     private void turMevcutMuKontrol(long turId) {
-        turService.existsByTurId(turId);
+        if (!turService.existsByTurId(turId)) {
+            throw new BulunamadiException("%s id ile tur bulunamadı.", String.valueOf(turId));
+        }
     }
 
     private void emailAlinmisMiKontrol(String email) {
@@ -107,6 +113,7 @@ public class MusteriService {
         List<RaporDto> raporDtoList = musteriMapper.getRaporDtoList(musteriDtoList);
         log.info("{} tane müşteri raporlanacak ", raporDtoList.size());
         RaporOlusturmaDto raporOlusturmaDto = new RaporOlusturmaDto();
+        raporOlusturmaDto.setRaporAdi("musteri_email_rapor.jrxml");
         raporOlusturmaDto.setRaporDtoList(raporDtoList);
         Map<String, Object> raporParametreleri = new HashMap<>();
         raporParametreleri.put("turAdi", "Ankara");

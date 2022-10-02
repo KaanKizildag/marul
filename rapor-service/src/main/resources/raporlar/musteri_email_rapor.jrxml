@@ -32,7 +32,7 @@
 					<reportElement x="20" y="40" width="270" height="20" forecolor="#FFFFFF"
 								   uuid="9075476c-3a57-45b8-9430-ad42edbfc173"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="13" isBold="true"/>
+						<font pdfEncoding="Cp1254" size="13" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA["Listelenen Tur: " + $P{turAdi}]]></textFieldExpression>
 				</textField>
@@ -51,28 +51,28 @@
 			<staticText>
 				<reportElement x="22" y="0" width="120" height="20" uuid="45f261b3-1a1d-4152-bc6b-d349d2563a98"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="13" isBold="true"/>
+					<font pdfEncoding="Cp1254" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Musteri Adi]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="142" y="0" width="164" height="20" uuid="4e6bf6f8-aa13-45e0-bba8-d6974ba9606a"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="13" isBold="true"/>
+					<font pdfEncoding="Cp1254" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Teslimat Noktasi]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="307" y="0" width="140" height="20" uuid="a30e71c6-632a-4cc2-aa7e-f4cf9903952d"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="13" isBold="true"/>
+					<font size="13" isBold="true" pdfEncoding="Cp1254"/>
 				</textElement>
 				<text><![CDATA[Telefon No]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="20" height="20" uuid="9e437350-b1e8-4cb1-b54c-49c365197567"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="13" isBold="true"/>
+					<font size="13" isBold="true" pdfEncoding="Cp1254"/>
 				</textElement>
 				<text><![CDATA[#]]></text>
 			</staticText>

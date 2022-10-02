@@ -66,8 +66,6 @@ services:
       dockerfile: ../musteri-service/Dockerfile
     volumes:
       - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
-    #    entrypoint: [ "/usr/share/wait-for-it.sh", "-h", "logstash", "-p", "${LOGSTASH_PORT}", "-t", "120",
-    #                  "--", "java", "-jar", "app.jar" ]
     ports:
       - "${MUSTERI_SERVICE_PORT}:${MUSTERI_SERVICE_PORT}"
     environment:
@@ -79,6 +77,8 @@ services:
       - LOGSTASH_PORT=${LOGSTASH_PORT}
       - SERVICE_DISCOVERY_PORT=${SERVICE_DISCOVERY_PORT}
       - APPNAME_SERVICE_DISCOVERY=${APPNAME_SERVICE_DISCOVERY}
+      - MUSTERI_SERVICE_HOST=${MUSTERI_SERVICE_HOST}
+      - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
     depends_on:
       - postgres-musteri
     networks:
@@ -98,6 +98,9 @@ services:
       - APPNAME_SERVICE_DISCOVERY=${APPNAME_SERVICE_DISCOVERY}
       - LOGSTASH_PORT=${LOGSTASH_PORT}
       - LOGSTASH_HOST=${LOGSTASH_HOST}
+      - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
+      - MAIL_SERVICE_PORT=${MAIL_SERVICE_PORT}
+      - MAIL_SERVICE_HOST=${MAIL_SERVICE_HOST}
     networks:
       - postgres
       - spring
@@ -121,6 +124,9 @@ services:
       - APPNAME_MAIL_SERVICE=${APPNAME_MAIL_SERVICE}
       - APPNAME_SATIS_SERVICE=${APPNAME_SATIS_SERVICE}
       - APPNAME_STOK_SERVICE=${APPNAME_STOK_SERVICE}
+      - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
+      - API_GATEWAY_PORT=${API_GATEWAY_PORT}
+      - API_GATEWAY_HOST=${API_GATEWAY_HOST}
     networks:
       - spring
 
@@ -137,6 +143,7 @@ services:
       - APPNAME_SERVICE_DISCOVERY=${APPNAME_SERVICE_DISCOVERY}
       - LOGSTASH_PORT=${LOGSTASH_PORT}
       - LOGSTASH_HOST=${LOGSTASH_HOST}
+      - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
     networks:
       - spring
 
@@ -152,10 +159,66 @@ services:
       - LOGSTASH_PORT=${LOGSTASH_PORT}
       - LOGSTASH_HOST=${LOGSTASH_HOST}
       - APPNAME_SERVICE_DISCOVERY=${APPNAME_SERVICE_DISCOVERY}
-      - RAPOR_SERVICE_PORT=${RAPOR_SERVICE_PORT}
       - RAPORLAR_DIZINI=${RAPORLAR_DIZINI}
       - SERVICE_DISCOVERY_PORT=${SERVICE_DISCOVERY_PORT}
       - MARUL_LOGO_PATH=${MARUL_LOGO_PATH}
+      - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
+      - RAPOR_SERVICE_HOST=${RAPOR_SERVICE_HOST}
+      - RAPOR_SERVICE_PORT=${RAPOR_SERVICE_PORT}
+    networks:
+      - postgres
+      - spring
+
+  stok-service:
+    container_name: stok-service
+    image: marul/stok-service
+    build:
+      context: ../stok-service
+      dockerfile: ../stok-service/Dockerfile
+    volumes:
+      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
+    ports:
+      - "${STOK_SERVICE_PORT}:${STOK_SERVICE_PORT}"
+    environment:
+      - APPNAME_STOK_SERVICE=${APPNAME_STOK_SERVICE}
+      - STOK_SERVICE_PORT=${STOK_SERVICE_PORT}
+      - POSTGRES_STOK_PORT=${POSTGRES_STOK_PORT}
+      - POSTGRES_STOK_HOST=${POSTGRES_STOK_HOST}
+      - LOGSTASH_HOST=${LOGSTASH_HOST}
+      - LOGSTASH_PORT=${LOGSTASH_PORT}
+      - SERVICE_DISCOVERY_PORT=${SERVICE_DISCOVERY_PORT}
+      - APPNAME_SERVICE_DISCOVERY=${APPNAME_SERVICE_DISCOVERY}
+      - STOK_SERVICE_HOST=${STOK_SERVICE_HOST}
+      - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
+    depends_on:
+      - postgres-stok
+    networks:
+      - postgres
+      - spring
+
+  satis-service:
+    container_name: satis-service
+    image: marul/satis-service
+    build:
+      context: ../satis-service
+      dockerfile: ../satis-service/Dockerfile
+    volumes:
+      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
+    ports:
+      - "${SATIS_SERVICE_PORT}:${SATIS_SERVICE_PORT}"
+    environment:
+      - APPNAME_SATIS_SERVICE=${APPNAME_SATIS_SERVICE}
+      - SATIS_SERVICE_PORT=${SATIS_SERVICE_PORT}
+      - POSTGRES_SATIS_PORT=${POSTGRES_SATIS_PORT}
+      - POSTGRES_SATIS_HOST=${POSTGRES_SATIS_HOST}
+      - LOGSTASH_HOST=${LOGSTASH_HOST}
+      - LOGSTASH_PORT=${LOGSTASH_PORT}
+      - SERVICE_DISCOVERY_PORT=${SERVICE_DISCOVERY_PORT}
+      - APPNAME_SERVICE_DISCOVERY=${APPNAME_SERVICE_DISCOVERY}
+      - SATIS_SERVICE_HOST=${SATIS_SERVICE_HOST}
+      - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
+    depends_on:
+      - postgres-satis
     networks:
       - postgres
       - spring
