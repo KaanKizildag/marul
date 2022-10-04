@@ -19,7 +19,7 @@ public class SecurityConfig {
     protected SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity serverHttpSecurity) {
         return serverHttpSecurity
                 .authorizeExchange()
-                .anyExchange().authenticated()
+                .anyExchange().permitAll()
                 .and()
                 .httpBasic()
                 .and()
