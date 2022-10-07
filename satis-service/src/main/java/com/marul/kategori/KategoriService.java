@@ -14,6 +14,12 @@ public class KategoriService {
     private final KategoriRepository kategoriRepository;
     private final KategoriMapper kategoriMapper;
 
+    public Kategori findById_JPA(Long id) {
+        Kategori kategori = kategoriRepository.findById(id)
+                .orElseThrow(() -> new BulunamadiException("%d id ile kategori bulunamadı"));
+        return kategori;
+    }
+
     public KategoriDto findById(Long id) {
         Kategori kategori = kategoriRepository.findById(id)
                 .orElseThrow(() -> new BulunamadiException("%d id ile kategori bulunamadı"));

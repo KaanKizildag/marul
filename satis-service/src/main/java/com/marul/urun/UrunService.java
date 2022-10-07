@@ -8,13 +8,12 @@ import com.marul.dto.stok.StokDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.ZatenKayitliException;
-import com.marul.kategori.KategoriDto;
+import com.marul.kategori.Kategori;
 import com.marul.kategori.KategoriService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author kaan
@@ -35,9 +34,10 @@ public class UrunService {
             throw new ZatenKayitliException("%s adıyla bir ürün zaten sisteme kayıtlı", urunAdi);
         }
 
+        Kategori kategori = kategoriService.findById_JPA(urunDto.getKategoriId());
         Urun urun = urunMapper.getEntity(urunDto);
+        urun.setKategori(kategori);
         urun = urunRepository.save(urun);
-        urun.setKategoriId(urunDto.getKategoriId());
         varsayilanStokAtamasi(urun.getId());
         return urunMapper.getDto(urun);
     }
@@ -61,13 +61,6 @@ public class UrunService {
     public List<UrunDto> findAll() {
         List<Urun> urunList = urunRepository.findAll();
         List<UrunDto> urunDtoList = urunMapper.getDtoList(urunList);
-
-        urunDtoList = urunDtoList.stream().map(urunDto -> {
-            Long kategoriId = urunDto.getKategoriId();
-            KategoriDto kategoriDto = kategoriService.findById(kategoriId);
-            urunDto.setKategoriAdi(kategoriDto.getKategoriAdi());
-            return urunDto;
-        }).collect(Collectors.toList());
 
         return urunDtoList;
     }
