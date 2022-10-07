@@ -5,6 +5,9 @@
  */
 package com.marul.urun;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.marul.kategori.Kategori;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,8 +36,10 @@ public class Urun {
     @Column(name = "kdv")
     private int kdv;
 
-    @Column(name = "kategori_id")
-    private Long kategoriId;
+    @JsonProperty(access = Access.WRITE_ONLY)
+    @ManyToOne(targetEntity = Kategori.class)
+    @JoinColumn(name="kategori_id")
+    private Kategori kategori;
 
     @Column(name = "barkod")
     private String barkod;
