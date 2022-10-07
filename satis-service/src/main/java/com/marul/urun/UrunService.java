@@ -8,10 +8,13 @@ import com.marul.dto.stok.StokDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.ZatenKayitliException;
+import com.marul.kategori.KategoriDto;
+import com.marul.kategori.KategoriService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author kaan
@@ -23,6 +26,7 @@ public class UrunService {
     private final UrunRepository urunRepository;
     private final UrunMapper urunMapper;
     private final StokFeignClient stokFeignClient;
+    private final KategoriService kategoriService;
 
     public UrunDto save(UrunDto urunDto) {
         String urunAdi = urunDto.getUrunAdi();
@@ -33,6 +37,7 @@ public class UrunService {
 
         Urun urun = urunMapper.getEntity(urunDto);
         urun = urunRepository.save(urun);
+        urun.setKategoriId(urunDto.getKategoriId());
         varsayilanStokAtamasi(urun.getId());
         return urunMapper.getDto(urun);
     }
@@ -55,7 +60,16 @@ public class UrunService {
 
     public List<UrunDto> findAll() {
         List<Urun> urunList = urunRepository.findAll();
-        return urunMapper.getDtoList(urunList);
+        List<UrunDto> urunDtoList = urunMapper.getDtoList(urunList);
+
+        urunDtoList = urunDtoList.stream().map(urunDto -> {
+            Long kategoriId = urunDto.getKategoriId();
+            KategoriDto kategoriDto = kategoriService.findById(kategoriId);
+            urunDto.setKategoriAdi(kategoriDto.getKategoriAdi());
+            return urunDto;
+        }).collect(Collectors.toList());
+
+        return urunDtoList;
     }
 
     public UrunDto findById(Long id) {

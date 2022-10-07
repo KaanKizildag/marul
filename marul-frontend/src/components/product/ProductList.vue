@@ -5,7 +5,7 @@
         <h6 class="mb-0">Ürün Listesi</h6> <br/>
         <el-button type="primary" plain @click="addProduct">Ekle</el-button>
 
-        <Dialog :dialog-visible="dialogVisible" :title="'Ürün Ekle'" @open="open" >
+        <Dialog :dialog-visible="dialogVisible" :title="'Ürün Ekle'" @open="open">
           <div class="input-group input-group-outline mb-3">
             <input type="text" v-model="urunDto.urunAdi" class="form-control" placeholder="Ürün Adı">
           </div>
@@ -27,7 +27,8 @@
           <template #buttons>
             <el-button @click="dialogVisible = false">Vazgeç</el-button>
             <el-button type="primary" @click="save"
-            >Keydet</el-button
+            >Keydet
+            </el-button
             >
           </template>
         </Dialog>
@@ -35,11 +36,13 @@
       </div>
       <div class="card-body pt-4 p-3">
         <el-table :data="filterTableData" style="width: 100%">
-          <el-table-column label="Date" prop="date"/>
-          <el-table-column label="Name" prop="name"/>
+          <el-table-column label="Ürün Adı" prop="urunAdi"/>
+          <el-table-column label="Fiyat" prop="fiyat"/>
+          <el-table-column label="Kdv" prop="kdv"/>
+          <el-table-column label="Kategori Adı" prop="kategoriAdi"/>
           <el-table-column align="right">
             <template #header>
-              <el-input v-model="search" size="small" placeholder="Type to search"/>
+              <el-input v-model="search" size="small" placeholder="Ara"/>
             </template>
             <template #default="scope">
               <a class="btn btn-link text-success px-3 mb-0" @click="update(scope.row)"><i
@@ -57,22 +60,26 @@
 <script setup>
 import {computed, ref} from "vue";
 import Dialog from "../common/Dialog.vue";
-import axios from "axios"
+import {ProductService} from "../../services/ProductService.js";
+
+const haftalikSatislar = ref({});
 
 const dialogVisible = ref(false)
 const isUpdate = ref(false)
 
 const urunDto = ref({
-  urunAdi:"",
-  fiyat:"",
-  kdv:"",
+  urunAdi: "",
+  fiyat: "",
+  kdv: "",
 
 })
-
+const p = new ProductService();
 const findAllProduct = () => {
-  axios.get("http://localhost:8084/satis-service/v1/urun/findAll")
-      .then(response => console.log(response.data))
+  p.findAllPrdocut().then(resp => tableData.value = resp.data.data)
 }
+const haftalikSatisArray = ref([])
+
+console.log(haftalikSatisArray)
 
 findAllProduct();
 
@@ -89,17 +96,19 @@ function save() {
   dialogVisible.value = false
   console.log(urunDto.value)
   urunDto.value = {
-    urunAdi:"",
-    fiyat:"",
-    kdv:"",
+    urunAdi: "",
+    fiyat: "",
+    kdv: "",
     kategoriId: null,
   }
-}function cancel() {
+}
+
+function cancel() {
   dialogVisible.value = false
   urunDto.value = {
-    urunAdi:"",
-    fiyat:"",
-    kdv:"",
+    urunAdi: "",
+    fiyat: "",
+    kdv: "",
 
   }
 }
@@ -107,49 +116,25 @@ function save() {
 
 function update(row) {
   dialogVisible.value = true
-  urunDto.value = {
-    urunAdi:"Marul",
-    fiyat: 13,
-    kdv: 18,
-    kategoriId: 1
-  }
+  row.kategoriId = 3;
+  urunDto.value = row
   console.log(row)
 }
+
 function remove(row) {
   console.log(row)
 }
 
 const search = ref('')
 const filterTableData = computed(() =>
-    tableData.filter(
+    tableData.value.filter(
         (data) =>
             !search.value ||
-            data.name.toLowerCase().includes(search.value.toLowerCase())
+            data.urunAdi.toLowerCase().includes(search.value.toLowerCase())
     )
 )
 
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-02',
-    name: 'John',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Morgan',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Jessy',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-]
+const tableData = ref([])
 const value = ref('')
 const options = [
   {

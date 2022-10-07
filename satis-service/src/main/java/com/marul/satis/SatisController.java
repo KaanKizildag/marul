@@ -3,7 +3,9 @@ package com.marul.satis;
 import com.marul.dto.SatisDto;
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
+import com.marul.dto.satis.KategoriFiyatDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/satis")
 @RequiredArgsConstructor
+@Slf4j
 public class SatisController {
 
     private final SatisService satisService;
@@ -36,7 +39,15 @@ public class SatisController {
     @GetMapping("/find-urun-adi-by-satisId")
     public Result findUrunAdiBySatisId(@RequestParam("satisId") Long satisId) {
         String urunAdi = satisService.findUrunAdiBySatisId(satisId);
-        return new SuccessDataResult(urunAdi, "ürün adı başarıyla getirildi");
+        return new SuccessDataResult<>(urunAdi, "ürün adı başarıyla getirildi");
+    }
+
+    @GetMapping("/onceki-haftaya-gore-satis-dustu-mu")
+    public Result haftalikSatislariGetir() {
+        List<KategoriFiyatDto> kategoriFiyatDtos = satisService.haftalikSatislariGetir();
+        String message = "haftalık satışlar listelendi";
+        log.info(message);
+        return new SuccessDataResult<>(kategoriFiyatDtos, message);
     }
 
     @GetMapping("/satis-faturasi")

@@ -20,4 +20,6 @@ public class UrunDto {
     private int kdv;
     @NotNull
     private Long kategoriId;
+    @NotNull
+    private String kategoriAdi;
 }

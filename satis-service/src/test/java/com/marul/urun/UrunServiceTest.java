@@ -4,12 +4,11 @@ import com.marul.dto.result.SuccessDataResult;
 import com.marul.dto.stok.StokDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -32,13 +31,8 @@ class UrunServiceTest {
     @Mock
     private StokFeignClient stokFeignClient;
 
-    @MockBean
+    @InjectMocks
     private UrunService urunService;
-
-    @BeforeEach
-    void setUp() {
-        urunService = new UrunService(urunRepository, urunMapper, stokFeignClient);
-    }
 
     @Test
     void save() {

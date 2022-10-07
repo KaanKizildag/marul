@@ -4,8 +4,11 @@ import com.marul.dto.SatisDto;
 import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
+import com.marul.dto.satis.KategoriFiyatDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
+import com.marul.kategori.KategoriDto;
+import com.marul.kategori.KategoriService;
 import com.marul.urun.StokFeignClient;
 import com.marul.urun.UrunService;
 import com.marul.util.ResultDecoder;
@@ -13,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +32,7 @@ public class SatisService {
     private final StokFeignClient stokFeignClient;
     private final SatisMapper satisMapper;
     private final UrunService urunService;
+    private final KategoriService kategoriService;
 
     public List<SatisDto> findAll() {
         List<Satis> satisList = satisRepository.findAll();
@@ -50,6 +55,7 @@ public class SatisService {
         urunKontrolu(urunId);
         stokGuncelle(satisDto, urunId);
         Satis satis = satisMapper.getEntity(satisDto);
+        satis.setSatisZamani(LocalDateTime.now());
         satis = this.satisRepository.save(satis);
         return satisMapper.getDto(satis);
     }
@@ -57,6 +63,34 @@ public class SatisService {
     public String findUrunAdiBySatisId(Long satisId) {
         return satisRepository.findUrunAdiBySatisId(satisId)
                 .orElseThrow(() -> new BulunamadiException("%s satis id ile urun bulunamadı.", satisId.toString()));
+    }
+
+    public List<SatisDto> baslangicVeBitisZamaninaGoreSatisGetir(LocalDateTime baslangiZamani, LocalDateTime bitisZamani) {
+        List<Satis> satisList = satisRepository.haftalikSatisiGetir(baslangiZamani, bitisZamani);
+        return satisMapper.getDtoList(satisList);
+    }
+
+    public List<KategoriFiyatDto> haftalikSatislariGetir() {
+        LocalDateTime baslangiZamani = LocalDateTime.now().minusDays(7);
+        LocalDateTime bitisZamani = LocalDateTime.now();
+        List<SatisDto> satisDtoList = baslangicVeBitisZamaninaGoreSatisGetir(baslangiZamani, bitisZamani);
+
+        return satisDtoList.stream().map(satis ->
+                {
+                    UrunDto urunDto = urunService.findById(satis.getUrunId());
+                    BigDecimal fiyat = urunDto.getFiyat();
+                    Long satilanAdet = satis.getSatilanAdet();
+                    BigDecimal toplam = fiyat.multiply(BigDecimal.valueOf(satilanAdet));
+                    Long kategoriId = urunDto.getKategoriId();
+                    KategoriDto kategoriDto = kategoriService.findById(kategoriId);
+
+                    return KategoriFiyatDto.builder()
+                            .toplamSatisTutari(toplam)
+                            .kategoriAdi(kategoriDto.getKategoriAdi())
+                            .satisArttiMi(false) // todo
+                            .build();
+                }
+        ).collect(Collectors.toList());
     }
 
     private void stokGuncelle(SatisDto satisDto, Long urunId) {
