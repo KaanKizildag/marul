@@ -1,7 +1,5 @@
 <template>
-  <el-tooltip content="Güncelle" placement="bottom" effect="light">
     <el-button type="success" :icon="Edit" circle />
-  </el-tooltip>
 </template>
 
 <script setup>

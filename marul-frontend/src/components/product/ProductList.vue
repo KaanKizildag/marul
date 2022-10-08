@@ -103,22 +103,28 @@ function addProduct() {
   isUpdate.value = false
 }
 
-function save() {
+async function save() {
   urunDto.value.urunAdi = urunDto.value.urunAdi.toUpperCase();
-  productService.savePrdocut(urunDto.value)
+  const result = await productService.savePrdocut(urunDto.value)
       .then(response => {
-        dialogVisible.value = false
-        urunDto.value = {
-          urunAdi: "",
-          fiyat: "",
-          kdv: "",
-          kategoriId: null,
-        }
-        successResponse(response.data.message)
-        findAllProduct();
+        return response.data
       }).catch((error) => {
-    errorResponse(error.response.data.message)
-  })
+        return error.response.data
+      })
+
+  if (result.success) {
+    dialogVisible.value = false
+    urunDto.value = {
+      urunAdi: "",
+      fiyat: "",
+      kdv: "",
+      kategoriId: null,
+    }
+    successResponse(result.message)
+    findAllProduct();
+  } else {
+    errorResponse(result.message)
+  }
 }
 
 function cancel() {
@@ -138,14 +144,20 @@ function update(row) {
   console.log(row)
 }
 
-function remove(id) {
-  productService.deleteById(id)
+async function remove(id) {
+  let result = await productService.deleteById(id)
       .then(response => {
-        successResponse(response.data.message)
-        findAllProduct();
+        return response.data
       }).catch((error) => {
-    errorResponse(error.response.data.message)
-  })
+        return error.response.data
+      })
+
+  if (result.success) {
+    successResponse(result.message)
+    findAllProduct();
+  } else {
+    errorResponse(result.message)
+  }
 }
 
 const search = ref('')

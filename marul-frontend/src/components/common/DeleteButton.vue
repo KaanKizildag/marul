@@ -1,7 +1,5 @@
 <template>
-  <el-tooltip content="Sil" placement="bottom" effect="light">
-    <el-button type="danger" :icon="Delete" circle />
-  </el-tooltip>
+    <el-button type="danger" : :icon="Delete" circle />
 </template>
 
 <script setup>
