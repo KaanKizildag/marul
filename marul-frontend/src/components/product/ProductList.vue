@@ -10,10 +10,10 @@
             <input type="text" v-model="urunDto.urunAdi" class="form-control" placeholder="Ürün Adı">
           </div>
           <div class="input-group input-group-outline mb-3">
-            <input type="text" v-model="urunDto.fiyat" class="form-control" placeholder="Ürün Fiyat">
+            <input type="number" v-model="urunDto.fiyat" class="form-control" placeholder="Ürün Fiyat">
           </div>
           <div class="input-group input-group-outline mb-3">
-            <input type="text" v-model="urunDto.kdv" class="form-control" placeholder="Kdv">
+            <input type="number" v-model="urunDto.kdv" class="form-control" placeholder="Kdv">
           </div>
           <el-select v-model="urunDto.kategoriId" filterable placeholder="Select">
             <el-option
@@ -62,10 +62,12 @@ import {computed, ref} from "vue";
 import Dialog from "../common/Dialog.vue";
 import {ProductService} from "../../services/ProductService.js";
 
-const haftalikSatislar = ref({});
+const productService = new ProductService();
+
 
 const dialogVisible = ref(false)
 const isUpdate = ref(false)
+const tableData = ref([])
 
 const urunDto = ref({
   urunAdi: "",
@@ -73,13 +75,10 @@ const urunDto = ref({
   kdv: "",
 
 })
-const p = new ProductService();
-const findAllProduct = () => {
-  p.findAllPrdocut().then(resp => tableData.value = resp.data.data)
-}
-const haftalikSatisArray = ref([])
 
-console.log(haftalikSatisArray)
+const findAllProduct = () => {
+  productService.findAllPrdocut().then(resp => tableData.value = resp.data.data)
+}
 
 findAllProduct();
 
@@ -93,14 +92,18 @@ function addProduct() {
 }
 
 function save() {
-  dialogVisible.value = false
-  console.log(urunDto.value)
-  urunDto.value = {
-    urunAdi: "",
-    fiyat: "",
-    kdv: "",
-    kategoriId: null,
-  }
+  p.savePrdocut(urunDto.value).then(res => {
+    if (res.data.success === true) {
+      dialogVisible.value = false
+      console.log(urunDto.value)
+      urunDto.value = {
+        urunAdi: "",
+        fiyat: "",
+        kdv: "",
+        kategoriId: null,
+      }
+    }
+  })
 }
 
 function cancel() {
@@ -112,7 +115,6 @@ function cancel() {
 
   }
 }
-
 
 function update(row) {
   dialogVisible.value = true
@@ -134,8 +136,6 @@ const filterTableData = computed(() =>
     )
 )
 
-const tableData = ref([])
-const value = ref('')
 const options = [
   {
     value: 1,

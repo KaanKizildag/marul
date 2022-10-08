@@ -1,16 +1,16 @@
-import axios from "axios";
-
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { httpRequest } from "./baseHTTP.js"
 
 export class ProductService {
 
-
     findAllPrdocut() {
-        return axios.get(BASE_URL + "/satis-service/v1/urun/findAll")
+        return httpRequest.get("/satis-service/v1/urun/findAll")
+    }
+
+    savePrdocut(product) {
+        return httpRequest.post("/satis-service/v1/urun/save", product)
     }
 
     haftalikSatislariGetir() {
-        return axios.get(BASE_URL + "/satis-service/v1/satis/haftalik-satislari-getir")
+        return httpRequest.get("/satis-service/v1/satis/onceki-haftaya-gore-satis-dustu-mu")
     }
 }
