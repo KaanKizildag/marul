@@ -12,7 +12,7 @@
       <ul class="navbar-nav">
         <li class="nav-item">
           <router-link to="/">
-          <a class="nav-link text-white active bg-gradient-primary" href="../pages/dashboard.html">
+          <a class="nav-link text-white " :class="props.activePage === 'ANASAYFA' ? 'active bg-gradient-primary' : ''" href="../pages/dashboard.html">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">dashboard</i>
             </div>
@@ -22,7 +22,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-white " href="../pages/tables.html">
+          <a class="nav-link text-white " :class="props.activePage === 'SATIŞ' ? 'active bg-gradient-primary' : ''" href="../pages/tables.html">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">table_view</i>
             </div>
@@ -31,7 +31,7 @@
         </li>
         <li class="nav-item">
           <router-link to="/product">
-          <a class="nav-link text-white " href="../pages/billing.html">
+          <a class="nav-link text-white " :class="props.activePage === 'ÜRÜN' ? 'active bg-gradient-primary' : ''" href="../pages/billing.html">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">receipt_long</i>
             </div>
@@ -40,7 +40,7 @@
           </router-link>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white " href="../pages/billing.html">
+          <a class="nav-link text-white " :class="props.activePage === 'STOK' ? 'active bg-gradient-primary' : ''" href="../pages/billing.html">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">receipt_long</i>
             </div>
@@ -48,7 +48,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white " href="../pages/virtual-reality.html">
+          <a class="nav-link text-white " :class="props.activePage === 'MÜŞTERİ' ? 'active bg-gradient-primary' : ''" href="../pages/virtual-reality.html">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">view_in_ar</i>
             </div>
@@ -56,7 +56,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white " href="../pages/rtl.html">
+          <a class="nav-link text-white " :class="props.activePage === 'RAPOR' ? 'active bg-gradient-primary' : ''" href="../pages/rtl.html">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
             </div>
@@ -64,7 +64,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white " href="../pages/notifications.html">
+          <a class="nav-link text-white " :class="props.activePage === 'E POSTA' ? 'active bg-gradient-primary' : ''" href="../pages/notifications.html">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">notifications</i>
             </div>
@@ -75,15 +75,15 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">HESAP</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white " href="../pages/profile.html">
+          <a class="nav-link text-white " :class="props.activePage === 'PROFİL' ? 'active bg-gradient-primary' : ''" href="../pages/profile.html">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">person</i>
             </div>
-            <span class="nav-link-text ms-1">Profil</span>
+            <span class="nav-link-text ms-1">PROFİL</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white " href="../pages/sign-in.html">
+          <a class="nav-link text-white " :class="props.activePage === 'GİRİŞ YAP' ? 'active bg-gradient-primary' : ''" href="../pages/sign-in.html">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">login</i>
             </div>
@@ -91,7 +91,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white " href="../pages/sign-up.html">
+          <a class="nav-link text-white " :class="props.activePage === 'ÜYE OL' ? 'active bg-gradient-primary' : ''" href="../pages/sign-up.html">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">assignment</i>
             </div>
@@ -109,7 +109,7 @@
 </template>
 
 <script setup>
-
+const props = defineProps(["activePage"])
 </script>
 
 <style scoped>
