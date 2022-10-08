@@ -1,6 +1,7 @@
 package com.marul.stokservice.stok;
 
 import com.marul.dto.stok.StokDto;
+import com.marul.dto.stok.StokKaydetDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.YeterliStokYokException;
 import com.marul.stokservice.stok.dto.KritikStokDurumDto;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,28 +38,41 @@ public class StokService {
         return stokRepository.yeterliStokVarMi(urunId, stok);
     }
 
-    public StokDto save(StokDto stokDto) {
-        Long urunId = stokDto.getUrunId();
-        Optional<Stok> optionalStok = stokRepository.findByUrunId(urunId);
-        if (optionalStok.isPresent()) {
-            Stok stok = optionalStok.get();
-            Long stokDtoAdet = stokDto.getAdet();
-            Long mevcutStok = stok.getAdet();
-            long guncelStok = mevcutStok + stokDtoAdet;
-            stok.setAdet(guncelStok);
-            log.info("{} id ile kayitli ürün bulunduğu için mevcut stok ({}) {} olarak güncellenecek.",
-                    urunId, mevcutStok, guncelStok);
-            stok = stokRepository.save(stok);
-            stokHareketiOlustur(stokDto.getAdet(), stok.getId());
-            return stokMapper.getDto(stok);
-        }
-        Stok stok = stokMapper.getEntity(stokDto);
+    public StokDto save(StokKaydetDto stokKaydetDto) {
+        Stok stok = stokMapper.getEntity(stokKaydetDto);
         stok = stokRepository.save(stok);
-        stokHareketiOlustur(stokDto.getAdet(), stok.getId());
         log.info("stok kaydedildi.");
+        StokHareketiDto stokHareketiDto = StokHareketiDto.builder()
+                .hareketZamani(LocalDateTime.now())
+                .aciklama(stokKaydetDto.getAciklama())
+                .satisMi(false)
+                .miktar(stokKaydetDto.getAdet())
+                .stokId(stok.getId())
+                .build();
+        stokHareketiService.save(stokHareketiDto);
         return stokMapper.getDto(stok);
     }
 
+//
+// public StokDto save(StokGuncelleDto stokKaydetDto) {
+//        Stok stok = stokMapper.getEntity(stokKaydetDto);
+//        stok = stokRepository.save(stok);
+//        log.info("stok kaydedildi.");
+//        StokHareketiDto stokHareketiDto = StokHareketiDto.builder()
+//                .hareketZamani(LocalDateTime.now())
+//                .aciklama(stokKaydetDto.getAciklama())
+//                .satisMi(false)
+//                .miktar(stokKaydetDto.getAdet())
+//                .stokId(stok.getId())
+//                .build();
+//        stokHareketiService.save(stokHareketiDto);
+//        return stokMapper.getDto(stok);
+//    }
+
+    @Deprecated
+    /**
+     * @deprecated stok güncelleme dto ile güncellenmeli
+     */
     public boolean stokGuncelle(Long urunId, Long satilanAdet) {
         Stok stok = stokRepository.findByUrunId(urunId)
                 .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", urunId.toString()));
@@ -73,20 +86,17 @@ public class StokService {
 
         stok.setAdet(stokAdet - satilanAdet);
         stok = stokRepository.save(stok);
-        stokHareketiOlustur(satilanAdet, stok.getId());
-        return stok.getId() != null;
-    }
 
-    private void stokHareketiOlustur(Long satilanAdet, Long stokId) {
-        // todo duzenlenecek ! @hkaankizildag
         StokHareketiDto stokHareketiDto = StokHareketiDto.builder()
-                .stokId(stokId)
-                .miktar(satilanAdet)
-                .satisMi(true)
-                .aciklama("Ürün satışı")
                 .hareketZamani(LocalDateTime.now())
+                .aciklama("Stok güncelleme")
+                .satisMi(satilanAdet > 0)
+                .miktar(satilanAdet)
+                .stokId(stok.getId())
                 .build();
         stokHareketiService.save(stokHareketiDto);
+
+        return stok.getId() != null;
     }
 
     public Long findUrunIdByStokId(Long stokId) {

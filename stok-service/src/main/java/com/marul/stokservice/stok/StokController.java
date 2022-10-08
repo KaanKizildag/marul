@@ -4,6 +4,7 @@ import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
 import com.marul.dto.result.SuccessResult;
 import com.marul.dto.stok.StokDto;
+import com.marul.dto.stok.StokKaydetDto;
 import com.marul.stokservice.stok.dto.KritikStokDurumDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +22,8 @@ public class StokController {
     private final StokService stokService;
 
     @PostMapping("/save")
-    public Result save(@RequestBody @Valid StokDto stokDto) {
-        stokDto = stokService.save(stokDto);
+    public Result save(@RequestBody @Valid StokKaydetDto stokKaydetDto) {
+        StokDto stokDto = stokService.save(stokKaydetDto);
         log.info("{} stok başarıyla kaydedildi.", stokDto);
         return new SuccessDataResult<>(stokDto);
     }

@@ -4,7 +4,7 @@
  */
 package com.marul.urun;
 
-import com.marul.dto.stok.StokDto;
+import com.marul.dto.stok.StokKaydetDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.ZatenKayitliException;
@@ -42,10 +42,11 @@ public class UrunService {
 
     private void varsayilanStokAtamasi(Long urunId) {
         long varsayilanStok = 0L;
-        StokDto stokDto = new StokDto();
-        stokDto.setUrunId(urunId);
-        stokDto.setAdet(varsayilanStok);
-        stokFeignClient.save(stokDto);
+        StokKaydetDto stokKaydetDto = new StokKaydetDto();
+        stokKaydetDto.setAdet(varsayilanStok);
+        stokKaydetDto.setUrunId(urunId);
+        stokKaydetDto.setAciklama("Ürün ekleme");
+        stokFeignClient.save(stokKaydetDto);
     }
 
     public boolean existsByUrunAdi(String urunAdi) {

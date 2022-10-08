@@ -2,6 +2,7 @@ package com.marul.stokservice;
 
 import com.marul.dto.result.SuccessDataResult;
 import com.marul.dto.stok.StokDto;
+import com.marul.dto.stok.StokKaydetDto;
 import com.marul.exception.ServisDonusHatasiException;
 import com.marul.stokservice.stok.*;
 import org.junit.jupiter.api.Assertions;
@@ -70,8 +71,7 @@ class StokServiceTest {
         long stokYuklemeAdet = 5L;
         long stokMevcutAdet = 15L;
 
-        StokDto stokDto = new StokDto();
-        stokDto.setId(stokId);
+        StokKaydetDto stokDto = new StokKaydetDto();
         stokDto.setAdet(stokYuklemeAdet);
         stokDto.setUrunId(urunId);
 
@@ -119,8 +119,7 @@ class StokServiceTest {
         long urunId = 1L;
         long stokAdet = 0L;
 
-        StokDto stokDto = new StokDto();
-        stokDto.setId(stokId);
+        StokKaydetDto stokDto = new StokKaydetDto();
         stokDto.setAdet(stokAdet);
         stokDto.setUrunId(urunId);
 
@@ -136,15 +135,14 @@ class StokServiceTest {
                 .thenReturn(stok);
         when(stokRepository.save(stok))
                 .thenReturn(stok);
-        when(stokMapper.getDto(stok))
-                .thenReturn(stokDto);
+//        when(stokMapper.getDto(stok))
+//                .thenReturn(stokDto);
 
         //when
         StokDto actual = stokService.save(stokDto);
         //then
         assertEquals(stokDto.getAdet(), actual.getAdet());
         assertEquals(stokDto.getUrunId(), actual.getUrunId());
-        assertEquals(stokDto.getId(), actual.getId());
 
         verify(stokRepository).findByUrunId(urunId);
         verify(stokMapper).getEntity(stokDto);
