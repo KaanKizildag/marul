@@ -1,4 +1,4 @@
-import { httpRequest } from "./baseHTTP.js"
+import {httpRequest} from "./baseHTTP.js"
 
 export class ProductService {
 
@@ -7,11 +7,7 @@ export class ProductService {
     }
 
     savePrdocut(product) {
-        return httpRequest.post("/satis-service/v1/urun/save", product)
-    }
-
-    savePrdocut(product) {
-        return axios.post(BASE_URL + "/satis-service/v1/urun/save", product, {
+        return httpRequest.post("/satis-service/v1/urun/save", product, {
             headers: {
                 "Accept": "application/json, application/json;charset=UTF-8",
                 "Content-Type": "application/json;charset=UTF-8"
