@@ -18,4 +18,8 @@ export class ProductService {
     haftalikSatislariGetir() {
         return httpRequest.get("/satis-service/v1/satis/onceki-haftaya-gore-satis-dustu-mu")
     }
+
+    deleteById(id) {
+        return httpRequest.delete("/satis-service/v1/urun/delete?id=" + id)
+    }
 }

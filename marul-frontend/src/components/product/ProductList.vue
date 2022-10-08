@@ -45,10 +45,12 @@
               <el-input v-model="search" size="small" placeholder="Ara"/>
             </template>
             <template #default="scope">
-              <a class="btn btn-link text-success px-3 mb-0" @click="update(scope.row)"><i
-                  class="material-icons text-sm me-2" @click="update">edit</i>Güncelle</a>
+              <a class="btn btn-link text-success px-3 mb-0" @click="update(scope.row)">
+                <i class="material-icons text-sm me-2" @click="update">edit</i>Güncelle</a>
+
               <a class="btn btn-link text-danger text-gradient px-3 mb-0">
-                <i class="material-icons text-sm me-2" @click="remove(scope.row)">delete</i>Sil</a>
+                <i class="material-icons text-sm me-2" @click="remove(scope.row.id)">delete</i>Sil</a>
+
             </template>
           </el-table-column>
         </el-table>
@@ -91,6 +93,7 @@ function addProduct() {
 }
 
 function save() {
+  urunDto.value.urunAdi = urunDto.value.urunAdi.toUpperCase();
   productService.savePrdocut(urunDto.value).then(response => {
     if (response.data.success === true) {
       dialogVisible.value = false
@@ -122,8 +125,14 @@ function update(row) {
   console.log(row)
 }
 
-function remove(row) {
-  console.log(row)
+function remove(id) {
+  productService.deleteById(id)
+      .then(response => {
+        if (response.data.success === true) {
+          findAllProduct();
+        }
+        alert(response.data.message);
+      })
 }
 
 const search = ref('')
