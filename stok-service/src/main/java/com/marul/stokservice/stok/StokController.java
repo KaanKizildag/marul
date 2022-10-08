@@ -2,6 +2,7 @@ package com.marul.stokservice.stok;
 
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
+import com.marul.dto.result.SuccessResult;
 import com.marul.dto.stok.StokDto;
 import com.marul.stokservice.stok.dto.KritikStokDurumDto;
 import lombok.RequiredArgsConstructor;
@@ -54,4 +55,9 @@ public class StokController {
         return new SuccessDataResult<>(kritikStokDurumDtoList, mesaj);
     }
 
+    @DeleteMapping("/stok-sil")
+    public Result stokSil(@RequestParam("urunId") Long urunId) {
+        stokService.urunIdIleStokSil(urunId);
+        return new SuccessResult("stok başarıyla silindi");
+    }
 }

@@ -20,6 +20,9 @@ public interface StokRepository extends JpaRepository<Stok, Long> {
     @Query("Select s.urunId From Stok s Where s.id = :stokId")
     Optional<Long> findUrunIdById(@Param("stokId") Long stokId);
 
+    @Query("From Stok s Where s.urunId = :urunId")
+    Optional<Stok> findStokByUrunId(@Param("urunId") Long stokId);
+
     @Query("From Stok s order by s.adet asc")
     List<Stok> findAllByOrOrderByAdetAsc(PageRequest pageRequest);
 }

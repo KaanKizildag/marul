@@ -72,6 +72,7 @@ public class UrunService {
     public void deleteById(Long id) {
         Urun urun = urunRepository.findById(id)
                 .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", id.toString()));
+        stokFeignClient.stokSil(urun.getId());
         urunRepository.delete(urun);
     }
 }

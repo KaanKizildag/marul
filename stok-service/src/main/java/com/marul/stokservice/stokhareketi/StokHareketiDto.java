@@ -20,4 +20,5 @@ public class StokHareketiDto {
     private LocalDateTime hareketZamani;
     @NotNull
     private boolean satisMi;
+    private String aciklama;
 }

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -77,9 +78,13 @@ public class StokService {
     }
 
     private void stokHareketiOlustur(Long satilanAdet, Long stokId) {
+        // todo duzenlenecek ! @hkaankizildag
         StokHareketiDto stokHareketiDto = StokHareketiDto.builder()
                 .stokId(stokId)
                 .miktar(satilanAdet)
+                .satisMi(true)
+                .aciklama("Ürün satışı")
+                .hareketZamani(LocalDateTime.now())
                 .build();
         stokHareketiService.save(stokHareketiDto);
     }
@@ -106,5 +111,20 @@ public class StokService {
                 .urunAdi(urunAdi)
                 .kritikMi(stok.getAdet() < KRITIK_STOK_LIMIT)
                 .build();
+    }
+
+    public void urunIdIleStokSil(Long urunId) {
+        Stok stok = stokRepository.findStokByUrunId(urunId)
+                .orElseThrow(() -> new BulunamadiException("%s ürün id ile stok bulunamadı", urunId.toString()));
+
+        stokHareketiService.save(StokHareketiDto.builder()
+                .stokId(stok.getId())
+                .hareketZamani(LocalDateTime.now())
+                .miktar(stok.getAdet())
+                .aciklama("Ürün silme")
+                .satisMi(false)
+                .build());
+
+        stokRepository.delete(stok);
     }
 }
