@@ -64,13 +64,13 @@ import {computed, ref} from "vue";
 import Dialog from "../common/Dialog.vue";
 import {ProductService} from "../../services/ProductService.js";
 import {CategoryService} from "../../services/CategoryService.js";
-import UtilService from "../../services/utilService.js";
+import NotificationService from "../../services/NotificationService.js";
 
 
 const productService = new ProductService();
 const categoryService = new CategoryService();
 
-const {successResponse, errorResponse} = UtilService();
+const {successResponse, errorResponse} = NotificationService();
 
 const dialogVisible = ref(false)
 const isUpdate = ref(false)
