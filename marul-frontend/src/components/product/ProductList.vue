@@ -27,7 +27,7 @@
           <template #buttons>
             <el-button @click="dialogVisible = false">Vazgeç</el-button>
             <el-button type="primary" @click="save"
-            >Keydet
+            >Kaydet
             </el-button
             >
           </template>
@@ -36,10 +36,10 @@
       </div>
       <div class="card-body pt-4 p-3">
         <el-table :data="filterTableData" style="width: 100%">
-          <el-table-column label="Ürün Adı" prop="urunAdi"/>
-          <el-table-column label="Fiyat" prop="fiyat"/>
-          <el-table-column label="Kdv" prop="kdv"/>
-          <el-table-column label="Kategori Adı" prop="kategoriAdi"/>
+          <el-table-column label="Ürün Adı" prop="urunAdi" :sortable="true"/>
+          <el-table-column label="Fiyat" prop="fiyat" :sortable="true"/>
+          <el-table-column label="Kdv" prop="kdv" :sortable="true"/>
+          <el-table-column label="Kategori Adı" prop="kategoriAdi" :sortable="true"/>
           <el-table-column align="right">
             <template #header>
               <el-input v-model="search" size="small" placeholder="Ara"/>

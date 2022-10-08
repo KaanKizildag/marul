@@ -2,6 +2,7 @@ package com.marul.urun;
 
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
+import com.marul.dto.result.SuccessResult;
 import com.marul.dto.urun.UrunDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,5 +52,12 @@ public class UrunController {
     public Result save(@RequestBody @Valid UrunDto urunDto) {
         urunDto = urunService.save(urunDto);
         return new SuccessDataResult<>(urunDto, "ürün başarıyla kaydedildi.");
+    }
+
+    @DeleteMapping("/delete")
+    public Result deleteById(@RequestParam("id") Long id) {
+        urunService.deleteById(id);
+        log.info("{} id ile ürün silindi", id);
+        return new SuccessResult("ürün başarıyla silindi");
     }
 }

@@ -29,11 +29,9 @@ public class UrunService {
 
     public UrunDto save(UrunDto urunDto) {
         String urunAdi = urunDto.getUrunAdi();
-
         if (existsByUrunAdi(urunAdi)) {
             throw new ZatenKayitliException("%s adıyla bir ürün zaten sisteme kayıtlı", urunAdi);
         }
-
         Kategori kategori = kategoriService.findById_JPA(urunDto.getKategoriId());
         Urun urun = urunMapper.getEntity(urunDto);
         urun.setKategori(kategori);
@@ -69,5 +67,11 @@ public class UrunService {
         Urun urun = urunRepository.findById(id)
                 .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", id.toString()));
         return urunMapper.getDto(urun);
+    }
+
+    public void deleteById(Long id) {
+        Urun urun = urunRepository.findById(id)
+                .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", id.toString()));
+        urunRepository.delete(urun);
     }
 }
