@@ -64,9 +64,13 @@ import {computed, ref} from "vue";
 import Dialog from "../common/Dialog.vue";
 import {ProductService} from "../../services/ProductService.js";
 import {CategoryService} from "../../services/CategoryService.js";
+import UtilService from "../../services/utilService.js";
+
 
 const productService = new ProductService();
 const categoryService = new CategoryService();
+
+const {successResponse, errorResponse} = UtilService();
 
 const dialogVisible = ref(false)
 const isUpdate = ref(false)
@@ -103,17 +107,19 @@ function addProduct() {
 
 function save() {
   urunDto.value.urunAdi = urunDto.value.urunAdi.toUpperCase();
-  productService.savePrdocut(urunDto.value).then(response => {
-    if (response.data.success === true) {
-      dialogVisible.value = false
-      urunDto.value = {
-        urunAdi: "",
-        fiyat: "",
-        kdv: "",
-        kategoriId: null,
-      }
-      findAllProduct();
-    }
+  productService.savePrdocut(urunDto.value)
+      .then(response => {
+        dialogVisible.value = false
+        urunDto.value = {
+          urunAdi: "",
+          fiyat: "",
+          kdv: "",
+          kategoriId: null,
+        }
+        successResponse(response.data.message)
+        findAllProduct();
+      }).catch((error) => {
+    errorResponse(error.response.data.message)
   })
 }
 
@@ -137,11 +143,11 @@ function update(row) {
 function remove(id) {
   productService.deleteById(id)
       .then(response => {
-        if (response.data.success === true) {
-          findAllProduct();
-        }
-        alert(response.data.message);
-      })
+        successResponse(response.data.message)
+        findAllProduct();
+      }).catch((error) => {
+    errorResponse(error.response.data.message)
+  })
 }
 
 const search = ref('')
