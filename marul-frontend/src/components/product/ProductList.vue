@@ -45,12 +45,8 @@
               <el-input v-model="search" size="small" placeholder="Ara"/>
             </template>
             <template #default="scope">
-              <a class="btn btn-link text-success px-3 mb-0" @click="update(scope.row)">
-                <i class="material-icons text-sm me-2" @click="update">edit</i>Güncelle</a>
-
-              <a class="btn btn-link text-danger text-gradient px-3 mb-0">
-                <i class="material-icons text-sm me-2" @click="remove(scope.row.id)">delete</i>Sil</a>
-
+              <DeleteButton @click="remove(scope.row.id)"/>
+              <EditButton @click="update(scope.row)"/>
             </template>
           </el-table-column>
         </el-table>
@@ -65,6 +61,8 @@ import Dialog from "../common/Dialog.vue";
 import {ProductService} from "../../services/ProductService.js";
 import {CategoryService} from "../../services/CategoryService.js";
 import NotificationService from "../../services/NotificationService.js";
+import DeleteButton from "../common/DeleteButton.vue";
+import EditButton from "../common/EditButton.vue";
 
 
 const productService = new ProductService();
