@@ -3,14 +3,18 @@ package com.marul.stokservice.stok;
 import com.marul.dto.stok.StokDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.YeterliStokYokException;
+import com.marul.stokservice.stok.dto.KritikStokDurumDto;
 import com.marul.stokservice.stokhareketi.StokHareketiDto;
 import com.marul.stokservice.stokhareketi.StokHarektiService;
 import com.marul.util.ResultDecoder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +25,8 @@ public class StokService {
     private final SatisFeignClient satisFeignClient;
     private final StokMapper stokMapper;
     private final StokHarektiService stokHareketiService;
+
+    private final int KRITIK_STOK_LIMIT = 10;
 
     public boolean yeterliStokVarMi(Long urunId, Long stok) {
         boolean urunVarMi = ResultDecoder.getDataResult(satisFeignClient.existsUrunById(urunId));
@@ -81,5 +87,24 @@ public class StokService {
     public Long findUrunIdByStokId(Long stokId) {
         return stokRepository.findUrunIdById(stokId)
                 .orElseThrow(() -> new BulunamadiException("Stok Id ile ürün bulunamadı"));
+    }
+
+    public List<KritikStokDurumDto> findAllByOrOrderByAdetAsc() {
+        List<Stok> stokList = stokRepository.findAllByOrOrderByAdetAsc(PageRequest.of(0, 5));
+        return stokList
+                .stream()
+                .map(this::getKritikStokDurumDto)
+                .collect(Collectors.toList());
+
+    }
+
+    private KritikStokDurumDto getKritikStokDurumDto(Stok stok) {
+        String urunAdi = ResultDecoder.getDataResult(satisFeignClient.findUrunAdiById(stok.getUrunId()));
+        return KritikStokDurumDto.builder()
+                .adet(stok.getAdet())
+                .urunId(stok.getUrunId())
+                .urunAdi(urunAdi)
+                .kritikMi(stok.getAdet() < KRITIK_STOK_LIMIT)
+                .build();
     }
 }
