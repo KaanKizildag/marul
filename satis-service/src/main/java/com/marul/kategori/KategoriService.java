@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -35,5 +37,10 @@ public class KategoriService {
         }
         kategori = kategoriRepository.save(kategori);
         return kategoriMapper.getDto(kategori);
+    }
+
+    public List<KategoriDto> findAll() {
+        List<Kategori> kategoriList = kategoriRepository.findAll();
+        return kategoriMapper.getDtoList(kategoriList);
     }
 }

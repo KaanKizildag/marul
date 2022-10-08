@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/kategori")
 @RequiredArgsConstructor
@@ -19,6 +21,14 @@ public class KategoriController {
         KategoriDto kategoriDto = kategoriService.findById(id);
         log.info("{} id ile kategori başarıyla bulundu.", id);
         return new SuccessDataResult<>(kategoriDto, "kategori başarıyla bulundu");
+    }
+
+    @GetMapping("/findAll")
+    public Result findById() {
+        List<KategoriDto> kategoriDtoList = kategoriService.findAll();
+        String message = String.format("%d tane kategori başarıyla listelendi", kategoriDtoList.size());
+        log.info(message);
+        return new SuccessDataResult<>(kategoriDtoList, message);
     }
 
     @PostMapping("/save")

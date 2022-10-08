@@ -17,10 +17,10 @@
           </div>
           <el-select v-model="urunDto.kategoriId" filterable placeholder="Select">
             <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in categories"
+                :key="item.id"
+                :label="item.kategoriAdi"
+                :value="item.id"
             />
           </el-select>
 
@@ -63,9 +63,10 @@
 import {computed, ref} from "vue";
 import Dialog from "../common/Dialog.vue";
 import {ProductService} from "../../services/ProductService.js";
+import {CategoryService} from "../../services/CategoryService.js";
 
 const productService = new ProductService();
-
+const categoryService = new CategoryService();
 
 const dialogVisible = ref(false)
 const isUpdate = ref(false)
@@ -81,6 +82,14 @@ const findAllProduct = () => {
   productService.findAllPrdocut().then(resp => tableData.value = resp.data.data)
 }
 
+const categories = ref([]);
+
+const findAllCategories = () => {
+  categoryService.findAllCategories()
+      .then(response => categories.value = response.data.data);
+}
+
+findAllCategories();
 findAllProduct();
 
 function open() {
@@ -144,24 +153,7 @@ const filterTableData = computed(() =>
     )
 )
 
-const options = [
-  {
-    value: 1,
-    label: 'Elektronik',
-  },
-  {
-    value: 2,
-    label: 'Yiyecek',
-  },
-  {
-    value: 3,
-    label: 'Kırtasiye',
-  },
-  {
-    value: 4,
-    label: 'Diğer',
-  },
-]
+
 </script>
 
 <style scoped>
