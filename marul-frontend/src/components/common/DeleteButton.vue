@@ -1,5 +1,5 @@
 <template>
-    <el-button type="danger" : :icon="Delete" circle />
+    <el-button type="danger" :icon="Delete" circle />
 </template>
 
 <script setup>
