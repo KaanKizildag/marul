@@ -5,13 +5,6 @@ spring:
     name: ${APPNAME_API_GATEWAY}
   cloud:
     gateway:
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins: "http://127.0.0.1:5173/"
-            allowedMethods:
-              - GET
-              - POST
       routes:
         - id: ${APPNAME_MUSTERI_SERVICE}
           uri: lb://${APPNAME_MUSTERI_SERVICE}

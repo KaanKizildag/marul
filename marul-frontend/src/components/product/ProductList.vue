@@ -75,7 +75,6 @@ const urunDto = ref({
   kdv: "",
 
 })
-
 const findAllProduct = () => {
   productService.findAllPrdocut().then(resp => tableData.value = resp.data.data)
 }
@@ -92,16 +91,16 @@ function addProduct() {
 }
 
 function save() {
-  p.savePrdocut(urunDto.value).then(res => {
-    if (res.data.success === true) {
+  productService.savePrdocut(urunDto.value).then(response => {
+    if (response.data.success === true) {
       dialogVisible.value = false
-      console.log(urunDto.value)
       urunDto.value = {
         urunAdi: "",
         fiyat: "",
         kdv: "",
         kategoriId: null,
       }
+      findAllProduct();
     }
   })
 }

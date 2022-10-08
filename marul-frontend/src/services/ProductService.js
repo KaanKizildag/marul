@@ -10,6 +10,15 @@ export class ProductService {
         return httpRequest.post("/satis-service/v1/urun/save", product)
     }
 
+    savePrdocut(product) {
+        return axios.post(BASE_URL + "/satis-service/v1/urun/save", product, {
+            headers: {
+                "Accept": "application/json, application/json;charset=UTF-8",
+                "Content-Type": "application/json;charset=UTF-8"
+            }
+        })
+    }
+
     haftalikSatislariGetir() {
         return httpRequest.get("/satis-service/v1/satis/onceki-haftaya-gore-satis-dustu-mu")
     }
