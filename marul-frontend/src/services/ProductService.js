@@ -13,14 +13,9 @@ export class ProductService {
     savePrdocut(product) {
         return axios.post(BASE_URL + "/satis-service/v1/urun/save", product, {
             headers: {
-                'Content-Type': 'application/json',
-                "Access-Control-Allow-Origin": 'http://127.0.0.1:5173/',
-                "Access-Control-Allow-Credentials": "true",
-                "Access-Control-Expose-Headers": "Set-Cookie",
-                "Access-Control-Allow-Headers": "Content-Type, x-xsrf-token, X-Requested-With, Accept, Expires, Last-Modified, Cache-Control",
-                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-                'Accept': '*/*'
-            },
+                "Accept": "application/json, application/json;charset=UTF-8",
+                "Content-Type": "application/json;charset=UTF-8"
+            }
         })
     }
 
