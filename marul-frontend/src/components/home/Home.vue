@@ -10,17 +10,17 @@
     <div class="row mt-4">
       <ChartCard :id="'chart1'" :data="chartData" :label="'Satış'" :labels="chartLabels" :title="'Haftalık Satış'"
                  :description="'Satış Açıklama'" :subDescription="'campaign sent 2 days ago'" :type="'success'"/>
-      <ChartCard :id="'chart2'" :data="chartData" :label="'Satış'" :labels="chartLabels" :title="'Haftalık Satış'"
+      <ChartCard :id="'chart2'" :data="chartData" :label="'Satış'" :labels="chartLabels" :title="'Aylık Satış'"
                  :description="'Satış Açıklama'" :subDescription="'campaign sent 2 days ago'" :type="'primary'"/>
-      <ChartCard :id="'chart3'" :data="chartData" :label="'Satış'" :labels="chartLabels" :title="'Haftalık Satış'"
+      <ChartCard :id="'chart3'" :data="chartData" :label="'Satış'" :labels="chartLabels" :title="'Yıllık Satış'"
                  :description="'Satış Açıklama'" :subDescription="'campaign sent 2 days ago'" :type="'dark'"/>
     </div>
 
     <div class="row mb-4">
       <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
-        <HomeMainCard/>
+        <!--        <HomeMainCard/>-->
       </div>
-      <HomeTimeLine/>
+      <!--      <HomeTimeLine/>-->
     </div>
   </div>
 
@@ -29,19 +29,30 @@
 <script setup>
 import TopMiniCard from "./TopMiniCard.vue"
 import ChartCard from "./ChartCard.vue"
-import HomeMainCard from "./HomeMainCard.vue"
-import HomeTimeLine from "./HomeTimeLine.vue"
-import {onMounted, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
+import {ProductService} from "../../services/ProductService.js";
 
 const emits = defineEmits(["pageName"])
-
-onMounted(() => {
-  emits("pageName", "ANASAYFA")
-})
+const productService = new ProductService();
 const chartData = ref()
 const chartLabels = ref()
-chartData.value = [50, 20, 10, 22, 50, 10, 40]
-chartLabels.value = ["M", "T", "W", "T", "F", "S", "S"]
+let haftalikSatislar = reactive({});
+
+const haftalikSatislariGetir = async () => {
+  const result = await productService.haftalikSatislariGetir()
+      .then(response => response.data.data);
+  return result;
+}
+
+onMounted(async () => {
+  emits("pageName", "ANASAYFA");
+  haftalikSatislar = await haftalikSatislariGetir();
+  console.log("haftalikSatislar: " + haftalikSatislar)
+  chartData.value = Object.values(haftalikSatislar);
+  chartLabels.value = Object.keys(haftalikSatislar);
+})
+
+
 </script>
 
 <style scoped>

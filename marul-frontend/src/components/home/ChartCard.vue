@@ -23,12 +23,12 @@
 
 <script setup>
 const props = defineProps(["id","data","label","labels","title","description","subDescription","type"])
-import {computed, onMounted, ref} from "vue";
+import {computed, onBeforeUpdate, onMounted, onUpdated} from "vue";
 
-const chartCardClass = computed(()=>{
-  return  `bg-gradient-${props.type} shadow-${props.type} border-radius-lg py-3 pe-1`
+const chartCardClass = computed(() => {
+  return `bg-gradient-${props.type} shadow-${props.type} border-radius-lg py-3 pe-1`
 })
-onMounted(()=> {
+const chartDataFucn = () => {
   var ctx = document.getElementById(props.id).getContext("2d");
   //const ctx = ref(null)
   new Chart(ctx, {
@@ -44,7 +44,7 @@ onMounted(()=> {
         backgroundColor: "rgba(255, 255, 255, .8)",
         data: props.data,
         maxBarThickness: 6
-      }, ],
+      },],
     },
     options: {
       responsive: true,
@@ -108,6 +108,16 @@ onMounted(()=> {
       },
     },
   });
+}
+onMounted(() => {
+  setInterval(chartDataFucn, 300);
+})
+onBeforeUpdate(() => {
+  console.log("onBeforeUpdate")
+})
+
+onUpdated(() => {
+  console.log("onUpdated")
 })
 </script>
 

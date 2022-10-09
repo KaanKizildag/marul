@@ -4,7 +4,7 @@ import com.marul.dto.SatisDto;
 import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
-import com.marul.dto.satis.KategoriFiyatDto;
+import com.marul.dto.satis.KategoriSatisAnalizDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.kategori.KategoriDto;
@@ -70,12 +70,30 @@ public class SatisService {
         return satisMapper.getDtoList(satisList);
     }
 
-    public List<KategoriFiyatDto> haftalikSatislariGetir() {
+    public Map<String, BigDecimal> haftalikSatisToMap(List<KategoriSatisAnalizDto> kategoriSatisAnalizDtoList) {
+        Map<String, BigDecimal> haftalikSatisMap = new HashMap<>();
+        kategoriSatisAnalizDtoList.stream().forEach(
+                kategoriSatisAnalizDto -> {
+                    String kategoriAdi = kategoriSatisAnalizDto.getKategoriAdi();
+                    BigDecimal toplamSatisTutari = kategoriSatisAnalizDto.getToplamSatisTutari();
+                    if (!haftalikSatisMap.containsKey(kategoriAdi)) {
+                        haftalikSatisMap.put(kategoriAdi, toplamSatisTutari);
+                    } else {
+                        BigDecimal toplamSatis = haftalikSatisMap.get(kategoriAdi)
+                                .add(toplamSatisTutari);
+                        ;
+                        haftalikSatisMap.put(kategoriAdi, toplamSatis);
+                    }
+                }
+        );
+        return haftalikSatisMap;
+    }
+
+    public Map<String, BigDecimal> haftalikSatislariGetir() {
         LocalDateTime baslangiZamani = LocalDateTime.now().minusDays(7);
         LocalDateTime bitisZamani = LocalDateTime.now();
         List<SatisDto> satisDtoList = baslangicVeBitisZamaninaGoreSatisGetir(baslangiZamani, bitisZamani);
-
-        return satisDtoList.stream().map(satis ->
+        List<KategoriSatisAnalizDto> kategoriSatisAnalizDtoList = satisDtoList.stream().map(satis ->
                 {
                     UrunDto urunDto = urunService.findById(satis.getUrunId());
                     BigDecimal fiyat = urunDto.getFiyat();
@@ -84,13 +102,14 @@ public class SatisService {
                     Long kategoriId = urunDto.getKategoriId();
                     KategoriDto kategoriDto = kategoriService.findById(kategoriId);
 
-                    return KategoriFiyatDto.builder()
+                    return KategoriSatisAnalizDto.builder()
                             .toplamSatisTutari(toplam)
                             .kategoriAdi(kategoriDto.getKategoriAdi())
-                            .satisArttiMi(false) // todo
                             .build();
                 }
         ).collect(Collectors.toList());
+
+        return haftalikSatisToMap(kategoriSatisAnalizDtoList);
     }
 
     private void stokGuncelle(SatisDto satisDto, Long urunId) {

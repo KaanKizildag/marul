@@ -3,7 +3,6 @@ package com.marul.satis;
 import com.marul.dto.SatisDto;
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
-import com.marul.dto.satis.KategoriFiyatDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/satis")
@@ -44,10 +45,10 @@ public class SatisController {
 
     @GetMapping("/onceki-haftaya-gore-satis-dustu-mu")
     public Result haftalikSatislariGetir() {
-        List<KategoriFiyatDto> kategoriFiyatDtos = satisService.haftalikSatislariGetir();
+        Map<String, BigDecimal> kategoriSatisAnalizDtoList = satisService.haftalikSatislariGetir();
         String message = "haftalık satışlar listelendi";
         log.info(message);
-        return new SuccessDataResult<>(kategoriFiyatDtos, message);
+        return new SuccessDataResult<>(kategoriSatisAnalizDtoList, message);
     }
 
     @GetMapping("/satis-faturasi")
