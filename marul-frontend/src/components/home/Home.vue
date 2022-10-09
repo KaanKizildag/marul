@@ -1,26 +1,35 @@
 <template>
   <div class="container-fluid py-4">
     <div class="row">
-      <TopMiniCard :icon="'person'" :color="'primary'"/>
+      <TopMiniCard :icon="'apps_outage'" :color="'primary'"/>
       <TopMiniCard :icon="'weekend'" :color="'success'"/>
       <TopMiniCard :icon="'person'" :color="'success'"/>
       <TopMiniCard :icon="'weekend'" :color="'primary'"/>
     </div>
 
     <div class="row mt-4">
-      <ChartCard :id="'chart1'" :data="chartData" :label="'Satış'" :labels="chartLabels" :title="'Haftalık Satış'"
-                 :description="'Satış Açıklama'" :subDescription="'campaign sent 2 days ago'" :type="'success'"/>
-      <ChartCard :id="'chart2'" :data="chartData" :label="'Satış'" :labels="chartLabels" :title="'Aylık Satış'"
-                 :description="'Satış Açıklama'" :subDescription="'campaign sent 2 days ago'" :type="'primary'"/>
-      <ChartCard :id="'chart3'" :data="chartData" :label="'Satış'" :labels="chartLabels" :title="'Yıllık Satış'"
-                 :description="'Satış Açıklama'" :subDescription="'campaign sent 2 days ago'" :type="'dark'"/>
+      <ChartCard :id="'chart1'" :data="haftalikSatislarChartData" :label="'Satış'" :labels="haftalikSatislarChartLabels"
+                 :title="'Haftalık Satış'"
+                 :description="'Satış Açıklama'"
+                 :subDescription="`${Math.floor((Date.now() - guncellenmeZamani) / 1000)} saniye önce güncellendi`"
+                 :type="'success'"/>
+      <ChartCard :id="'chart2'" :data="haftalikSatislarChartData" :label="'Satış'" :labels="haftalikSatislarChartLabels"
+                 :title="'Aylık Satış'"
+                 :description="'Satış Açıklama'"
+                 :subDescription="`${Math.floor((Date.now() - guncellenmeZamani) / 1000)} saniye önce güncellendi`"
+                 :type="'primary'"/>
+      <ChartCard :id="'chart3'" :data="haftalikSatislarChartData" :label="'Satış'" :labels="haftalikSatislarChartLabels"
+                 :title="'Yıllık Satış'"
+                 :description="'Satış Açıklama'"
+                 :subDescription="`${Math.floor((Date.now() - guncellenmeZamani) / 1000)} saniye önce güncellendi`"
+                 :type="'dark'"/>
     </div>
 
     <div class="row mb-4">
       <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
-        <!--        <HomeMainCard/>-->
+        <HomeMainCard/>
       </div>
-      <!--      <HomeTimeLine/>-->
+      <HomeTimeLine/>
     </div>
   </div>
 
@@ -28,15 +37,18 @@
 
 <script setup>
 import TopMiniCard from "./TopMiniCard.vue"
+import HomeMainCard from "./HomeMainCard.vue"
+import HomeTimeLine from "./HomeTimeLine.vue"
 import ChartCard from "./ChartCard.vue"
 import {onMounted, reactive, ref} from "vue";
 import {ProductService} from "../../services/ProductService.js";
 
 const emits = defineEmits(["pageName"])
 const productService = new ProductService();
-const chartData = ref()
-const chartLabels = ref()
+const haftalikSatislarChartData = ref()
+const haftalikSatislarChartLabels = ref()
 let haftalikSatislar = reactive({});
+let guncellenmeZamani = Date.now();
 
 const haftalikSatislariGetir = async () => {
   const result = await productService.haftalikSatislariGetir()
@@ -48,8 +60,9 @@ onMounted(async () => {
   emits("pageName", "ANASAYFA");
   haftalikSatislar = await haftalikSatislariGetir();
   console.log("haftalikSatislar: " + haftalikSatislar)
-  chartData.value = Object.values(haftalikSatislar);
-  chartLabels.value = Object.keys(haftalikSatislar);
+  haftalikSatislarChartData.value = Object.values(haftalikSatislar);
+  haftalikSatislarChartLabels.value = Object.keys(haftalikSatislar);
+  guncellenmeZamani = Date.now();
 })
 
 

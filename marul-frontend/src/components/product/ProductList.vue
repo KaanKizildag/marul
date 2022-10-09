@@ -73,18 +73,20 @@ const {successResponse, errorResponse} = NotificationService();
 const dialogVisible = ref(false)
 const isUpdate = ref(false)
 const tableData = ref([])
+const categories = ref([]);
+const search = ref('')
 
 const urunDto = ref({
   urunAdi: "",
   fiyat: "",
   kdv: "",
-
 })
+
 const findAllProduct = () => {
   productService.findAllPrdocut().then(resp => tableData.value = resp.data.data)
 }
 
-const categories = ref([]);
+findAllProduct();
 
 const findAllCategories = () => {
   categoryService.findAllCategories()
@@ -92,18 +94,17 @@ const findAllCategories = () => {
 }
 
 findAllCategories();
-findAllProduct();
 
 function open() {
   console.log('opennn')
 }
 
-function addProduct() {
+const addProduct = () => {
   dialogVisible.value = true
   isUpdate.value = false
 }
 
-async function save() {
+const save = async () => {
   urunDto.value.urunAdi = urunDto.value.urunAdi.toUpperCase();
   const result = await productService.savePrdocut(urunDto.value)
       .then(response => response.data)
@@ -125,24 +126,23 @@ async function save() {
   findAllProduct();
 }
 
-function cancel() {
+const cancel = () => {
   dialogVisible.value = false
   urunDto.value = {
     urunAdi: "",
     fiyat: "",
     kdv: "",
-
   }
 }
 
-function update(row) {
+const update = (row) => {
   dialogVisible.value = true
   row.kategoriId = 3;
   urunDto.value = row
   console.log(row)
 }
 
-async function remove(id) {
+const remove = async (id) => {
   let result = await productService.deleteById(id)
       .then(response => response.data)
       .catch((error) => error.response.data)
@@ -155,12 +155,11 @@ async function remove(id) {
   findAllProduct();
 }
 
-const search = ref('')
 const filterTableData = computed(() =>
     tableData.value.filter(
-        (data) =>
-            !search.value ||
-            data.urunAdi.toLowerCase().includes(search.value.toLowerCase())
+        (data) => !search.value
+            || data.urunAdi.toLowerCase()
+                .includes(search.value.toLowerCase())
     )
 )
 

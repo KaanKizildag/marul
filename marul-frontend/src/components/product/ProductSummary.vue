@@ -7,27 +7,28 @@
             <h6 class="mb-0">STOK AZALAN ÜRÜNLER</h6>
           </div>
           <div class="col-md-6 d-flex justify-content-start justify-content-md-end align-items-center">
-            <i class="material-icons me-2 text-lg">date_range</i>
-            <small>01 - 07 Ekim 2022</small>
+            <StockLimitSelector @stockLimit="stockLimitHandler"/>
           </div>
         </div>
       </div>
       <div class="card-body pt-4 p-3">
         <ul class="list-group">
 
-          <li v-for="item in haftalikSatis"
+          <li v-for="stock in criticalStockList"
               class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
             <div class="d-flex align-items-center">
               <button
-                  class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center">
-                <i class="material-icons text-lg">expand_more</i></button>
+                  class="btn btn-icon-only btn-rounded mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"
+                  :class="stock.kritikMi ? 'btn-outline-danger ': 'btn-outline-warning'">
+                <i class="material-icons text-lg">{{ stock.kritikMi ? "priority_high" : "low_priority" }}</i></button>
               <div class="d-flex flex-column">
-                <h6 class="mb-1 text-dark text-sm">{{ item[0].toUpperCase() }}</h6>
-                <span class="text-xs">27 March 2020, at 12:30 PM</span>
+                <h6 class="mb-1 text-dark text-sm">{{ stock.urunAdi }}</h6>
+                <span class="text-xs">{{ stock.kategoriAdi }}</span>
               </div>
             </div>
-            <div class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold">
-              - $ {{ item[1] }}
+            <div class="d-flex align-items-center text-gradient text-sm font-weight-bold"
+                 :class="stock.kritikMi ? 'text-danger': 'text-warning'">
+              {{ stock.adet }}
             </div>
           </li>
 
@@ -37,10 +38,46 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "ProductSummary"
+<script setup>
+import {computed, onMounted, ref} from "vue";
+import {StockService} from "../../services/StockService.js";
+import NotificationService from "../../services/NotificationService.js"
+import StockLimitSelector from "./StockLimitSelector.vue"
+
+const criticalStockList = ref()
+const criticalStockListAll = ref()
+
+const stockService = new StockService();
+const {errorResponse, successResponse} = NotificationService();
+const getCriticalStockInfo = () => {
+  return stockService.getCriticalStockInfo()
+      .then(response => response.data)
+      .catch(error => error.response.data);
 }
+
+const isCritic = computed((stock) => {
+  return stock.kritikMi ? "expand_more" : "expand_less";
+})
+
+onMounted(async () => {
+  let result = await getCriticalStockInfo();
+
+  if (!result.success) {
+    errorResponse(result.message);
+    return;
+  }
+
+  criticalStockListAll.value = result.data
+  criticalStockList.value = result.data.slice(0, 5);
+})
+const stockLimit = ref()
+const stockLimitHandler = (limit) => {
+  console.log(limit)
+  stockLimit.value = limit;
+  criticalStockList.value = criticalStockListAll.value.slice(0, limit);
+  console.log(criticalStockList.value);
+}
+
 </script>
 
 <style scoped>

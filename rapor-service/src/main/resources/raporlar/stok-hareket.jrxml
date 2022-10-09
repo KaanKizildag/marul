@@ -3,18 +3,18 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
-              name="satis-faturasi" pageWidth="540" pageHeight="500" columnWidth="400" leftMargin="20" rightMargin="20"
+              name="satis-faturasi" pageWidth="800" pageHeight="500" columnWidth="400" leftMargin="20" rightMargin="20"
               topMargin="20" bottomMargin="20" uuid="af8b874c-367e-4c8d-a316-7f29ab7c0308">
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-    <parameter name="baslangicTarihi" class="java.lang.String"/>
-    <parameter name="bitisTarihi" class="java.lang.String"/>
+    <parameter name="baslangicTarihi" class="java.util.Date"/>
+    <parameter name="bitisTarihi" class="java.util.Date"/>
     <queryString>
         <![CDATA[]]>
     </queryString>
     <field name="urunAdi" class="java.lang.String"/>
     <field name="miktar" class="java.lang.Long"/>
-    <field name="hareketZamani" class="java.time.LocalDateTime"/>
-    <field name="satisMi" class="java.lang.Boolean"/>
+    <field name="hareketZamani" class="java.util.Date"/>
+    <field name="aciklama" class="java.lang.String"/>
     <background>
         <band splitType="Stretch"/>
     </background>
@@ -22,7 +22,7 @@
         <band height="101" splitType="Stretch">
             <property name="com.jaspersoft.studio.unit.height" value="px"/>
             <staticText>
-                <reportElement x="0" y="0" width="499" height="49" uuid="3ec892e9-a32a-4f26-970c-d5c95dc7c500">
+                <reportElement x="0" y="0" width="760" height="49" uuid="3ec892e9-a32a-4f26-970c-d5c95dc7c500">
                     <property name="com.jaspersoft.studio.unit.width" value="px"/>
                 </reportElement>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
@@ -31,7 +31,7 @@
                 <text><![CDATA[Hareket Raporu]]></text>
             </staticText>
             <line>
-                <reportElement x="0" y="100" width="500" height="1" uuid="324c3e4b-6144-4491-9ee6-3574ffce2f98">
+                <reportElement x="0" y="100" width="760" height="1" uuid="324c3e4b-6144-4491-9ee6-3574ffce2f98">
                     <property name="com.jaspersoft.studio.unit.x" value="px"/>
                 </reportElement>
                 <graphicElement>
@@ -39,7 +39,7 @@
                 </graphicElement>
             </line>
             <line>
-                <reportElement x="0" y="0" width="500" height="1" uuid="28e38ddb-7c95-4691-9f84-b88c841f62cc">
+                <reportElement x="0" y="0" width="760" height="1" uuid="28e38ddb-7c95-4691-9f84-b88c841f62cc">
                     <property name="com.jaspersoft.studio.unit.width" value="px"/>
                     <property name="com.jaspersoft.studio.unit.x" value="px"/>
                 </reportElement>
@@ -74,7 +74,7 @@
                 </textElement>
                 <textFieldExpression><![CDATA[$P{baslangicTarihi}]]></textFieldExpression>
             </textField>
-            <textField>
+            <textField pattern="dd:MM:yyyy - HH:mm:ss">
                 <reportElement x="170" y="70" width="170" height="20" uuid="312d1877-85ab-4c71-bf4e-9d658c018ca4">
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
                 </reportElement>
@@ -88,7 +88,7 @@
     <pageHeader>
         <band height="27" splitType="Stretch">
             <staticText>
-                <reportElement x="0" y="2" width="130" height="20" uuid="75a2c7eb-306e-43f3-9bfc-8bb833eb0853">
+                <reportElement x="0" y="2" width="180" height="20" uuid="75a2c7eb-306e-43f3-9bfc-8bb833eb0853">
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
                 </reportElement>
                 <textElement>
@@ -97,17 +97,19 @@
                 <text><![CDATA[Ürün adı]]></text>
             </staticText>
             <staticText>
-                <reportElement x="130" y="2" width="130" height="20" uuid="81fa8149-7811-4051-ab6e-93d2ab8ea317">
+                <reportElement x="180" y="2" width="90" height="20" uuid="81fa8149-7811-4051-ab6e-93d2ab8ea317">
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
                 </reportElement>
-                <textElement>
+                <textElement textAlignment="Center">
                     <font fontName="DejaVu Sans Mono" size="13" isBold="true" pdfEncoding="Cp1254"/>
                 </textElement>
                 <text><![CDATA[Miktar]]></text>
             </staticText>
             <staticText>
-                <reportElement x="364" y="1" width="136" height="20" uuid="1cfe4a64-ce37-437b-b0fe-88c796df9e89">
+                <reportElement x="510" y="2" width="249" height="20" uuid="1cfe4a64-ce37-437b-b0fe-88c796df9e89">
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
                 </reportElement>
                 <textElement>
                     <font fontName="DejaVu Sans Mono" size="13" isBold="true" pdfEncoding="Cp1254"/>
@@ -115,14 +117,13 @@
                 <text><![CDATA[Hareket zamanı]]></text>
             </staticText>
             <staticText>
-                <reportElement x="260" y="2" width="104" height="20" uuid="111d982c-d4ed-46b1-9dbf-7d7ceb2f63fb">
+                <reportElement x="270" y="2" width="240" height="20" uuid="111d982c-d4ed-46b1-9dbf-7d7ceb2f63fb">
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
-                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
                 </reportElement>
                 <textElement>
                     <font fontName="DejaVu Sans Mono" size="13" isBold="true" pdfEncoding="Cp1254"/>
                 </textElement>
-                <text><![CDATA[Hareket]]></text>
+                <text><![CDATA[Açıklama]]></text>
             </staticText>
         </band>
     </pageHeader>
@@ -130,7 +131,7 @@
         <band height="38" splitType="Stretch">
             <property name="com.jaspersoft.studio.unit.height" value="px"/>
             <textField>
-                <reportElement x="0" y="3" width="130" height="30" uuid="13d91722-7220-47e5-b717-41c710a1fade">
+                <reportElement x="0" y="3" width="180" height="30" uuid="13d91722-7220-47e5-b717-41c710a1fade">
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
                 </reportElement>
                 <textElement>
@@ -139,16 +140,17 @@
                 <textFieldExpression><![CDATA[$F{urunAdi}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="130" y="3" width="130" height="30" uuid="468c3f09-a6b0-41fb-82c1-19b815cc9a6c">
+                <reportElement x="180" y="3" width="90" height="30" uuid="468c3f09-a6b0-41fb-82c1-19b815cc9a6c">
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
                 </reportElement>
-                <textElement>
+                <textElement textAlignment="Center">
                     <font fontName="DejaVu Sans Mono" size="13" pdfEncoding="Cp1254"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$F{miktar}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[Math.abs($F{miktar})]]></textFieldExpression>
             </textField>
-            <textField>
-                <reportElement x="364" y="3" width="136" height="30" uuid="29f95956-31be-4a18-a985-dbdc60f4ab40">
+            <textField pattern="dd:MM:yyyy - HH:mm:ss">
+                <reportElement x="510" y="4" width="249" height="30" uuid="29f95956-31be-4a18-a985-dbdc60f4ab40">
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
                 </reportElement>
                 <textElement>
@@ -157,13 +159,14 @@
                 <textFieldExpression><![CDATA[$F{hareketZamani}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="260" y="3" width="104" height="30" uuid="779ca3fc-e14c-4a04-8208-03128becff26">
+                <reportElement x="270" y="3" width="240" height="30" uuid="779ca3fc-e14c-4a04-8208-03128becff26">
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
                 </reportElement>
                 <textElement>
                     <font fontName="DejaVu Sans Mono" size="13" pdfEncoding="Cp1254"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$F{satisMi}?"Satış":"Alış"]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{aciklama}]]></textFieldExpression>
             </textField>
         </band>
     </detail>
@@ -171,7 +174,7 @@
         <band height="57">
             <property name="com.jaspersoft.studio.unit.height" value="px"/>
             <textField pattern="dd:MM:yyyy">
-                <reportElement x="399" y="2" width="100" height="25" uuid="ad92221a-2a85-4c97-99aa-f561a5947480">
+                <reportElement x="659" y="2" width="100" height="25" uuid="ad92221a-2a85-4c97-99aa-f561a5947480">
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
                 </reportElement>
@@ -179,7 +182,7 @@
                 <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
             </textField>
             <line>
-                <reportElement x="0" y="0" width="500" height="1" uuid="776ccc6e-3a01-455d-ba79-054db53c572d">
+                <reportElement x="0" y="0" width="760" height="1" uuid="776ccc6e-3a01-455d-ba79-054db53c572d">
                     <property name="com.jaspersoft.studio.unit.x" value="px"/>
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
                 </reportElement>
@@ -196,9 +199,10 @@
                     <![CDATA["https://raw.githubusercontent.com/KaanKizildag/marul/master/logo.png"]]></imageExpression>
             </image>
             <textField pattern="HH:mm:ss">
-                <reportElement x="399" y="27" width="100" height="25" uuid="02f5ae00-f47f-4c97-9c95-e44c6644871c">
+                <reportElement x="659" y="27" width="100" height="25" uuid="02f5ae00-f47f-4c97-9c95-e44c6644871c">
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
                 </reportElement>
                 <textElement textAlignment="Left"/>
                 <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>

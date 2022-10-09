@@ -2,6 +2,7 @@ package com.marul.stokservice.stok;
 
 import com.marul.dto.stok.StokDto;
 import com.marul.dto.stok.StokKaydetDto;
+import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.YeterliStokYokException;
 import com.marul.stokservice.stok.dto.KritikStokDurumDto;
@@ -105,7 +106,7 @@ public class StokService {
     }
 
     public List<KritikStokDurumDto> findAllByOrOrderByAdetAsc() {
-        List<Stok> stokList = stokRepository.findAllByOrOrderByAdetAsc(PageRequest.of(0, 5));
+        List<Stok> stokList = stokRepository.findAllByOrOrderByAdetAsc(PageRequest.of(0, 20));
         return stokList
                 .stream()
                 .map(this::getKritikStokDurumDto)
@@ -114,11 +115,12 @@ public class StokService {
     }
 
     private KritikStokDurumDto getKritikStokDurumDto(Stok stok) {
-        String urunAdi = ResultDecoder.getDataResult(satisFeignClient.findUrunAdiById(stok.getUrunId()));
+        UrunDto urunDto = ResultDecoder.getDataResult(satisFeignClient.findById(stok.getUrunId()));
         return KritikStokDurumDto.builder()
                 .adet(stok.getAdet())
                 .urunId(stok.getUrunId())
-                .urunAdi(urunAdi)
+                .urunAdi(urunDto.getUrunAdi())
+                .kategoriAdi(urunDto.getKategoriAdi())
                 .kritikMi(stok.getAdet() < KRITIK_STOK_LIMIT)
                 .build();
     }

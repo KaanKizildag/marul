@@ -110,7 +110,7 @@ const chartDataFucn = () => {
   });
 }
 onMounted(() => {
-  setInterval(chartDataFucn, 300);
+  setTimeout(chartDataFucn, 500);
 })
 onBeforeUpdate(() => {
   console.log("onBeforeUpdate")
