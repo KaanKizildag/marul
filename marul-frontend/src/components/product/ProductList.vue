@@ -45,12 +45,8 @@
               <el-input v-model="search" size="small" placeholder="Ara"/>
             </template>
             <template #default="scope">
-              <a class="btn btn-link text-success px-3 mb-0" @click="update(scope.row)">
-                <i class="material-icons text-sm me-2" @click="update">edit</i>Güncelle</a>
-
-              <a class="btn btn-link text-danger text-gradient px-3 mb-0">
-                <i class="material-icons text-sm me-2" @click="remove(scope.row.id)">delete</i>Sil</a>
-
+              <DeleteButton @click="remove(scope.row.id)"/>
+              <EditButton @click="update(scope.row)"/>
             </template>
           </el-table-column>
         </el-table>
@@ -64,9 +60,15 @@ import {computed, ref} from "vue";
 import Dialog from "../common/Dialog.vue";
 import {ProductService} from "../../services/ProductService.js";
 import {CategoryService} from "../../services/CategoryService.js";
+import NotificationService from "../../services/NotificationService.js";
+import DeleteButton from "../common/DeleteButton.vue";
+import EditButton from "../common/EditButton.vue";
+
 
 const productService = new ProductService();
 const categoryService = new CategoryService();
+
+const {successResponse, errorResponse} = NotificationService();
 
 const dialogVisible = ref(false)
 const isUpdate = ref(false)
@@ -101,20 +103,26 @@ function addProduct() {
   isUpdate.value = false
 }
 
-function save() {
+async function save() {
   urunDto.value.urunAdi = urunDto.value.urunAdi.toUpperCase();
-  productService.savePrdocut(urunDto.value).then(response => {
-    if (response.data.success === true) {
-      dialogVisible.value = false
-      urunDto.value = {
-        urunAdi: "",
-        fiyat: "",
-        kdv: "",
-        kategoriId: null,
-      }
-      findAllProduct();
-    }
-  })
+  const result = await productService.savePrdocut(urunDto.value)
+      .then(response => response.data)
+      .catch((error) => error.response.data)
+
+  if (!result.success) {
+    errorResponse(result.message)
+    return;
+  }
+
+  dialogVisible.value = false
+  urunDto.value = {
+    urunAdi: "",
+    fiyat: "",
+    kdv: "",
+    kategoriId: null,
+  }
+  successResponse(result.message)
+  findAllProduct();
 }
 
 function cancel() {
@@ -134,14 +142,17 @@ function update(row) {
   console.log(row)
 }
 
-function remove(id) {
-  productService.deleteById(id)
-      .then(response => {
-        if (response.data.success === true) {
-          findAllProduct();
-        }
-        alert(response.data.message);
-      })
+async function remove(id) {
+  let result = await productService.deleteById(id)
+      .then(response => response.data)
+      .catch((error) => error.response.data)
+
+  if (!result.success) {
+    errorResponse(result.message)
+    return;
+  }
+  successResponse(result.message)
+  findAllProduct();
 }
 
 const search = ref('')

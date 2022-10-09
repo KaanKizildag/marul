@@ -6,7 +6,7 @@ const pageName = ref("")
 </script>
 
 <template>
-  <Sidebar />
+  <Sidebar :activePage="pageName"/>
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <Navbar :pageName="pageName"/>
     <router-view @pageName="pageName = $event"> </router-view>
