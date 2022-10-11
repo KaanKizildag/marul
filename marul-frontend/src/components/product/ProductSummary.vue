@@ -28,7 +28,7 @@
             </div>
             <div class="d-flex align-items-center text-gradient text-sm font-weight-bold"
                  :class="stock.kritikMi ? 'text-danger': 'text-warning'">
-              {{ stock.adet }}
+              {{ "Kalan stok adeti: " + stock.adet }}
             </div>
           </li>
 

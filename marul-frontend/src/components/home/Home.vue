@@ -42,6 +42,8 @@ import HomeTimeLine from "./HomeTimeLine.vue"
 import ChartCard from "./ChartCard.vue"
 import {onMounted, reactive, ref} from "vue";
 import {ProductService} from "../../services/ProductService.js";
+import NotificationService from "../../services/NotificationService.js";
+
 
 const emits = defineEmits(["pageName"])
 const productService = new ProductService();
@@ -49,11 +51,16 @@ const haftalikSatislarChartData = ref()
 const haftalikSatislarChartLabels = ref()
 let haftalikSatislar = reactive({});
 let guncellenmeZamani = Date.now();
+const {errorResponse, successResponse} = NotificationService();
 
 const haftalikSatislariGetir = async () => {
   const result = await productService.haftalikSatislariGetir()
-      .then(response => response.data.data);
-  return result;
+      .then(response => response.data);
+  if (!result.success) {
+    errorResponse(result.message);
+  }
+  guncellenmeZamani = Date.now();
+  return result.data;
 }
 
 onMounted(async () => {
@@ -62,7 +69,6 @@ onMounted(async () => {
   console.log("haftalikSatislar: " + haftalikSatislar)
   haftalikSatislarChartData.value = Object.values(haftalikSatislar);
   haftalikSatislarChartLabels.value = Object.keys(haftalikSatislar);
-  guncellenmeZamani = Date.now();
 })
 
 
