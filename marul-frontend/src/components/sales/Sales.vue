@@ -15,6 +15,9 @@
               <template #header>
                 <el-input v-model="search" size="small" placeholder="Ara"/>
               </template>
+              <template #default="scope">
+                <el-button type="success" :icon="ArrowRightBold" circle/>
+              </template>
             </el-table-column>
           </Table>
         </div>
@@ -30,6 +33,7 @@ import {CustomerService} from "../../services/CustomerService.js";
 import NotificationService from "../../services/NotificationService.js";
 import Table from "../common/Table.vue";
 import SalesSummary from "./SalesSummary.vue";
+import {ArrowRightBold} from '@element-plus/icons-vue'
 
 
 const search = ref('')

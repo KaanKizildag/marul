@@ -9,6 +9,7 @@ import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.kategori.KategoriDto;
 import com.marul.kategori.KategoriService;
+import com.marul.satis.dto.SonSatisOzetiDto;
 import com.marul.urun.StokFeignClient;
 import com.marul.urun.UrunService;
 import com.marul.util.ResultDecoder;

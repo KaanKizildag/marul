@@ -1,4 +1,4 @@
-package com.marul.satis;
+package com.marul.satis.dto;
 
 import lombok.Builder;
 import lombok.Getter;

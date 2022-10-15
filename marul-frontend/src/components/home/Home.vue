@@ -21,8 +21,8 @@
                  :type="'primary'"
                  :chart-type="'line'"/>
       <ChartCard :id="'chart3'" :data="haftalikSatislarChartData" :label="'Satış'" :labels="haftalikSatislarChartLabels"
-                 :title="'Yıllık Satış'"
-                 :description="'Satış Açıklama'"
+                 :title="'En çok satış yapılan 7 müşteri'"
+                 :description="'En çok satış yapılan 7 müşteri'"
                  :subDescription="`${Math.floor((Date.now() - guncellenmeZamani) / 1000)} saniye önce güncellendi`"
                  :type="'dark'"
                  :chart-type="'bar'"/>

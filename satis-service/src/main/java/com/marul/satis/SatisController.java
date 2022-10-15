@@ -3,6 +3,7 @@ package com.marul.satis;
 import com.marul.dto.SatisDto;
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
+import com.marul.satis.dto.SonSatisOzetiDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

@@ -28,4 +28,5 @@ public class MusteriDto {
     private Double borc = 0D;
     @NotNull
     private Long turId;
+    private String turAdi;
 }
