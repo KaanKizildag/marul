@@ -4,6 +4,7 @@ import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
 import com.marul.dto.result.SuccessResult;
 import com.marul.dto.urun.UrunDto;
+import com.marul.dto.urun.UrunGuncellemeDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -49,9 +50,15 @@ public class UrunController {
     }
 
     @PostMapping("/save")
-    public Result save(@RequestBody @Valid UrunDto urunDto) {
+    public Result save(@Valid @RequestBody UrunDto urunDto) {
         urunDto = urunService.save(urunDto);
         return new SuccessDataResult<>(urunDto, "ürün başarıyla kaydedildi.");
+    }
+
+    @PostMapping("/update")
+    public Result update(@Valid @RequestBody UrunGuncellemeDto urunGuncellemeDto) {
+        UrunDto urunDto = urunService.guncelle(urunGuncellemeDto);
+        return new SuccessDataResult<>(urunDto, "ürün başarıyla güncellendi.");
     }
 
     @DeleteMapping("/delete")

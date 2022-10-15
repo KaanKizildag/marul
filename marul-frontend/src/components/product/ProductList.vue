@@ -27,9 +27,8 @@
           <template #buttons>
             <el-button @click="dialogVisible = false">Vazgeç</el-button>
             <el-button type="primary" @click="save"
-            >Kaydet
-            </el-button
-            >
+            > {{ buttonText }}
+            </el-button>
           </template>
         </Dialog>
 
@@ -103,12 +102,19 @@ const addProduct = () => {
   dialogVisible.value = true
   isUpdate.value = false
 }
-
+const buttonText = computed(() => isUpdate.value ? "Güncelle" : "Kaydet")
 const save = async () => {
   urunDto.value.urunAdi = urunDto.value.urunAdi.toUpperCase();
-  const result = await productService.savePrdocut(urunDto.value)
-      .then(response => response.data)
-      .catch((error) => error.response.data)
+  let result;
+  if (!isUpdate.value) {
+    result = await productService.savePrdocut(urunDto.value)
+        .then(response => response.data)
+        .catch((error) => error.response.data)
+  } else {
+    result = await productService.updateProduct(urunDto.value)
+        .then(response => response.data)
+        .catch((error) => error.response.data)
+  }
 
   if (!result.success) {
     errorResponse(result.message)
@@ -137,6 +143,7 @@ const cancel = () => {
 
 const update = (row) => {
   dialogVisible.value = true
+  isUpdate.value = true
   row.kategoriId = 3;
   urunDto.value = row
   console.log(row)

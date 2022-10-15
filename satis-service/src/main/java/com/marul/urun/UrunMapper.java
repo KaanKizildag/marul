@@ -1,6 +1,7 @@
 package com.marul.urun;
 
 import com.marul.dto.urun.UrunDto;
+import com.marul.dto.urun.UrunGuncellemeDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -19,4 +20,7 @@ public interface UrunMapper {
     @Mapping(source = "kategoriId", target = "kategori.id")
     @Mapping(source = "kategoriAdi", target = "kategori.kategoriAdi")
     Urun getEntity(UrunDto urunDto);
+
+    @Mapping(source = "kategoriId", target = "kategori.id")
+    Urun getEntity(UrunGuncellemeDto urunGuncellemeDto);
 }

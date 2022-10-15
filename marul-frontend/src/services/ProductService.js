@@ -7,12 +7,11 @@ export class ProductService {
     }
 
     savePrdocut(product) {
-        return httpRequest.post("/satis-service/v1/urun/save", product, {
-            headers: {
-                "Accept": "application/json, application/json;charset=UTF-8",
-                "Content-Type": "application/json;charset=UTF-8"
-            }
-        })
+        return httpRequest.post("/satis-service/v1/urun/save", product)
+    }
+
+    updateProduct(product) {
+        return httpRequest.post("/satis-service/v1/urun/update", product)
     }
 
     haftalikSatislariGetir() {

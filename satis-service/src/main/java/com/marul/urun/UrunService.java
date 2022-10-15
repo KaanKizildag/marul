@@ -6,6 +6,7 @@ package com.marul.urun;
 
 import com.marul.dto.stok.StokKaydetDto;
 import com.marul.dto.urun.UrunDto;
+import com.marul.dto.urun.UrunGuncellemeDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.ZatenKayitliException;
 import com.marul.kategori.Kategori;
@@ -37,6 +38,18 @@ public class UrunService {
         urun.setKategori(kategori);
         urun = urunRepository.save(urun);
         varsayilanStokAtamasi(urun.getId());
+        return urunMapper.getDto(urun);
+    }
+
+    public UrunDto guncelle(UrunGuncellemeDto urunGuncellemeDto) {
+        String urunAdi = urunGuncellemeDto.getUrunAdi();
+        if (existsByUrunAdi(urunAdi)) {
+            throw new ZatenKayitliException("%s adıyla bir ürün zaten sisteme kayıtlı", urunAdi);
+        }
+        Kategori kategori = kategoriService.findById_JPA(urunGuncellemeDto.getKategoriId());
+        Urun urun = urunMapper.getEntity(urunGuncellemeDto);
+        urun.setKategori(kategori);
+        urun = urunRepository.save(urun);
         return urunMapper.getDto(urun);
     }
 

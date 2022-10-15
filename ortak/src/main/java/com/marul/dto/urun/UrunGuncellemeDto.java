@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class UrunDto {
+public class UrunGuncellemeDto {
 
     private Long id;
     @NotBlank
@@ -21,6 +21,4 @@ public class UrunDto {
     private int kdv;
     @NotNull
     private Long kategoriId;
-
-    private String kategoriAdi;
 }
