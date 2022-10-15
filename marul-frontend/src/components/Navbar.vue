@@ -126,8 +126,9 @@ import {ref} from "vue";
 
 const props = defineProps(["pageName"])
 const route = useRoute();
+const aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
 const formatDate = (date) => {
-  return date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();
+  return date.getDate() + "/" + aylar[(date.getMonth())] + "/" + date.getFullYear();
 }
 const fullPath = ref("")
 fullPath.value = route.fullPath;
