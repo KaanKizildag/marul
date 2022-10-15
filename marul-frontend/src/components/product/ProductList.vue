@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-7 mt-4">
+  <div class="col-md-9 mt-4">
     <div class="card">
       <div class="card-header pb-0 px-3">
         <h6 class="mb-0">Ürün Listesi</h6> <br/>
@@ -34,7 +34,7 @@
 
       </div>
       <div class="card-body pt-4 p-3">
-        <el-table :data="filterTableData" style="width: 100%">
+        <Table :data="filterTableData">
           <el-table-column label="Ürün Adı" prop="urunAdi" :sortable="true"/>
           <el-table-column label="Fiyat" prop="fiyat" :sortable="true"/>
           <el-table-column label="Kdv" prop="kdv" :sortable="true"/>
@@ -48,7 +48,7 @@
               <EditButton @click="update(scope.row)"/>
             </template>
           </el-table-column>
-        </el-table>
+        </Table>
       </div>
     </div>
   </div>
@@ -62,6 +62,7 @@ import {CategoryService} from "../../services/CategoryService.js";
 import NotificationService from "../../services/NotificationService.js";
 import DeleteButton from "../common/DeleteButton.vue";
 import EditButton from "../common/EditButton.vue";
+import Table from "../common/Table.vue";
 
 
 const productService = new ProductService();

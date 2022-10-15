@@ -23,5 +23,4 @@ public interface SatisRepository extends JpaRepository<Satis, Long> {
 
     @Query("From Satis s Where s.satisZamani between :baslangicZamani And :bitisZamani")
     List<Satis> haftalikSatisiGetir(@Param("baslangicZamani") LocalDateTime baslangicZamani, @Param("bitisZamani") LocalDateTime bitisZamani);
-
 }

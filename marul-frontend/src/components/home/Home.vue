@@ -12,17 +12,20 @@
                  :title="'Haftalık Satış'"
                  :description="'Satış Açıklama'"
                  :subDescription="`${Math.floor((Date.now() - guncellenmeZamani) / 1000)} saniye önce güncellendi`"
-                 :type="'success'"/>
+                 :type="'success'"
+                 :chart-type="'bar'"/>
       <ChartCard :id="'chart2'" :data="haftalikSatislarChartData" :label="'Satış'" :labels="haftalikSatislarChartLabels"
                  :title="'Aylık Satış'"
                  :description="'Satış Açıklama'"
                  :subDescription="`${Math.floor((Date.now() - guncellenmeZamani) / 1000)} saniye önce güncellendi`"
-                 :type="'primary'"/>
+                 :type="'primary'"
+                 :chart-type="'line'"/>
       <ChartCard :id="'chart3'" :data="haftalikSatislarChartData" :label="'Satış'" :labels="haftalikSatislarChartLabels"
                  :title="'Yıllık Satış'"
                  :description="'Satış Açıklama'"
                  :subDescription="`${Math.floor((Date.now() - guncellenmeZamani) / 1000)} saniye önce güncellendi`"
-                 :type="'dark'"/>
+                 :type="'dark'"
+                 :chart-type="'bar'"/>
     </div>
 
     <div class="row mb-4">

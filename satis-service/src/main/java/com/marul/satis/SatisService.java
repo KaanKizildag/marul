@@ -13,6 +13,7 @@ import com.marul.urun.StokFeignClient;
 import com.marul.urun.UrunService;
 import com.marul.util.ResultDecoder;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -60,6 +61,23 @@ public class SatisService {
         return satisMapper.getDto(satis);
     }
 
+    public List<SonSatisOzetiDto> sonSatislariGetir() {
+        List<Satis> satis = satisRepository.findAll(Pageable.ofSize(20)).toList();
+        return satis.stream()
+                .map(satisDto -> {
+                    Long urunId = satisDto.getUrunId();
+                    Long musteriId = satisDto.getMusteriId();
+                    MusteriDto musteriDto = ResultDecoder.getDataResult(musteriFeignClient.findById(musteriId));
+                    UrunDto urunDto = urunService.findById(urunId);
+                    return SonSatisOzetiDto.builder()
+                            .musteriAdi(musteriDto.getMusteriAdi())
+                            .urunAdi(urunDto.getUrunAdi())
+                            .satisTutari(urunDto.getFiyat().multiply(BigDecimal.valueOf(satisDto.getSatilanAdet())))
+                            .build();
+
+                }).collect(Collectors.toList());
+    }
+
     public String findUrunAdiBySatisId(Long satisId) {
         return satisRepository.findUrunAdiBySatisId(satisId)
                 .orElseThrow(() -> new BulunamadiException("%s satis id ile urun bulunamadı.", satisId.toString()));
@@ -72,7 +90,7 @@ public class SatisService {
 
     public Map<String, BigDecimal> haftalikSatisToMap(List<KategoriSatisAnalizDto> kategoriSatisAnalizDtoList) {
         Map<String, BigDecimal> haftalikSatisMap = new HashMap<>();
-        kategoriSatisAnalizDtoList.stream().forEach(
+        kategoriSatisAnalizDtoList.forEach(
                 kategoriSatisAnalizDto -> {
                     String kategoriAdi = kategoriSatisAnalizDto.getKategoriAdi();
                     BigDecimal toplamSatisTutari = kategoriSatisAnalizDto.getToplamSatisTutari();

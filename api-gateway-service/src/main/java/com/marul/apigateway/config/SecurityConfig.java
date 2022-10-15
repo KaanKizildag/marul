@@ -15,6 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
+import java.util.List;
+
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
@@ -43,15 +45,20 @@ public class SecurityConfig {
         return new MapReactiveUserDetailsService(user);
     }
 
+
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://127.0.0.1:5173/");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        final CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOrigins(List.of("http://localhost:5173/"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowCredentials(false);
+        configuration.setAllowedHeaders(List.of("*"));
+
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
 

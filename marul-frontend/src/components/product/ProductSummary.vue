@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-5 mt-4">
+  <div class="col-md-3 mt-4">
     <div class="card h-100 mb-4">
       <div class="card-header pb-0 px-3">
         <div class="row">
@@ -7,7 +7,7 @@
             <h6 class="mb-0">STOK AZALAN ÜRÜNLER</h6>
           </div>
           <div class="col-md-6 d-flex justify-content-start justify-content-md-end align-items-center">
-            <StockLimitSelector @stockLimit="stockLimitHandler"/>
+            <LimitSelector @stockLimit="stockLimitHandler"/>
           </div>
         </div>
       </div>
@@ -39,10 +39,10 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import {StockService} from "../../services/StockService.js";
 import NotificationService from "../../services/NotificationService.js"
-import StockLimitSelector from "./StockLimitSelector.vue"
+import LimitSelector from "../common/LimitSelector.vue"
 
 const criticalStockList = ref()
 const criticalStockListAll = ref()
@@ -54,10 +54,6 @@ const getCriticalStockInfo = () => {
       .then(response => response.data)
       .catch(error => error.response.data);
 }
-
-const isCritic = computed((stock) => {
-  return stock.kritikMi ? "expand_more" : "expand_less";
-})
 
 onMounted(async () => {
   let result = await getCriticalStockInfo();

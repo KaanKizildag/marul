@@ -68,6 +68,11 @@ public class SatisController {
         headers.setContentDispositionFormData(filename, filename);
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
         return new ResponseEntity<>(satisRaporu, headers, HttpStatus.OK);
+    }
 
+    @GetMapping("/son-satislari-getir")
+    public Result sonSatislariGetir() {
+        List<SonSatisOzetiDto> sonSatisOzetiDtos = satisService.sonSatislariGetir();
+        return new SuccessDataResult<>(sonSatisOzetiDtos, "satışlar listelendi");
     }
 }

@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-const props = defineProps(["id","data","label","labels","title","description","subDescription","type"])
+const props = defineProps(["id", "data", "label", "labels", "title", "description", "subDescription", "type", "chartType"])
 import {computed, onBeforeUpdate, onMounted, onUpdated} from "vue";
 
 const chartCardClass = computed(() => {
@@ -32,19 +32,23 @@ const chartDataFucn = () => {
   var ctx = document.getElementById(props.id).getContext("2d");
   //const ctx = ref(null)
   new Chart(ctx, {
-    type: "bar",
+    type: props.chartType,
     data: {
       labels: props.labels,
       datasets: [{
         label: props.label,
-        tension: 0.4,
-        borderWidth: 0,
-        borderRadius: 4,
-        borderSkipped: false,
-        backgroundColor: "rgba(255, 255, 255, .8)",
+        tension: 0,
+        pointRadius: 5,
+        pointBackgroundColor: "rgba(255, 255, 255, .8)",
+        pointBorderColor: "transparent",
+        borderColor: "rgba(255, 255, 255, .8)",
+        borderWidth: 4,
+        backgroundColor: "transparent",
+        fill: true,
         data: props.data,
         maxBarThickness: 6
-      },],
+
+      }],
     },
     options: {
       responsive: true,
@@ -69,9 +73,8 @@ const chartDataFucn = () => {
             color: 'rgba(255, 255, 255, .2)'
           },
           ticks: {
-            suggestedMin: 0,
-            suggestedMax: 500,
-            beginAtZero: true,
+            display: true,
+            color: '#f8f9fa',
             padding: 10,
             font: {
               size: 14,
@@ -80,17 +83,15 @@ const chartDataFucn = () => {
               style: 'normal',
               lineHeight: 2
             },
-            color: "#fff"
-          },
+          }
         },
         x: {
           grid: {
             drawBorder: false,
-            display: true,
-            drawOnChartArea: true,
+            display: false,
+            drawOnChartArea: false,
             drawTicks: false,
-            borderDash: [5, 5],
-            color: 'rgba(255, 255, 255, .2)'
+            borderDash: [5, 5]
           },
           ticks: {
             display: true,

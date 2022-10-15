@@ -16,7 +16,6 @@ import java.util.List;
 @RequestMapping("v1/musteri")
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin
 public class MusteriController {
 
     private final MusteriService musteriService;
