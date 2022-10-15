@@ -23,7 +23,7 @@
 
 <script setup>
 const props = defineProps(["id", "data", "label", "labels", "title", "description", "subDescription", "type", "chartType"])
-import {computed, onBeforeUpdate, onMounted, onUpdated} from "vue";
+import {computed, onMounted} from "vue";
 
 const chartCardClass = computed(() => {
   return `bg-gradient-${props.type} shadow-${props.type} border-radius-lg py-3 pe-1`
@@ -112,13 +112,6 @@ const chartDataFucn = () => {
 }
 onMounted(() => {
   setTimeout(chartDataFucn, 500);
-})
-onBeforeUpdate(() => {
-  console.log("onBeforeUpdate")
-})
-
-onUpdated(() => {
-  console.log("onUpdated")
 })
 </script>
 

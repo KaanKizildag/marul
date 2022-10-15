@@ -11,19 +11,19 @@
       <ChartCard :id="'chart1'" :data="haftalikSatislarChartData" :label="'Satış'" :labels="haftalikSatislarChartLabels"
                  :title="'Haftalık Satış'"
                  :description="'Satış Açıklama'"
-                 :subDescription="`${Math.floor((Date.now() - guncellenmeZamani) / 1000)} saniye önce güncellendi`"
+                 :subDescription="`${updatedAt} dakika önce güncellendi`"
                  :type="'success'"
                  :chart-type="'bar'"/>
       <ChartCard :id="'chart2'" :data="haftalikSatislarChartData" :label="'Satış'" :labels="haftalikSatislarChartLabels"
                  :title="'Aylık Satış'"
                  :description="'Satış Açıklama'"
-                 :subDescription="`${Math.floor((Date.now() - guncellenmeZamani) / 1000)} saniye önce güncellendi`"
+                 :subDescription="`${updatedAt} dakika önce güncellendi`"
                  :type="'primary'"
                  :chart-type="'line'"/>
       <ChartCard :id="'chart3'" :data="haftalikSatislarChartData" :label="'Satış'" :labels="haftalikSatislarChartLabels"
                  :title="'En çok satış yapılan 7 müşteri'"
                  :description="'En çok satış yapılan 7 müşteri'"
-                 :subDescription="`${Math.floor((Date.now() - guncellenmeZamani) / 1000)} saniye önce güncellendi`"
+                 :subDescription="`${updatedAt} dakika önce güncellendi`"
                  :type="'dark'"
                  :chart-type="'bar'"/>
     </div>
@@ -53,23 +53,22 @@ const productService = new ProductService();
 const haftalikSatislarChartData = ref()
 const haftalikSatislarChartLabels = ref()
 let haftalikSatislar = reactive({});
-let guncellenmeZamani = Date.now();
 const {errorResponse, successResponse} = NotificationService();
 
+let updatedAt = ref(0)
 const haftalikSatislariGetir = async () => {
   const result = await productService.haftalikSatislariGetir()
       .then(response => response.data);
   if (!result.success) {
     errorResponse(result.message);
   }
-  guncellenmeZamani = Date.now();
   return result.data;
 }
+setInterval(() => updatedAt.value++, 1000 * 60)
 
 onMounted(async () => {
   emits("pageName", "ANASAYFA");
   haftalikSatislar = await haftalikSatislariGetir();
-  console.log("haftalikSatislar: " + haftalikSatislar)
   haftalikSatislarChartData.value = Object.values(haftalikSatislar);
   haftalikSatislarChartLabels.value = Object.keys(haftalikSatislar);
 })
