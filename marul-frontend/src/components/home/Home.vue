@@ -29,9 +29,6 @@
     </div>
 
     <div class="row mb-4">
-      <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
-        <HomeMainCard/>
-      </div>
       <HomeTimeLine/>
     </div>
   </div>
@@ -40,7 +37,6 @@
 
 <script setup>
 import TopMiniCard from "./TopMiniCard.vue"
-import HomeMainCard from "./HomeMainCard.vue"
 import HomeTimeLine from "./HomeTimeLine.vue"
 import ChartCard from "./ChartCard.vue"
 import {onMounted, reactive, ref} from "vue";
