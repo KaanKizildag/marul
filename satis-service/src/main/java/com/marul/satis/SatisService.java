@@ -50,6 +50,7 @@ public class SatisService {
         return satisMapper.getDtoList(satisList);
     }
 
+
     public SatisDto save(SatisDto satisDto) {
         Long musteriId = satisDto.getMusteriId();
         Long urunId = satisDto.getUrunId();
@@ -60,6 +61,12 @@ public class SatisService {
         satis.setSatisZamani(LocalDateTime.now());
         satis = this.satisRepository.save(satis);
         return satisMapper.getDto(satis);
+    }
+
+    public List<SatisDto> save(List<SatisDto> satisDtoList) {
+        return satisDtoList.stream()
+                .map(this::save)
+                .collect(Collectors.toList());
     }
 
     public List<SonSatisOzetiDto> sonSatislariGetir() {

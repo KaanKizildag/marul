@@ -10,9 +10,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import java.util.Map;
 @RequestMapping("/v1/satis")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class SatisController {
 
     private final SatisService satisService;
@@ -33,9 +36,10 @@ public class SatisController {
     }
 
     @PostMapping("/save")
-    public Result save(@RequestBody @Valid SatisDto satisDto) {
-        SatisDto satisDtoResult = satisService.save(satisDto);
-        return new SuccessDataResult<>(satisDtoResult, "satis basariyla kaydedildi.");
+    public Result save(@RequestBody @NotEmpty List<@Valid SatisDto> satisDto) {
+        List<SatisDto> satisDtoResultList = satisService.save(satisDto);
+        return new SuccessDataResult<>(satisDtoResultList,
+                satisDtoResultList.size() + " tane satış başarıyla kaydedildi.");
     }
 
     @GetMapping("/find-urun-adi-by-satisId")
