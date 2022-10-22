@@ -6,14 +6,14 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(value = "satis-service")
+@FeignClient(value = "satis-service", path = "/satis-service/v1")
 public interface SatisFeignClient {
-    @GetMapping("/satis-service/v1/urun/existsById")
+    @GetMapping("/urun/existsById")
     SuccessDataResult<Boolean> existsUrunById(@RequestParam(value = "id") Long id);
 
-    @GetMapping("/satis-service/v1/urun/findUrunAdiById")
+    @GetMapping("/urun/findUrunAdiById")
     SuccessDataResult<String> findUrunAdiById(@RequestParam("id") Long id);
 
-    @GetMapping("/satis-service/v1/urun/findById")
+    @GetMapping("/urun/findById")
     SuccessDataResult<UrunDto> findById(@RequestParam("id") Long id);
 }

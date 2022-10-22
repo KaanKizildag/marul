@@ -4,9 +4,11 @@ import com.marul.dto.SatisDto;
 import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
+import com.marul.dto.satis.KasaHareketiInsertDto;
 import com.marul.dto.satis.KategoriSatisAnalizDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
+import com.marul.kasahareketi.KasaHareketiService;
 import com.marul.kategori.KategoriDto;
 import com.marul.kategori.KategoriService;
 import com.marul.satis.dto.SonSatisOzetiDto;
@@ -35,6 +37,7 @@ public class SatisService {
     private final SatisMapper satisMapper;
     private final UrunService urunService;
     private final KategoriService kategoriService;
+    private final KasaHareketiService kasaHareketiService;
 
     public List<SatisDto> findAll() {
         List<Satis> satisList = satisRepository.findAll();
@@ -57,10 +60,22 @@ public class SatisService {
         musteriKontrolu(musteriId);
         urunKontrolu(urunId);
         stokGuncelle(satisDto, urunId);
+        kasaHareketiOlustur(satisDto, urunId);
         Satis satis = satisMapper.getEntity(satisDto);
         satis.setSatisZamani(LocalDateTime.now());
         satis = this.satisRepository.save(satis);
         return satisMapper.getDto(satis);
+    }
+
+    private void kasaHareketiOlustur(SatisDto satisDto, Long urunId) {
+        BigDecimal satislanAdet = BigDecimal.valueOf(satisDto.getSatilanAdet());
+        BigDecimal fiyat = urunService.findById(urunId).getFiyat();
+
+        KasaHareketiInsertDto kasaHareketiInsertDto = new KasaHareketiInsertDto();
+        kasaHareketiInsertDto.setAciklama("ürün satışı");
+        kasaHareketiInsertDto.setTutar(fiyat.multiply(satislanAdet));
+
+        kasaHareketiService.save(kasaHareketiInsertDto);
     }
 
     public List<SatisDto> save(List<SatisDto> satisDtoList) {
