@@ -1,11 +1,15 @@
 package com.marul.emailsender;
 
+import com.marul.dto.MailGondermeDto;
+import com.marul.emailsender.config.EmailSenderConfigData;
 import com.marul.exception.EmailGonderirkenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -20,6 +24,7 @@ public class EmailSenderService {
 
     private final JavaMailSender javaMailSender;
     private final EmailSenderConfigData emailSenderConfigData;
+
 
     public void sendMailWithAttachment(String toEmail,
                                        String body,
@@ -43,16 +48,17 @@ public class EmailSenderService {
         log.info(emailSenderConfigData.getBasariliMesaj());
     }
 
-    public void sendMailWithoutAttachment(String toEmail,
-                                          String body,
-                                          String subject) throws MessagingException {
-
+    @KafkaListener(
+            topics = "marul-mail",
+            groupId = "group-id"
+    )
+    public void sendMailWithoutAttachment(@Payload MailGondermeDto mailGondermeDto) throws MessagingException {
+        log.info("mail to: {}, body {}, subject: {}", mailGondermeDto.getEmailTo(), mailGondermeDto.getBody(), mailGondermeDto.getSubject());
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessageHelper.setFrom("kaan10241024@gmail.com");
-        mimeMessageHelper.setTo(toEmail);
-        mimeMessageHelper.setText(body);
-        mimeMessageHelper.setSubject(subject);
+        mimeMessageHelper.setTo(mailGondermeDto.getEmailTo());
+        mimeMessageHelper.setText(mailGondermeDto.getBody());
+        mimeMessageHelper.setSubject(mailGondermeDto.getSubject());
 
         javaMailSender.send(mimeMessage);
         log.info(emailSenderConfigData.getBasariliMesaj());

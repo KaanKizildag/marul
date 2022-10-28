@@ -1,5 +1,6 @@
 package com.marul.satis;
 
+import com.marul.dto.MailGondermeDto;
 import com.marul.dto.SatisDto;
 import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
@@ -15,8 +16,9 @@ import com.marul.satis.dto.SonSatisOzetiDto;
 import com.marul.urun.StokFeignClient;
 import com.marul.urun.UrunService;
 import com.marul.util.ResultDecoder;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -27,7 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SatisService {
 
     private final SatisRepository satisRepository;
@@ -38,6 +40,7 @@ public class SatisService {
     private final UrunService urunService;
     private final KategoriService kategoriService;
     private final KasaHareketiService kasaHareketiService;
+    private final KafkaTemplate<String, MailGondermeDto> kafkaTemplate;
 
     public List<SatisDto> findAll() {
         List<Satis> satisList = satisRepository.findAll();
@@ -64,7 +67,16 @@ public class SatisService {
         Satis satis = satisMapper.getEntity(satisDto);
         satis.setSatisZamani(LocalDateTime.now());
         satis = this.satisRepository.save(satis);
+        mailGonder();
         return satisMapper.getDto(satis);
+    }
+
+    private void mailGonder() {
+        MailGondermeDto mailGondermeDto = new MailGondermeDto();
+        mailGondermeDto.setEmailTo("huseyinkaan.kizildag@gmail.com");
+        mailGondermeDto.setBody("satış yapıldı");
+        mailGondermeDto.setSubject("Marul");
+        kafkaTemplate.send("marul-mail", mailGondermeDto);
     }
 
     private void kasaHareketiOlustur(SatisDto satisDto, Long urunId) {
@@ -198,8 +210,6 @@ public class SatisService {
         raporOlusturmaDto.setRaporDtoList(raporDtoList);
 
         return ResultDecoder.getDataResult(raporServiceFeignClient.generateSimpleReport(raporOlusturmaDto));
-
-
     }
 
 }

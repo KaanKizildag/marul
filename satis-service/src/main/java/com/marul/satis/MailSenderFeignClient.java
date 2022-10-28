@@ -1,4 +1,4 @@
-package com.marul.musteri;
+package com.marul.satis;
 
 import com.marul.dto.MailGondermeDto;
 import com.marul.dto.result.SuccessResult;
@@ -11,4 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface MailSenderFeignClient {
     @PostMapping("mail-service/v1/email-service/email-gonder")
     SuccessResult sendMailWithAttachment(@RequestBody MailGondermeDto mailGondermeDto);
+
+    @PostMapping("mail-service/v1/email-service/email-gonder-eksiz")
+    SuccessResult sendMailWithoutAttachment(@RequestBody MailGondermeDto mailGondermeDto);
 }
