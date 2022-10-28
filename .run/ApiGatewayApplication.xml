@@ -1,0 +1,35 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot" nameIsGenerated="true">
+        <option name="ACTIVE_PROFILES"/>
+        <envs>
+            <env name="API_GATEWAY_HOST" value="localhost"/>
+            <env name="APPNAME_API_GATEWAY" value="api-gateway-service"/>
+            <env name="APPNAME_MAIL_SERVICE" value="mail-service"/>
+            <env name="APPNAME_MUSTERI_SERVICE" value="musteri-service"/>
+            <env name="APPNAME_RAPOR_SERVICE" value="rapor-service"/>
+            <env name="APPNAME_SATIS_SERVICE" value="satis-service"/>
+            <env name="APPNAME_SERVICE_DISCOVERY" value="service-discovery"/>
+            <env name="APPNAME_STOK_SERVICE" value="stok-service"/>
+            <env name="LOGSTASH_HOST" value="localhost"/>
+            <env name="LOGSTASH_PORT" value="5000"/>
+            <env name="SERVICE_DISCOVERY_HOST" value="localhost"/>
+        </envs>
+        <module name="api-gateway-service"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="com.marul.apigateway.ApiGatewayApplication"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="com.marul.apigateway.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+            <option name="credential"/>
+            <option name="region"/>
+            <option name="useCurrentConnection" value="false"/>
+        </extension>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>
