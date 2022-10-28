@@ -20,9 +20,13 @@ spring:
     username: marul
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         show_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always

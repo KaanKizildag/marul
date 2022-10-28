@@ -22,7 +22,7 @@ import javax.persistence.*;
 public class Tur {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "tur_adi")

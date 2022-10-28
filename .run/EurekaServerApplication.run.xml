@@ -1,0 +1,27 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="EurekaServerApplication" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot" nameIsGenerated="true">
+        <option name="ACTIVE_PROFILES"/>
+        <envs>
+            <env name="LOGSTASH_HOST" value="localhost"/>
+            <env name="LOGSTASH_PORT" value="5000"/>
+            <env name="SERVICE_DISCOVERY_HOST" value="localhost"/>
+        </envs>
+        <module name="service-discovery"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="com.marul.servicediscovery.EurekaServerApplication"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="com.marul.servicediscovery.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+            <option name="credential"/>
+            <option name="region"/>
+            <option name="useCurrentConnection" value="false"/>
+        </extension>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

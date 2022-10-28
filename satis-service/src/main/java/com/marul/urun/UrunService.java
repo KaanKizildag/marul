@@ -4,10 +4,13 @@
  */
 package com.marul.urun;
 
-import com.marul.dto.stok.StokDto;
+import com.marul.dto.stok.StokKaydetDto;
 import com.marul.dto.urun.UrunDto;
+import com.marul.dto.urun.UrunGuncellemeDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.ZatenKayitliException;
+import com.marul.kategori.Kategori;
+import com.marul.kategori.KategoriService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,26 +26,40 @@ public class UrunService {
     private final UrunRepository urunRepository;
     private final UrunMapper urunMapper;
     private final StokFeignClient stokFeignClient;
+    private final KategoriService kategoriService;
 
     public UrunDto save(UrunDto urunDto) {
         String urunAdi = urunDto.getUrunAdi();
-
         if (existsByUrunAdi(urunAdi)) {
             throw new ZatenKayitliException("%s adıyla bir ürün zaten sisteme kayıtlı", urunAdi);
         }
-
+        Kategori kategori = kategoriService.findById_JPA(urunDto.getKategoriId());
         Urun urun = urunMapper.getEntity(urunDto);
+        urun.setKategori(kategori);
         urun = urunRepository.save(urun);
         varsayilanStokAtamasi(urun.getId());
         return urunMapper.getDto(urun);
     }
 
+    public UrunDto guncelle(UrunGuncellemeDto urunGuncellemeDto) {
+        String urunAdi = urunGuncellemeDto.getUrunAdi();
+        if (existsByUrunAdi(urunAdi)) {
+            throw new ZatenKayitliException("%s adıyla bir ürün zaten sisteme kayıtlı", urunAdi);
+        }
+        Kategori kategori = kategoriService.findById_JPA(urunGuncellemeDto.getKategoriId());
+        Urun urun = urunMapper.getEntity(urunGuncellemeDto);
+        urun.setKategori(kategori);
+        urun = urunRepository.save(urun);
+        return urunMapper.getDto(urun);
+    }
+
     private void varsayilanStokAtamasi(Long urunId) {
         long varsayilanStok = 0L;
-        StokDto stokDto = new StokDto();
-        stokDto.setUrunId(urunId);
-        stokDto.setAdet(varsayilanStok);
-        stokFeignClient.save(stokDto);
+        StokKaydetDto stokKaydetDto = new StokKaydetDto();
+        stokKaydetDto.setAdet(varsayilanStok);
+        stokKaydetDto.setUrunId(urunId);
+        stokKaydetDto.setAciklama("Ürün ekleme");
+        stokFeignClient.save(stokKaydetDto);
     }
 
     public boolean existsByUrunAdi(String urunAdi) {
@@ -55,12 +72,21 @@ public class UrunService {
 
     public List<UrunDto> findAll() {
         List<Urun> urunList = urunRepository.findAll();
-        return urunMapper.getDtoList(urunList);
+        List<UrunDto> urunDtoList = urunMapper.getDtoList(urunList);
+
+        return urunDtoList;
     }
 
     public UrunDto findById(Long id) {
         Urun urun = urunRepository.findById(id)
                 .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", id.toString()));
         return urunMapper.getDto(urun);
+    }
+
+    public void deleteById(Long id) {
+        Urun urun = urunRepository.findById(id)
+                .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", id.toString()));
+        stokFeignClient.stokSil(urun.getId());
+        urunRepository.delete(urun);
     }
 }

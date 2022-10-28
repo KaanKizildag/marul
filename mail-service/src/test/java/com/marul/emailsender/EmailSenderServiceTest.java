@@ -1,5 +1,6 @@
 package com.marul.emailsender;
 
+import com.marul.dto.MailGondermeDto;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,10 @@ class EmailSenderServiceTest {
         String emailTo = "huseyinkaan.kizildag@gmail.com";
         String body = "marul projesi email test";
         String subject = "email-service test";
-
-        emailSenderService.sendMailWithoutAttachment(
-                emailTo,
-                body,
-                subject
-        );
+        MailGondermeDto mailGondermeDto = new MailGondermeDto();
+        mailGondermeDto.setEmailTo(emailTo);
+        mailGondermeDto.setBody(body);
+        mailGondermeDto.setSubject(subject);
+        emailSenderService.sendMailWithoutAttachment(mailGondermeDto);
     }
 }

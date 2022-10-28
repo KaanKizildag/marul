@@ -3,7 +3,6 @@ package com.marul.musteri;
 import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -12,7 +11,6 @@ public interface MusteriMapper {
 
     MusteriDto getTarget(Musteri musteri);
 
-    @Mapping(target = "borc", expression = "java( musteriDto.getBorc() / 100 )")
     Musteri getSource(MusteriDto musteriDto);
 
     List<Musteri> getSourceList(List<MusteriDto> musteriDtoList);

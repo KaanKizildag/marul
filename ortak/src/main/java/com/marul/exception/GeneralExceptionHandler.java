@@ -34,7 +34,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        Result errorDataResult = new ErrorDataResult<>(errors, "aşağıdaki alanlar hatalı gönderilmiştir.");
+        Result errorDataResult = new ErrorDataResult<>(errors, "aşağıdaki alanlar hatalı gönderilmiştir." + errors);
         return new ResponseEntity<>(errorDataResult, HttpStatus.BAD_REQUEST);
     }
 

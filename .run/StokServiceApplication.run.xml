@@ -1,0 +1,31 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="StokServiceApplication" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot" nameIsGenerated="true">
+        <option name="ACTIVE_PROFILES"/>
+        <envs>
+            <env name="APPNAME_STOK_SERVICE" value="stok-service"/>
+            <env name="LOGSTASH_HOST" value="localhost"/>
+            <env name="LOGSTASH_PORT" value="5000"/>
+            <env name="STOK_SERVICE_HOST" value="localhost"/>
+            <env name="POSTGRES_STOK_HOST" value="localhost"/>
+            <env name="POSTGRES_STOK_PORT" value="5434"/>
+            <env name="SERVICE_DISCOVERY_HOST" value="localhost"/>
+        </envs>
+        <module name="stok-service"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="com.marul.stokservice.StokServiceApplication"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="com.marul.stokservice.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+            <option name="credential"/>
+            <option name="region"/>
+            <option name="useCurrentConnection" value="false"/>
+        </extension>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

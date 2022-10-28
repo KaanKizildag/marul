@@ -16,7 +16,6 @@ import java.util.List;
 @RequestMapping("v1/musteri")
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin
 public class MusteriController {
 
     private final MusteriService musteriService;
@@ -40,7 +39,7 @@ public class MusteriController {
     }
 
     @PostMapping("/save")
-    public Result save(/*@Valid*/ @RequestBody @Valid MusteriDto musteriDto) {
+    public Result save(@RequestBody @Valid MusteriDto musteriDto) {
         musteriDto = musteriService.save(musteriDto);
         return new SuccessDataResult<>(musteriDto, "Müşteri başarıyla kaydedildi.");
     }

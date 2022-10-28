@@ -3,6 +3,7 @@ package com.marul.dto.urun;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 public class UrunDto {
 
     private Long id;
-    @NotNull
+    @NotBlank
     private String urunAdi;
     @Positive
     private BigDecimal fiyat;
@@ -20,4 +21,6 @@ public class UrunDto {
     private int kdv;
     @NotNull
     private Long kategoriId;
+
+    private String kategoriAdi;
 }

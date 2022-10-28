@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(value = "mail-service")
+@Deprecated
 public interface MailSenderFeignClient {
     @PostMapping("mail-service/v1/email-service/email-gonder")
     SuccessResult sendMailWithAttachment(@RequestBody MailGondermeDto mailGondermeDto);

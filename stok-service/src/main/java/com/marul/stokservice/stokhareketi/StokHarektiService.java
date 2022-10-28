@@ -4,12 +4,12 @@ import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.stokservice.stok.SatisFeignClient;
 import com.marul.stokservice.stok.StokService;
+import com.marul.util.DateUtil;
 import com.marul.util.ResultDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -51,7 +51,7 @@ public class StokHarektiService {
     }
 
     public List<StokHareketiDto> findAll() {
-        List<StokHareketi> stokHareketiList = stokHareketiRepository.findAll();
+        List<StokHareketi> stokHareketiList = stokHareketiRepository.findAllOrderByIdDesc();
         return stokHareketiMapper.getDtoList(stokHareketiList);
     }
 
@@ -82,7 +82,8 @@ public class StokHarektiService {
             return StokHareketRaporDto.builder()
                     .urunAdi(urunAdi)
                     .miktar(stokHareketiDto.getMiktar())
-                    .hareketZamani(stokHareketiDto.getHareketZamani())
+                    .aciklama(stokHareketiDto.getAciklama())
+                    .hareketZamani(DateUtil.dateFromLocalDateTime(stokHareketiDto.getHareketZamani()))
                     .build();
         }).collect(Collectors.toList());
     }
@@ -93,8 +94,10 @@ public class StokHarektiService {
         List<RaporDto> raporDto = stokHareketiMapper.getRaporDto(stokHareketiDtoList);
         raporOlusturmaDto.setRaporDtoList(raporDto);
         HashMap<String, Object> raporParametreleri = new HashMap<>();
-        raporParametreleri.put("baslangicTarihi", Timestamp.valueOf(LocalDateTime.MIN));
-        raporParametreleri.put("bitisTarihi", Timestamp.valueOf(LocalDateTime.now(clock)));
+        raporParametreleri.put("baslangicTarihi", null);
+//        raporParametreleri.put("baslangicTarihi", DateUtil.dateFromLocalDateTime(LocalDateTime.now()));
+        raporParametreleri.put("bitisTarihi", null);
+//        raporParametreleri.put("bitisTarihi", DateUtil.dateFromLocalDateTime(LocalDateTime.now()));
         raporOlusturmaDto.setRaporParametreleri(raporParametreleri);
         return raporOlusturmaDto;
     }

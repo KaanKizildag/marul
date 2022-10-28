@@ -23,7 +23,7 @@ import java.io.Serializable;
 public class Musteri implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "musteri_adi", nullable = false)

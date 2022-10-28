@@ -27,4 +27,7 @@ public class StokHareketi {
 
     @Formula("miktar > 0")
     private Boolean satisMi;
+
+    @Column(name = "aciklama")
+    private String aciklama;
 }

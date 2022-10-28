@@ -2,13 +2,15 @@ version: '3.7'
 services:
   postgres-musteri:
     container_name: postgres-musteri
-    image: postgres
+    build:
+      context: database/musteri_database
+      dockerfile: /Dockerfile
     environment:
       POSTGRES_USER: marul
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
     volumes:
-      - postgres:/data/postgres
+      - postgres_musteri:/data/postgres
     ports:
       - "5432:5432"
     networks:
@@ -16,13 +18,15 @@ services:
     restart: unless-stopped
   postgres-stok:
     container_name: postgres-stok
-    image: postgres
+    build:
+      context: database/stok_database
+      dockerfile: /Dockerfile
     environment:
       POSTGRES_USER: marul
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
     volumes:
-      - postgres:/data/postgres
+      - postgres_stok:/data/postgres
     ports:
       - "5434:5432"
     networks:
@@ -31,13 +35,15 @@ services:
 
   postgres-satis:
     container_name: postgres-satis
-    image: postgres
+    build:
+      context: database/satis_database
+      dockerfile: /Dockerfile
     environment:
       POSTGRES_USER: marul
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
     volumes:
-      - postgres:/data/postgres
+      - postgres_satis:/data/postgres
     ports:
       - "5433:5432"
     networks:
@@ -230,5 +236,7 @@ networks:
     driver: bridge
 
 volumes:
-  postgres:
+  postgres_musteri:
+  postgres_satis:
+  postgres_stok:
   pgadmin:

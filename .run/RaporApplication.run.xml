@@ -1,0 +1,31 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="RaporApplication" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot" nameIsGenerated="true">
+        <option name="ACTIVE_PROFILES"/>
+        <envs>
+            <env name="APPNAME_RAPOR_SERVICE" value="rapor-service"/>
+            <env name="LOGSTASH_HOST" value="localhost"/>
+            <env name="LOGSTASH_PORT" value="5000"/>
+            <env name="RAPOR_SERVICE_HOST" value="localhost"/>
+            <env name="RAPOR_SERVICE_PORT" value="8081"/>
+            <env name="SERVICE_DISCOVERY_HOST" value="localhost"/>
+            <env name="RAPORLAR_DIZINI" value="raporlar/"/>
+        </envs>
+        <module name="rapor-service"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="com.marul.rapor.RaporApplication"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="com.marul.rapor.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+            <option name="credential"/>
+            <option name="region"/>
+            <option name="useCurrentConnection" value="false"/>
+        </extension>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

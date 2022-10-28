@@ -13,6 +13,7 @@ import com.marul.dto.result.DataResult;
 import com.marul.dto.result.SuccessResult;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.EmailDahaOnceAlinmisException;
+import com.marul.tur.TurDto;
 import com.marul.tur.TurService;
 import com.marul.util.ResultDecoder;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author kaan
@@ -39,7 +41,14 @@ public class MusteriService {
 
     public List<MusteriDto> findAll() {
         List<Musteri> musteriList = musteriRepository.findAll();
-        return musteriMapper.getTargetList(musteriList);
+        List<MusteriDto> musteriDtoList = musteriMapper.getTargetList(musteriList);
+        musteriDtoList = musteriDtoList.stream().map(musteri -> {
+            Long turId = musteri.getTurId();
+            TurDto turDto = turService.findById(turId);
+            musteri.setTurAdi(turDto.getTurAdi());
+            return musteri;
+        }).collect(Collectors.toList());
+        return musteriDtoList;
     }
 
     public MusteriDto findById(Long id) {

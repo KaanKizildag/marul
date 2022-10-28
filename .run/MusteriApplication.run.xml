@@ -1,0 +1,31 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="MusteriApplication" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot" nameIsGenerated="true">
+        <option name="ACTIVE_PROFILES"/>
+        <envs>
+            <env name="APPNAME_MUSTERI_SERVICE" value="musteri-service"/>
+            <env name="LOGSTASH_HOST" value="localhost"/>
+            <env name="LOGSTASH_PORT" value="5000"/>
+            <env name="POSTGRES_MUSTERI_HOST" value="localhost"/>
+            <env name="POSTGRES_MUSTERI_PORT" value="5432"/>
+            <env name="SERVICE_DISCOVERY_HOST" value="localhost"/>
+            <env name="MUSTERI_SERVICE_HOST" value="localhost"/>
+        </envs>
+        <module name="musteri-service"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="com.marul.MusteriApplication"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="com.marul.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+            <option name="credential"/>
+            <option name="region"/>
+            <option name="useCurrentConnection" value="false"/>
+        </extension>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

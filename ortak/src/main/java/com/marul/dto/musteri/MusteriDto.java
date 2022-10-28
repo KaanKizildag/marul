@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -12,7 +13,8 @@ import javax.validation.constraints.Pattern;
 public class MusteriDto {
 
     private Long id;
-    @NotNull
+
+    @NotBlank
     private String musteriAdi;
 
     @NotNull
@@ -26,4 +28,5 @@ public class MusteriDto {
     private Double borc = 0D;
     @NotNull
     private Long turId;
+    private String turAdi;
 }

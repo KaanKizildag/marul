@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -12,5 +12,6 @@ import java.time.LocalDateTime;
 public class StokHareketRaporDto {
     private String urunAdi;
     private Long miktar;
-    private LocalDateTime hareketZamani;
+    private Date hareketZamani;
+    private String aciklama;
 }

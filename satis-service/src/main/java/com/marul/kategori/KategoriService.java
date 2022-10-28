@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -14,9 +16,14 @@ public class KategoriService {
     private final KategoriRepository kategoriRepository;
     private final KategoriMapper kategoriMapper;
 
+    public Kategori findById_JPA(Long id) {
+        return kategoriRepository.findById(id)
+                .orElseThrow(() -> new BulunamadiException("%s id ile kategori bulunamadı", id.toString()));
+    }
+
     public KategoriDto findById(Long id) {
         Kategori kategori = kategoriRepository.findById(id)
-                .orElseThrow(() -> new BulunamadiException("%d id ile kategori bulunamadı"));
+                .orElseThrow(() -> new BulunamadiException("%s id ile kategori bulunamadı", id.toString()));
         return kategoriMapper.getDto(kategori);
     }
 
@@ -30,5 +37,10 @@ public class KategoriService {
         }
         kategori = kategoriRepository.save(kategori);
         return kategoriMapper.getDto(kategori);
+    }
+
+    public List<KategoriDto> findAll() {
+        List<Kategori> kategoriList = kategoriRepository.findAll();
+        return kategoriMapper.getDtoList(kategoriList);
     }
 }
