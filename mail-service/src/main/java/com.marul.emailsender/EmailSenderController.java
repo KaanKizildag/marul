@@ -18,6 +18,7 @@ import java.io.ByteArrayInputStream;
 @RequestMapping("v1/email-service")
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 public class EmailSenderController {
 
     private final EmailSenderService emailSenderService;

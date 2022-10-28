@@ -21,6 +21,8 @@ spring:
   sql:
     init:
       mode: always
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
 eureka:
   client:
     fetch-registry: true

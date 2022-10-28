@@ -5,7 +5,6 @@ import com.marul.dto.SatisDto;
 import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
-import com.marul.dto.result.SuccessResult;
 import com.marul.dto.satis.KasaHareketiInsertDto;
 import com.marul.dto.satis.KategoriSatisAnalizDto;
 import com.marul.dto.urun.UrunDto;
@@ -19,6 +18,7 @@ import com.marul.urun.UrunService;
 import com.marul.util.ResultDecoder;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -40,7 +40,7 @@ public class SatisService {
     private final UrunService urunService;
     private final KategoriService kategoriService;
     private final KasaHareketiService kasaHareketiService;
-    private final MailSenderFeignClient mailSenderFeignClient;
+    private final KafkaTemplate<String, MailGondermeDto> kafkaTemplate;
 
     public List<SatisDto> findAll() {
         List<Satis> satisList = satisRepository.findAll();
@@ -71,12 +71,12 @@ public class SatisService {
         return satisMapper.getDto(satis);
     }
 
-    private SuccessResult mailGonder() {
+    private void mailGonder() {
         MailGondermeDto mailGondermeDto = new MailGondermeDto();
         mailGondermeDto.setEmailTo("turgay2843@gmail.com");
         mailGondermeDto.setBody("satış yapıldı");
         mailGondermeDto.setSubject("Marul");
-        return mailSenderFeignClient.sendMailWithoutAttachment(mailGondermeDto);
+        kafkaTemplate.send("marul-mail", mailGondermeDto);
     }
 
     private void kasaHareketiOlustur(SatisDto satisDto, Long urunId) {

@@ -21,6 +21,7 @@ public class EmailSenderService {
     private final JavaMailSender javaMailSender;
     private final EmailSenderConfigData emailSenderConfigData;
 
+
     public void sendMailWithAttachment(String toEmail,
                                        String body,
                                        String subject,

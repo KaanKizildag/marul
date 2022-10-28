@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
-public class KafkaConfig {
+public class KafkaProducerConfig {
     @Bean
     public NewTopic amigosCodeTopic() {
         return TopicBuilder.name("amigoscode")
