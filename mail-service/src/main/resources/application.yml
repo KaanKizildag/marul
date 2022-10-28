@@ -5,7 +5,8 @@ server:
 spring:
   application:
     name: ${APPNAME_MAIL_SERVICE:mail-service}
-
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
   mail:
     host: smtp.gmail.com
     port: 587
