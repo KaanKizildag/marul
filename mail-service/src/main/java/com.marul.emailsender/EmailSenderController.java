@@ -4,6 +4,7 @@ import com.marul.dto.MailGondermeDto;
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessResult;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,18 @@ public class EmailSenderController {
                 mailGondermeDto.getBody(),
                 mailGondermeDto.getSubject(),
                 new ByteArrayInputStream(mailGondermeDto.getInputStream()));
+
+        log.info(emailSenderConfigData.getBasariliMesaj());
+        return new SuccessResult(emailSenderConfigData.getBasariliMesaj());
+    }
+
+    @SneakyThrows
+    @PostMapping("/email-gonder-eksiz")
+    public Result sendMailWithoutAttachment(@RequestBody MailGondermeDto mailGondermeDto) {
+
+        emailSenderService.sendMailWithoutAttachment(mailGondermeDto.getEmailTo(),
+                mailGondermeDto.getBody(),
+                mailGondermeDto.getSubject());
 
         log.info(emailSenderConfigData.getBasariliMesaj());
         return new SuccessResult(emailSenderConfigData.getBasariliMesaj());

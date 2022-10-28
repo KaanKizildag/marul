@@ -1,9 +1,11 @@
 package com.marul.satis;
 
+import com.marul.dto.MailGondermeDto;
 import com.marul.dto.SatisDto;
 import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
+import com.marul.dto.result.SuccessResult;
 import com.marul.dto.satis.KasaHareketiInsertDto;
 import com.marul.dto.satis.KategoriSatisAnalizDto;
 import com.marul.dto.urun.UrunDto;
@@ -38,6 +40,7 @@ public class SatisService {
     private final UrunService urunService;
     private final KategoriService kategoriService;
     private final KasaHareketiService kasaHareketiService;
+    private final MailSenderFeignClient mailSenderFeignClient;
 
     public List<SatisDto> findAll() {
         List<Satis> satisList = satisRepository.findAll();
@@ -64,7 +67,16 @@ public class SatisService {
         Satis satis = satisMapper.getEntity(satisDto);
         satis.setSatisZamani(LocalDateTime.now());
         satis = this.satisRepository.save(satis);
+        mailGonder();
         return satisMapper.getDto(satis);
+    }
+
+    private SuccessResult mailGonder() {
+        MailGondermeDto mailGondermeDto = new MailGondermeDto();
+        mailGondermeDto.setEmailTo("turgay2843@gmail.com");
+        mailGondermeDto.setBody("satış yapıldı");
+        mailGondermeDto.setSubject("Marul");
+        return mailSenderFeignClient.sendMailWithoutAttachment(mailGondermeDto);
     }
 
     private void kasaHareketiOlustur(SatisDto satisDto, Long urunId) {

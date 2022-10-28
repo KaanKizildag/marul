@@ -17,6 +17,7 @@
         <module>api-gateway-service</module>
         <module>satis-service</module>
         <module>stok-service</module>
+        <module>kafka</module>
     </modules>
 
     <properties>
