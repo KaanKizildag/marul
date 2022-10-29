@@ -152,13 +152,19 @@ const findAllProduct = () => {
 }
 
 const addToCart = (row) => {
+  let satisUrunDtoList = {
+    urunId: row.id,
+    satilanAdet: row.adet == null ? row.adet = 1 : row.adet,
+  }
   const salesD = {
     musteriId: musteriId.value,
     urunId: row.id,
-    urunAdi: row.urunAdi,
     satilanAdet: row.adet == null ? row.adet = 1 : row.adet,
+    satisUrunDtoList: [],
+    urunAdi: row.urunAdi,
     tutar: row.adet * row.fiyat
   }
+  salesD.satisUrunDtoList.push(satisUrunDtoList)
 
   let product = saleArray.value.find(sale => sale.urunId === salesD.urunId);
   if (product !== undefined) {
