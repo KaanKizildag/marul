@@ -5,7 +5,7 @@
  */
 package com.marul.musteri;
 
-import com.marul.dto.MailGondermeDto;
+import com.marul.dto.mail.MailGondermeDto;
 import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;

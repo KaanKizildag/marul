@@ -1,6 +1,6 @@
 package com.marul.emailsender;
 
-import com.marul.dto.MailGondermeDto;
+import com.marul.dto.mail.MailGondermeDto;
 import com.marul.emailsender.config.EmailSenderConfigData;
 import com.marul.exception.EmailGonderirkenException;
 import lombok.RequiredArgsConstructor;

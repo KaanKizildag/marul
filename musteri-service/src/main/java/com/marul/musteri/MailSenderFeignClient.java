@@ -1,6 +1,6 @@
 package com.marul.musteri;
 
-import com.marul.dto.MailGondermeDto;
+import com.marul.dto.mail.MailGondermeDto;
 import com.marul.dto.result.SuccessResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
