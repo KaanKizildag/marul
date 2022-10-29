@@ -39,21 +39,20 @@
 </template>
 
 <script setup>
+
 import {onMounted, ref} from "vue";
 import {StockService} from "../../services/StockService.js";
 import NotificationService from "../../services/NotificationService.js"
+const {errorResponse, successResponse} = NotificationService();
 import LimitSelector from "../common/LimitSelector.vue"
 
 const criticalStockList = ref()
 const criticalStockListAll = ref()
 
+
+const stockLimit = ref()
 const stockService = new StockService();
-const {errorResponse, successResponse} = NotificationService();
-const getCriticalStockInfo = () => {
-  return stockService.getCriticalStockInfo()
-      .then(response => response.data)
-      .catch(error => error.response.data);
-}
+
 
 onMounted(async () => {
   let result = await getCriticalStockInfo();
@@ -65,17 +64,19 @@ onMounted(async () => {
 
   criticalStockListAll.value = result.data
   criticalStockList.value = result.data.slice(0, 5);
+  successResponse(result.message)
 })
-const stockLimit = ref()
+
+const getCriticalStockInfo = () => {
+  return stockService.getCriticalStockInfo()
+      .then(response => response.data)
+      .catch(error => error.response.data);
+}
+
+
 const stockLimitHandler = (limit) => {
-  console.log(limit)
   stockLimit.value = limit;
   criticalStockList.value = criticalStockListAll.value.slice(0, limit);
-  console.log(criticalStockList.value);
 }
 
 </script>
-
-<style scoped>
-
-</style>

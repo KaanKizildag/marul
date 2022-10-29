@@ -44,16 +44,22 @@
 </template>
 <script setup>
 
-import SalesService from "../../services/SalesService.js"
+import {SalesService} from "../../services/SalesService.js"
 import NotificationService from "../../services/NotificationService.js";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import LimitSelector from "../common/LimitSelector.vue";
 
 const {successResponse, errorResponse} = NotificationService();
+const satisService = new SalesService();
 
 const satisListAll = ref([]);
 const satisList = ref([]);
 const stockLimit = ref()
+
+
+onMounted(() => {
+  getLastSales();
+})
 
 const stockLimitHandler = (limit) => {
   console.log(limit)
@@ -61,11 +67,8 @@ const stockLimitHandler = (limit) => {
   satisList.value = satisListAll.value.slice(0, limit);
 }
 
-const satisService = new SalesService();
-
-
-const sonSatislariGetir = async () => {
-  let result = await satisService.sonSatislariGetir()
+const getLastSales = async () => {
+  let result = await satisService.getLastSales()
       .then(response => response.data)
       .catch(error => error.response.data);
 
@@ -77,11 +80,4 @@ const sonSatislariGetir = async () => {
   satisList.value = result.data.slice(0, 5);
   successResponse(result.message);
 }
-
-sonSatislariGetir();
-
 </script>
-
-<style scoped>
-
-</style>

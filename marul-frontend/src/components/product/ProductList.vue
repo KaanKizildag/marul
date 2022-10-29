@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import Dialog from "../common/Dialog.vue";
 import {ProductService} from "../../services/ProductService.js";
 import {CategoryService} from "../../services/CategoryService.js";
@@ -82,28 +82,26 @@ const urunDto = ref({
   kdv: "",
 })
 
+onMounted(() => {
+  findAllCategories();
+  findAllProduct();
+})
+
 const findAllProduct = () => {
   productService.findAllPrdocut().then(resp => tableData.value = resp.data.data)
 }
-
-findAllProduct();
 
 const findAllCategories = () => {
   categoryService.findAllCategories()
       .then(response => categories.value = response.data.data);
 }
 
-findAllCategories();
-
-function open() {
-  console.log('opennn')
-}
 
 const addProduct = () => {
   dialogVisible.value = true
   isUpdate.value = false
 }
-const buttonText = computed(() => isUpdate.value ? "Güncelle" : "Kaydet")
+
 const save = async () => {
   urunDto.value.urunAdi = urunDto.value.urunAdi.toUpperCase();
   let result;
@@ -145,9 +143,7 @@ const cancel = () => {
 const update = (row) => {
   dialogVisible.value = true
   isUpdate.value = true
-  row.kategoriId = 3;
   urunDto.value = row
-  console.log(row)
 }
 
 const remove = async (id) => {
@@ -163,6 +159,8 @@ const remove = async (id) => {
   findAllProduct();
 }
 
+const buttonText = computed(() => isUpdate.value ? "Güncelle" : "Kaydet")
+
 const filterTableData = computed(() =>
     tableData.value.filter(
         (data) => !search.value
@@ -170,7 +168,6 @@ const filterTableData = computed(() =>
                 .includes(search.value.toLowerCase())
     )
 )
-
 
 </script>
 
