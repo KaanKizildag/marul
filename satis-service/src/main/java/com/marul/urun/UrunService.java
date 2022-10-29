@@ -42,10 +42,6 @@ public class UrunService {
     }
 
     public UrunDto guncelle(UrunGuncellemeDto urunGuncellemeDto) {
-        String urunAdi = urunGuncellemeDto.getUrunAdi();
-        if (existsByUrunAdi(urunAdi)) {
-            throw new ZatenKayitliException("%s adıyla bir ürün zaten sisteme kayıtlı", urunAdi);
-        }
         Kategori kategori = kategoriService.findById_JPA(urunGuncellemeDto.getKategoriId());
         Urun urun = urunMapper.getEntity(urunGuncellemeDto);
         urun.setKategori(kategori);
