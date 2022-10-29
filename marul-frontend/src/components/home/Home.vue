@@ -45,46 +45,49 @@ import {ProductService} from "../../services/ProductService.js";
 import {KasaHareketiService} from "../../services/KasaHareketiService.js";
 import NotificationService from "../../services/NotificationService.js";
 
+const {errorResponse, successResponse} = NotificationService();
 
 const emits = defineEmits(["pageName"])
 const productService = new ProductService();
+
 const kasaHareketiService = new KasaHareketiService();
 const haftalikSatislarChartData = ref()
 const haftalikSatislarChartLabels = ref()
-let haftalikSatislar = reactive({});
-let kasaToplamTutari = ref(0);
-const {errorResponse, successResponse} = NotificationService();
+const kasaToplamTutari = ref(0);
+const updatedAt = ref(0)
 
-let updatedAt = ref(0)
+const haftalikSatislar = ref();
+
 const haftalikSatislariGetir = async () => {
   const result = await productService.haftalikSatislariGetir()
       .then(response => response.data);
   if (!result.success) {
     errorResponse(result.message);
   }
+  haftalikSatislar.value = result.data;
+  haftalikSatislarChartData.value = Object.values(haftalikSatislar.value);
+  haftalikSatislarChartLabels.value = Object.keys(haftalikSatislar.value);
   return result.data;
 }
+
 const kasaToplamTutariGetir = async () => {
   const result = await kasaHareketiService.kasaToplamTutariGetir()
       .then(response => response.data);
   if (!result.success) {
     errorResponse(result.message);
   }
+  kasaToplamTutari.value = result.data;
   return result.data;
 }
+
 setInterval(() => updatedAt.value++, 1000 * 60)
 
-onMounted(async () => {
+onMounted(() => {
   emits("pageName", "ANASAYFA");
-  haftalikSatislar = await haftalikSatislariGetir();
-  kasaToplamTutari.value = await kasaToplamTutariGetir();
-  haftalikSatislarChartData.value = Object.values(haftalikSatislar);
-  haftalikSatislarChartLabels.value = Object.keys(haftalikSatislar);
+
+  haftalikSatislariGetir();
+  kasaToplamTutariGetir();
 })
 
 
 </script>
-
-<style scoped>
-
-</style>

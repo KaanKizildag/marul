@@ -25,10 +25,11 @@
 const props = defineProps(["id", "data", "label", "labels", "title", "description", "subDescription", "type", "chartType"])
 import {computed, onMounted} from "vue";
 
-const chartCardClass = computed(() => {
-  return `bg-gradient-${props.type} shadow-${props.type} border-radius-lg py-3 pe-1`
+onMounted(() => {
+  setTimeout(chartDataFunc, 500);
 })
-const chartDataFucn = () => {
+
+const chartDataFunc = () => {
   var ctx = document.getElementById(props.id).getContext("2d");
   //const ctx = ref(null)
   new Chart(ctx, {
@@ -110,11 +111,8 @@ const chartDataFucn = () => {
     },
   });
 }
-onMounted(() => {
-  setTimeout(chartDataFucn, 500);
+
+const chartCardClass = computed(() => {
+  return `bg-gradient-${props.type} shadow-${props.type} border-radius-lg py-3 pe-1`
 })
 </script>
-
-<style scoped>
-
-</style>
