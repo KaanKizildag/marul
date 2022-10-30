@@ -5,16 +5,19 @@ import com.marul.dto.stok.StokDto;
 import com.marul.dto.stok.StokKaydetDto;
 import com.marul.exception.ServisDonusHatasiException;
 import com.marul.stokservice.stok.*;
+import com.marul.stokservice.stokhareketi.StokHareketiDto;
+import com.marul.stokservice.stokhareketi.StokHarektiService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,13 +25,12 @@ class StokServiceTest {
 
     @Mock
     private StokRepository stokRepository;
-
     @Mock
     private SatisFeignClient satisFeignClient;
-
     @Mock
     private StokMapper stokMapper;
-
+    @Mock
+    private StokHarektiService stokHarektiService;
     @InjectMocks
     private StokService stokService;
 
@@ -64,89 +66,69 @@ class StokServiceTest {
     }
 
     @Test
-    void stoguBulunanUruneYeniStokYuklendiginde() {
-        // given
-        long stokId = 1L;
-        long urunId = 1L;
-        long stokYuklemeAdet = 5L;
-        long stokMevcutAdet = 15L;
+    @DisplayName("Stok güncelleme")
+    void stokGuncelle() {
+        Long urunId = 1L;
+        Long satilanAdet = 10L;
 
-        StokKaydetDto stokDto = new StokKaydetDto();
-        stokDto.setAdet(stokYuklemeAdet);
-        stokDto.setUrunId(urunId);
-
-        Stok stok = new Stok();
-
-        stok.setId(stokId);
-        stok.setAdet(stokMevcutAdet);
-        stok.setUrunId(urunId);
-
-        Stok yuklemeSonrasiStok = new Stok();
-
-        yuklemeSonrasiStok.setId(stokId);
-        yuklemeSonrasiStok.setAdet(stokMevcutAdet + stokYuklemeAdet);
-        yuklemeSonrasiStok.setUrunId(urunId);
-
-        StokDto yuklemeSonrasistokDto = new StokDto();
-        yuklemeSonrasistokDto.setId(stokId);
-        yuklemeSonrasistokDto.setAdet(stokMevcutAdet + stokYuklemeAdet);
-        yuklemeSonrasistokDto.setUrunId(urunId);
+        Stok stok = getStok();
+        StokHareketiDto stokHareketiDto = getStokHareketiDto(satilanAdet, urunId);
 
         when(stokRepository.findByUrunId(urunId))
                 .thenReturn(Optional.of(stok));
+        when(satisFeignClient.existsUrunById(urunId))
+                .thenReturn(new SuccessDataResult<>(Boolean.TRUE));
+        when(stokRepository.yeterliStokVarMi(urunId, satilanAdet))
+                .thenReturn(Boolean.TRUE);
         when(stokRepository.save(stok))
-                .thenReturn(yuklemeSonrasiStok);
-        when(stokMapper.getDto(yuklemeSonrasiStok))
-                .thenReturn(yuklemeSonrasistokDto);
+                .thenReturn(stok);
+        when(stokHarektiService.save(any()))
+                .thenReturn(stokHareketiDto);
+        boolean actual = stokService.stokGuncelle(urunId, satilanAdet);
 
-        //when
-        StokDto actual = stokService.save(stokDto);
-        //then
-        assertEquals(yuklemeSonrasistokDto.getAdet(), actual.getAdet());
-        assertEquals(yuklemeSonrasistokDto.getUrunId(), actual.getUrunId());
-        assertEquals(yuklemeSonrasistokDto.getId(), actual.getId());
+        Assertions.assertTrue(actual);
 
-        verify(stokRepository).findByUrunId(urunId);
-        verify(stokMapper, times(0)).getEntity(stokDto);
-        verify(stokRepository).save(stok);
-        verify(stokMapper).getDto(yuklemeSonrasiStok);
+    }
+
+    private StokHareketiDto getStokHareketiDto(long satilanAdet, long stokId) {
+        return StokHareketiDto.builder()
+                .hareketZamani(LocalDateTime.now())
+                .aciklama("Stok güncelleme")
+                .satisMi(satilanAdet > 0)
+                .miktar(satilanAdet)
+                .stokId(stokId)
+                .build();
+    }
+
+    private Stok getStok() {
+        Stok stok = new Stok();
+        stok.setId(1L);
+        stok.setAdet(10L);
+        stok.setUrunId(1L);
+        return stok;
     }
 
     @Test
+    @DisplayName("Stok kaydet")
     void stoguBulunmayanUruneYeniStokYuklendiginde() {
-        // given
-        long stokId = 1L;
-        long urunId = 1L;
-        long stokAdet = 0L;
+        StokKaydetDto stokKaydetDto = getStokKaydetDto();
+        Stok stok = getStok();
 
-        StokKaydetDto stokDto = new StokKaydetDto();
-        stokDto.setAdet(stokAdet);
-        stokDto.setUrunId(urunId);
+        when(stokMapper.getEntity(stokKaydetDto)).thenReturn(stok);
+        when(stokRepository.save(any())).thenReturn(stok);
+        when(stokMapper.getDto(stok)).thenReturn(new StokDto());
 
-        Stok stok = new Stok();
+        StokDto actual = stokService.save(stokKaydetDto);
 
-        stok.setId(stokId);
-        stok.setAdet(stokAdet);
-        stok.setUrunId(urunId);
-
-        when(stokRepository.findByUrunId(urunId))
-                .thenReturn(Optional.empty());
-        when(stokMapper.getEntity(stokDto))
-                .thenReturn(stok);
-        when(stokRepository.save(stok))
-                .thenReturn(stok);
-//        when(stokMapper.getDto(stok))
-//                .thenReturn(stokDto);
-
-        //when
-        StokDto actual = stokService.save(stokDto);
-        //then
-        assertEquals(stokDto.getAdet(), actual.getAdet());
-        assertEquals(stokDto.getUrunId(), actual.getUrunId());
-
-        verify(stokRepository).findByUrunId(urunId);
-        verify(stokMapper).getEntity(stokDto);
-        verify(stokRepository).save(stok);
+        verify(stokMapper).getEntity(stokKaydetDto);
         verify(stokMapper).getDto(stok);
+        verify(stokRepository).save(stok);
+    }
+
+    private StokKaydetDto getStokKaydetDto() {
+        StokKaydetDto stokDto = new StokKaydetDto();
+        stokDto.setAdet(10L);
+        stokDto.setUrunId(1L);
+        return stokDto;
     }
 }
