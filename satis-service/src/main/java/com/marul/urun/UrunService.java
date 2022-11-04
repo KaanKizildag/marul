@@ -68,9 +68,7 @@ public class UrunService {
 
     public List<UrunDto> findAll() {
         List<Urun> urunList = urunRepository.findAll();
-        List<UrunDto> urunDtoList = urunMapper.getDtoList(urunList);
-
-        return urunDtoList;
+        return urunMapper.getDtoList(urunList);
     }
 
     public UrunDto findById(Long id) {
