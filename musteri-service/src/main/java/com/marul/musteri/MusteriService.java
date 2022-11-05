@@ -5,7 +5,7 @@
  */
 package com.marul.musteri;
 
-import com.marul.dto.MailGondermeDto;
+import com.marul.dto.mail.MailGondermeDto;
 import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
@@ -42,11 +42,10 @@ public class MusteriService {
     public List<MusteriDto> findAll() {
         List<Musteri> musteriList = musteriRepository.findAll();
         List<MusteriDto> musteriDtoList = musteriMapper.getTargetList(musteriList);
-        musteriDtoList = musteriDtoList.stream().map(musteri -> {
+        musteriDtoList = musteriDtoList.stream().peek(musteri -> {
             Long turId = musteri.getTurId();
             TurDto turDto = turService.findById(turId);
             musteri.setTurAdi(turDto.getTurAdi());
-            return musteri;
         }).collect(Collectors.toList());
         return musteriDtoList;
     }

@@ -1,8 +1,9 @@
 package com.marul.satis;
 
-import com.marul.dto.SatisDto;
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
+import com.marul.dto.satis.SatisResponseDto;
+import com.marul.satis.dto.SatisInsertDto;
 import com.marul.satis.dto.SonSatisOzetiDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -27,19 +27,20 @@ import java.util.Map;
 public class SatisController {
 
     private final SatisService satisService;
+    private final SatisAnalizService satisAnalizService;
 
     @GetMapping("/findAll")
     public Result findAll() {
-        List<SatisDto> satisList = satisService.findAll();
+        List<SatisResponseDto> satisList = satisService.findAll();
         return new SuccessDataResult<>(satisList,
                 String.format("%d tane satış başarıyla listelendi", satisList.size()));
     }
 
     @PostMapping("/save")
-    public Result save(@RequestBody @NotEmpty List<@Valid SatisDto> satisDto) {
-        List<SatisDto> satisDtoResultList = satisService.save(satisDto);
-        return new SuccessDataResult<>(satisDtoResultList,
-                satisDtoResultList.size() + " tane satış başarıyla kaydedildi.");
+    public Result save(@RequestBody @Valid SatisInsertDto satisInsertDto) {
+        List<SatisResponseDto> satisResponseDtoList = satisService.save(satisInsertDto);
+        return new SuccessDataResult<>(satisResponseDtoList,
+                satisResponseDtoList.size() + " tane satış başarıyla kaydedildi.");
     }
 
     @GetMapping("/find-urun-adi-by-satisId")
@@ -50,7 +51,7 @@ public class SatisController {
 
     @GetMapping("/onceki-haftaya-gore-satis-dustu-mu")
     public Result haftalikSatislariGetir() {
-        Map<String, BigDecimal> kategoriSatisAnalizDtoList = satisService.haftalikSatislariGetir();
+        Map<String, BigDecimal> kategoriSatisAnalizDtoList = satisAnalizService.haftalikSatislariGetir();
         String message = "haftalık satışlar listelendi";
         log.info(message);
         return new SuccessDataResult<>(kategoriSatisAnalizDtoList, message);

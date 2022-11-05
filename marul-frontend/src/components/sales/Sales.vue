@@ -78,7 +78,7 @@
 </template>
 
 <script setup>
-import {computed, defineEmits, onMounted, reactive, ref} from "vue";
+import {computed, defineEmits, onMounted, ref} from "vue";
 import Table from "../common/Table.vue";
 import SalesSummary from "../../components/sales/SalesSummary.vue";
 import {ArrowRightBold} from '@element-plus/icons-vue'
@@ -122,15 +122,21 @@ const confirmCart = () => {
   saleState.value = makeASale
   nextStep()
 }
-
+let satisInsertDto = {
+  musteriId: null,
+  satisDtoList: []
+};
 const sale = async () => {
   saleArray.value.forEach(p => {
     let product = productList.value.filter(product => product.id === p.urunId)
     cart.value.push(product[0])
   })
   saleState.value = makeASale
+  let musteriId = saleArray.value[0].musteriId
+  let satisDtoList = []
+  saleArray.value.forEach(sale => satisDtoList.push({...sale.satisDtoList}))
 
-  const result = await salesService.save(saleArray.value).then(resp => resp.data).catch(error => error.response)
+  const result = await salesService.save(satisInsertDto).then(resp => resp.data).catch(error => error.response)
 
   if (!result.success) {
     errorResponse(result.message)
@@ -152,19 +158,21 @@ const findAllProduct = () => {
 }
 
 const addToCart = (row) => {
-  let satisUrunDtoList = {
+  let satisDto = {
     urunId: row.id,
     satilanAdet: row.adet == null ? row.adet = 1 : row.adet,
   }
+  satisInsertDto.satisDtoList.push(satisDto);
   const salesD = {
     musteriId: musteriId.value,
     urunId: row.id,
     satilanAdet: row.adet == null ? row.adet = 1 : row.adet,
-    satisUrunDtoList: [],
+    satisDtoList: [],
     urunAdi: row.urunAdi,
     tutar: row.adet * row.fiyat
   }
-  salesD.satisUrunDtoList.push(satisUrunDtoList)
+  satisInsertDto.musteriId = musteriId.value;
+  // salesD.satisDtoList.push(satisDtoList)
 
   let product = saleArray.value.find(sale => sale.urunId === salesD.urunId);
   if (product !== undefined) {

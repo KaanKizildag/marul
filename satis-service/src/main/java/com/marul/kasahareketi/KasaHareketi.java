@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Setter
 public class KasaHareketi {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "aciklama")

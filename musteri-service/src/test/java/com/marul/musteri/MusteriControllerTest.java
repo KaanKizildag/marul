@@ -68,22 +68,28 @@ class MusteriControllerTest {
     @Test
     void findById() throws Exception {
 
-        String musteriAdi = "Kaan";
-        long musteriId = 1L;
-        MusteriDto musteriDto = new MusteriDto();
-        musteriDto.setId(musteriId);
-        musteriDto.setMusteriAdi(musteriAdi);
-        musteriDto.setTeslimatNoktasi("Çankaya");
-        musteriDto.setTelefonNo("00000");
-        musteriDto.setEmail(musteriAdi + "@marul.com.tr");
+        MusteriDto musteriDto = getMusteriDto();
 
-        Mockito.when(musteriService.findById(musteriId)).thenReturn(musteriDto);
-        ResultActions resultActions = mockMvc.perform(get("/v1/musteri/findById/" + musteriId)
-                .contentType(MediaType.APPLICATION_JSON));
-        resultActions
-                .andExpect(content().string(Matchers.containsString("\"success\":true")));
-        resultActions
+        Long musteriId = getMusteriDto().getId();
+        Mockito.when(musteriService.findById(musteriId))
+                .thenReturn(musteriDto);
+
+        mockMvc.perform(get("/v1/musteri/findById?musteriId=" + musteriId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string(Matchers.containsString("\"success\":true")))
                 .andExpect(status().isOk())
                 .andDo(print());
+    }
+
+    private MusteriDto getMusteriDto() {
+        MusteriDto musteriDto = new MusteriDto();
+        musteriDto.setId(1L);
+        musteriDto.setTurId(1L);
+        musteriDto.setTurAdi("Ankara");
+        musteriDto.setMusteriAdi("musteri");
+        musteriDto.setTeslimatNoktasi("Çankaya");
+        musteriDto.setTelefonNo("00000");
+        musteriDto.setEmail("musteri@marul.com.tr");
+        return musteriDto;
     }
 }
