@@ -11,7 +11,7 @@ export class CustomerService {
     }
 
     updateCustomer(customer) {
-        return httpRequest.post("/musteri-service/v1/musteri/update", customer)
+        return httpRequest.put("/musteri-service/v1/musteri/update", customer)
     }
 
     deleteById(id) {

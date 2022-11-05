@@ -44,6 +44,18 @@ public class MusteriController {
         return new SuccessDataResult<>(musteriDto, "Müşteri başarıyla kaydedildi.");
     }
 
+    @DeleteMapping("/delete")
+    public Result delete(@RequestParam Long id) {
+        musteriService.deleteById(id);
+        return new SuccessDataResult<>( "Müşteri başarıyla silindi.");
+    }
+
+    @PutMapping("/update")
+    public Result update(@RequestBody @Valid MusteriDto musteriDto) {
+        musteriDto = musteriService.update(musteriDto);
+        return new SuccessDataResult<>(musteriDto, "Müşteri başarıyla güncellendi.");
+    }
+
     @GetMapping("/rapor/findAll")
     public Result raporFindAll() {
         return new SuccessDataResult<>(musteriService.musteriRaporla(), "rapor başarıyla oluşturulddu");

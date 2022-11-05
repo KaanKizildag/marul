@@ -57,6 +57,7 @@
           </a>
         </li>
         <li class="nav-item">
+          <router-link to="/customers">
           <a class="nav-link text-white " :class="props.activePage === 'MÜŞTERİ' ? 'active bg-gradient-primary' : ''"
              href="../pages/virtual-reality.html">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -64,6 +65,7 @@
             </div>
             <span class="nav-link-text ms-1">MÜŞTERİ</span>
           </a>
+          </router-link>
         </li>
         <li class="nav-item">
           <a class="nav-link text-white " :class="props.activePage === 'RAPOR' ? 'active bg-gradient-primary' : ''"
