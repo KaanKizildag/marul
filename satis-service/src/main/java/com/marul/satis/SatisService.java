@@ -1,5 +1,6 @@
 package com.marul.satis;
 
+import com.marul.dto.mail.MailGondermeDto;
 import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
@@ -7,8 +8,6 @@ import com.marul.dto.satis.SatisDto;
 import com.marul.dto.satis.SatisResponseDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
-import com.marul.kasahareketi.KasaHareketiService;
-import com.marul.kategori.KategoriService;
 import com.marul.satis.dto.SatisInsertDto;
 import com.marul.satis.dto.SonSatisOzetiDto;
 import com.marul.urun.StokFeignClient;
@@ -16,6 +15,7 @@ import com.marul.urun.UrunService;
 import com.marul.util.ResultDecoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +37,8 @@ public class SatisService {
     private final StokFeignClient stokFeignClient;
     private final SatisMapper satisMapper;
     private final UrunService urunService;
-    private final KategoriService kategoriService;
-    private final KasaHareketiService kasaHareketiService;
     private final KafkaTemplate<String, SatisInsertDto> kafkaTemplate;
+    private final KafkaTemplate<String, MailGondermeDto> mailKafkaTemplate;
 
     public List<SatisResponseDto> findAll() {
         List<Satis> satisList = satisRepository.findAll();
@@ -69,8 +68,8 @@ public class SatisService {
                     satis.setSatisZamani(LocalDateTime.now());
                     return satisRepository.save(satis);
                 }).collect(Collectors.toList());
-        kafkayaBildir(satisInsertDto);
         stokGuncelle(satisInsertDto);
+        kafkayaBildir(satisInsertDto);
         return satisMapper.getResponseDtoList(satisList);
     }
 
@@ -157,4 +156,19 @@ public class SatisService {
         return ResultDecoder.getDataResult(raporServiceFeignClient.generateSimpleReport(raporOlusturmaDto));
     }
 
+    @KafkaListener(
+            topics = "marul-satis",
+            groupId = "group-id2"
+    )
+    public void faturaOlusturVeMailAt(SatisInsertDto satisInsertDto) {
+        Long musteriId = satisInsertDto.getMusteriId();
+        MusteriDto musteriDto = ResultDecoder.getDataResult(musteriFeignClient.findById(musteriId));
+        byte[] satisFaturasi = satisRaporuGetir(musteriId);
+        MailGondermeDto mailGondermeDto = new MailGondermeDto();
+        mailGondermeDto.setInputStream(satisFaturasi);
+        mailGondermeDto.setEmailTo(musteriDto.getEmail());
+        mailGondermeDto.setBody("Sayın " + musteriDto.getMusteriAdi() + ",\nSatış raporunuz ekte sunulmuştur.");
+        mailGondermeDto.setSubject("Marul satış raporu");
+        mailKafkaTemplate.send("marul-mail", mailGondermeDto);
+    }
 }

@@ -53,13 +53,14 @@ public class EmailSenderService {
             groupId = "group-id"
     )
     public void sendMailWithoutAttachment(@Payload MailGondermeDto mailGondermeDto) throws MessagingException {
-        log.info("mail to: {}, body {}, subject: {}", mailGondermeDto.getEmailTo(), mailGondermeDto.getBody(), mailGondermeDto.getSubject());
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+        MimeMessageHelper mimeMessageHelper = null;
+        mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+        mimeMessageHelper.setFrom("com.tr.marul@gmail.com");
         mimeMessageHelper.setTo(mailGondermeDto.getEmailTo());
         mimeMessageHelper.setText(mailGondermeDto.getBody());
         mimeMessageHelper.setSubject(mailGondermeDto.getSubject());
-
+        mimeMessageHelper.addAttachment(emailSenderConfigData.getEkAdi(), new ByteArrayResource(mailGondermeDto.getInputStream()));
         javaMailSender.send(mimeMessage);
         log.info(emailSenderConfigData.getBasariliMesaj());
     }

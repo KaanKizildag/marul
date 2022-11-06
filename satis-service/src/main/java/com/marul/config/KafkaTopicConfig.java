@@ -1,5 +1,6 @@
 package com.marul.config;
 
+import com.marul.dto.mail.MailGondermeDto;
 import com.marul.satis.dto.SatisInsertDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -20,12 +21,23 @@ public class KafkaTopicConfig {
     private String bootstrampServers;
 
     @Bean
-    public KafkaTemplate<String, SatisInsertDto> kafkaTemplate(ProducerFactory<String, SatisInsertDto> producerFactory) {
+    public KafkaTemplate<String, SatisInsertDto> satisKafkaTemplate(ProducerFactory<String, SatisInsertDto> producerFactory) {
+        return new KafkaTemplate<>(producerFactory);
+    }
+
+    @Bean
+    public KafkaTemplate<String, MailGondermeDto> mailKafkaTemplate(ProducerFactory<String, MailGondermeDto> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean
     public ProducerFactory<String, SatisInsertDto> producerFactory() {
+        Map<String, Object> config = producerConfig();
+        return new DefaultKafkaProducerFactory<>(config);
+    }
+
+    @Bean
+    public ProducerFactory<String, MailGondermeDto> mailProducerFactory() {
         Map<String, Object> config = producerConfig();
         return new DefaultKafkaProducerFactory<>(config);
     }
