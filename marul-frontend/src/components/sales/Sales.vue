@@ -15,7 +15,7 @@
           <div class="card">
             <div class="card-header pb-0 px-3">
               <h6 class="mb-0">Müşteri Listesi</h6> <br/>
-              <Table :data="filterTableData">
+              <Table :data="filteredCustomers">
                 <el-table-column label="Müşteri adı" prop="musteriAdi" :sortable="true"/>
                 <el-table-column label="Telefon no" prop="telefonNo" :sortable="true"/>
                 <el-table-column label="Email" prop="email" :sortable="true"/>
@@ -44,12 +44,14 @@
           <div class="card">
             <div class="card-header pb-0 px-3">
               <h6 class="mb-0">Ürün Listesi</h6> <br/>
-              <Table :data="productList" style="width: 100%">
+              <Table :data="filteredProductList" style="width: 100%">
                 <el-table-column label="Ürün Adı" prop="urunAdi" :sortable="true"/>
-                <el-table-column label="Fiyat" prop="fiyat" :sortable="true"/>
-                <el-table-column label="Adet" align="center">
+                <el-table-column label="Birim Fiyatı" prop="fiyat" :sortable="true"/>
+                <el-table-column align="right">
+                  <template #header>
+                    <el-input v-model="searchProductName" size="small" placeholder="Ara"/>
+                  </template>
                   <template #default="scope">
-                    <el-input-number v-model="scope.row.adet" :min="1" :max="9999999"></el-input-number>
                     <el-button style="margin-left: 20px" @click="addToCart(scope.row)" type="warning" plain>Sepete
                       Ekle
                     </el-button>
@@ -60,13 +62,13 @@
           </div>
         </div>
 
-        <Cart :saleArray="saleArray" @removeFromCart="removeFromCartHandler"/>
+        <Cart :cartArray="cartArray" @changeProductCount="changeProductCount"/>
       </template>
 
 
       <!--  TODO:  MAKE A SALE COMPONENT -->
 
-      <el-button v-if="saleState === addToCartState && saleArray.length > 0"
+      <el-button v-if="saleState === addToCartState && cartArray.length > 0"
                  style="margin-top: 12px; width: 100px; margin-left: 20px" @click="confirmCart">Sepeti Onayla
       </el-button>
       <el-button v-if="saleState === makeASale" style="margin-top: 12px; width: 100px; margin-left: 20px" @click="sale">
@@ -78,7 +80,7 @@
 </template>
 
 <script setup>
-import {computed, defineEmits, onMounted, ref} from "vue";
+import {computed, defineEmits, onMounted, reactive, ref} from "vue";
 import Table from "../common/Table.vue";
 import SalesSummary from "../../components/sales/SalesSummary.vue";
 import {ArrowRightBold} from '@element-plus/icons-vue'
@@ -101,15 +103,18 @@ const addToCartState = "ADD_TO_CART_STATE";
 const makeASale = "MAKE_A_SALE";
 
 const saleState = ref(selectCustomer)
-const saleArray = ref([])
-const cart = ref([])
+const cartArray = ref([])
 const active = ref(0)
 const musteriId = ref(null)
 const search = ref('')
-const amount = ref(0)
-const tableData = ref([])
+const searchProductName = ref('')
+const customers = ref([])
 const productList = ref([])
-const steps = ref(null)
+
+const satisInsertDto = reactive({
+  musteriId: null,
+  satisDtoList: []
+});
 
 onMounted(() => {
   emits("pageName", "SATIŞ")
@@ -120,32 +125,34 @@ onMounted(() => {
 
 const confirmCart = () => {
   saleState.value = makeASale
-  nextStep()
+  nextStep();
 }
-let satisInsertDto = {
-  musteriId: null,
-  satisDtoList: []
-};
-const sale = async () => {
-  saleArray.value.forEach(p => {
-    let product = productList.value.filter(product => product.id === p.urunId)
-    cart.value.push(product[0])
-  })
-  saleState.value = makeASale
-  let musteriId = saleArray.value[0].musteriId
-  let satisDtoList = []
-  saleArray.value.forEach(sale => satisDtoList.push({...sale.satisDtoList}))
 
+const sale = async () => {
+  saleState.value = makeASale
+
+  satisInsertDto.satisDtoList = satisInsertDto.satisDtoList.filter(sales => sales.satilanAdet > 0);
   const result = await salesService.save(satisInsertDto).then(resp => resp.data).catch(error => error.response)
 
   if (!result.success) {
     errorResponse(result.message)
+    cartArray.value = []
+    satisInsertDto.satisDtoList = []
+    saleState.value = addToCartState;
     return;
   }
 
   successResponse(result.message);
 
-  nextStep()
+  nextStep();
+
+  setTimeout(()=>successResponse("Fatura mail ile gönderildi"),500);
+
+  nextStep();
+  saleState.value = selectCustomer
+  satisInsertDto.musteriId = null;
+  satisInsertDto.satisDtoList = []
+  cartArray.value = []
 }
 
 
@@ -160,29 +167,19 @@ const findAllProduct = () => {
 const addToCart = (row) => {
   let satisDto = {
     urunId: row.id,
-    satilanAdet: row.adet == null ? row.adet = 1 : row.adet,
+    satilanAdet: 1,
   }
+  satisInsertDto.musteriId = musteriId.value
   satisInsertDto.satisDtoList.push(satisDto);
   const salesD = {
     musteriId: musteriId.value,
     urunId: row.id,
-    satilanAdet: row.adet == null ? row.adet = 1 : row.adet,
-    satisDtoList: [],
+    satilanAdet: satisDto.satilanAdet,
     urunAdi: row.urunAdi,
-    tutar: row.adet * row.fiyat
-  }
-  satisInsertDto.musteriId = musteriId.value;
-  // salesD.satisDtoList.push(satisDtoList)
-
-  let product = saleArray.value.find(sale => sale.urunId === salesD.urunId);
-  if (product !== undefined) {
-    product.satilanAdet += row.adet
-    product.tutar += row.adet * row.fiyat
-    saleArray.value.push()
-    return;
+    tutar: satisDto.satilanAdet * row.fiyat
   }
 
-  saleArray.value.push(salesD)
+  cartArray.value.push(salesD)
 }
 
 const handleProductList = (customer) => {
@@ -200,18 +197,33 @@ const findAllCustomers = async () => {
     errorResponse(result.message)
     return;
   }
-  tableData.value = result.data;
+  customers.value = result.data;
   successResponse(result.message);
 }
 const removeFromCartHandler = (row) => {
-  saleArray.value = saleArray.value.filter(sale => sale.urunId !== row.urunId)
+  cartArray.value = cartArray.value.filter(sale => sale.urunId !== row.urunId)
 }
 
-const filterTableData = computed(() =>
-    tableData.value
+const changeProductCount = (row) => {
+  let product = satisInsertDto.satisDtoList.find(satis => satis.urunId == row.urunId);
+  product.satilanAdet = row.satilanAdet
+  if (row.satilanAdet === 0) {
+    removeFromCartHandler(row);
+  }
+}
+
+const filteredCustomers = computed(() =>
+    customers.value
         .filter((data) => !search.value
             || data.musteriAdi.toLowerCase()
                 .includes(search.value.toLowerCase())
+        )
+)
+const filteredProductList = computed(() =>
+    productList.value
+        .filter((data) => !searchProductName.value
+            || data.urunAdi.toLowerCase()
+                .includes(searchProductName.value.toLowerCase())
         )
 )
 

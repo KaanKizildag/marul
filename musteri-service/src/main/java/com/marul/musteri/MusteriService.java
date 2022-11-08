@@ -61,7 +61,8 @@ public class MusteriService {
     }
 
     public void deleteById(Long id) {
-        musteriRepository.deleteById(id);
+        Musteri deletedMusteri = musteriRepository.findById(id).orElseThrow(() -> new BulunamadiException("Müsteri bulunamadi"));
+        musteriRepository.delete(deletedMusteri);
     }
 //
 //    public void update(Long musteriId, MusteriDto musteriDto) {
@@ -84,6 +85,14 @@ public class MusteriService {
         Musteri musteri = musteriMapper.getSource(musteriDto);
         musteri = musteriRepository.save(musteri);
         return musteriMapper.getTarget(musteri);
+    }
+
+    public MusteriDto update(MusteriDto musteriDto) {
+        turMevcutMuKontrol(musteriDto.getTurId());
+        musteriRepository.findById(musteriDto.getId()).orElseThrow(() -> new BulunamadiException("Müsteri bulunamadi"));
+        Musteri musteri = musteriMapper.getSource(musteriDto);
+        musteriRepository.save(musteri);
+        return musteriDto;
     }
 
     private void turMevcutMuKontrol(long turId) {
