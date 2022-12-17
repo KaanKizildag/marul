@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc()
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
-class SatisApplicationUrunIntegrationTest {
+class SatisApplicationIntegrationTest {
 
     @Autowired
     private UrunRepository urunRepository;

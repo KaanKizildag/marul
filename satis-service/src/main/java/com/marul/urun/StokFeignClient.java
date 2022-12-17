@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @FeignClient(value = "stok-service")
 public interface StokFeignClient {
+
     @PostMapping("/stok-service/v1/stok/save")
     SuccessDataResult<StokDto> save(@RequestBody StokKaydetDto stokKaydetDto);
 

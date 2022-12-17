@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
@@ -96,8 +97,12 @@ class MusteriServiceTest {
     @Test
     void delete() {
         long musteriId = 1L;
+
+        Mockito.when(musteriRepository.findById(any()))
+                .thenReturn(Optional.of(getMusteri()));
+
         musteriService.deleteById(musteriId);
-        verify(musteriRepository).deleteById(musteriId);
+        verify(musteriRepository).delete(any());
     }
 
     @Test
