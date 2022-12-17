@@ -1,9 +1,11 @@
 //package com.marul.satis;
 //
+//import com.marul.dto.satis.SatisDto;
 //import com.marul.dto.satis.SatisResponseDto;
 //import com.marul.dto.musteri.MusteriDto;
 //import com.marul.dto.result.SuccessDataResult;
 //import com.marul.exception.BulunamadiException;
+//import com.marul.satis.dto.SatisInsertDto;
 //import com.marul.urun.UrunService;
 //import org.junit.jupiter.api.Assertions;
 //import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@
 //import org.mockito.Mock;
 //import org.mockito.junit.jupiter.MockitoExtension;
 //
+//import java.util.ArrayList;
 //import java.util.Collections;
 //import java.util.List;
 //
@@ -53,7 +56,9 @@
 //
 //        //then
 //        SatisResponseDto satisResponseDto = new SatisResponseDto();
-//        satisResponseDto.setUrunId(urunId);
+//        ArrayList<Object> satisDtoList = new ArrayList<>();
+////        satisDtoList.add()
+////        satisResponseDto.setSatisDtoList(satisDtoList);
 //        satisResponseDto.setMusteriId(musteriId);
 //        List<SatisResponseDto> beklenen = Collections.singletonList(satisResponseDto);
 //        Assertions.assertEquals(beklenen.size(), satisResponseDtoList.size());
@@ -68,7 +73,7 @@
 //        long urunId = 1L;
 //
 //        satisResponseDto.setMusteriId(musteriId);
-//        satisResponseDto.setUrunId(urunId);
+////        satisResponseDto.setUrunId(urunId);
 //
 //        Satis satis = new Satis();
 //        satis.setMusteriId(musteriId);
@@ -90,10 +95,10 @@
 //                .thenReturn(true);
 //
 //        // when
-//        SatisResponseDto actual = satisService.save(satisResponseDto);
+//        SatisResponseDto actual = satisService.save(new SatisInsertDto());
 //
 //        //then
-//        Assertions.assertEquals(actual.getUrunId(), satisResponseDto.getUrunId());
+////        Assertions.assertEquals(actual.getUrunId(), satisResponseDto.getUrunId());
 //
 //        verify(satisMapper).getEntity(satisResponseDto);
 //        verify(musteriFeignClient).existsById(musteriId);
