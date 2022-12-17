@@ -13,6 +13,11 @@
         <envs>
             <env name="LOGSTASH_HOST" value="localhost"/>
             <env name="LOGSTASH_PORT" value="5000"/>
+            <env name="POSTGRES_SATIS_HOST" value="localhost"/>
+            <env name="POSTGRES_SATIS_PORT" value="5433"/>
+            <env name="SERVICE_DISCOVERY_HOST" value="localhost"/>
+            <env name="APPNAME_SATIS_SERVICE" value="satis-service"/>
+            <env name="SATIS_SERVICE_HOST" value="localhost"/>
         </envs>
         <method v="2">
             <option name="Make" enabled="true"/>
