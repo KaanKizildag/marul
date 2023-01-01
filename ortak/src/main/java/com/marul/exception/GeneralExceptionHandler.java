@@ -3,6 +3,8 @@ package com.marul.exception;
 import com.marul.dto.result.ErrorDataResult;
 import com.marul.dto.result.ErrorResult;
 import com.marul.dto.result.Result;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +21,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @Value("${spring.application.name}")
+    private String appname;
 
     @NotNull
     @Override
@@ -41,6 +46,13 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result genelServisHatasi(RuntimeException exception) {
+        return new ErrorResult(exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {ServisDonusHatasiException.class})
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public Result genelServisHatasi(ServisDonusHatasiException exception) {
+        log.error("Servis adı: {}", appname);
         return new ErrorResult(exception.getMessage());
     }
 }
