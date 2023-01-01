@@ -56,14 +56,14 @@
     </appender>
 
     <logger name="tr.com.marul" level="info" additivity="false">
-        <appender-ref ref="FILE"/>
+<!--        <appender-ref ref="FILE"/>-->
 <!--        <appender-ref ref="STDOUT"/>-->
         <appender-ref ref="logstash"/>
 
     </logger>
 
     <root level="info">
-        <appender-ref ref="FILE"/>
+        <!--        <appender-ref ref="FILE"/>-->
         <!--        <appender-ref ref="STDOUT"/>-->
         <appender-ref ref="logstash"/>
     </root>
