@@ -62,4 +62,5 @@ pnpm-debug.log*
 *.sw?
 *.log
 /logs/*
+package-lock.json
 
