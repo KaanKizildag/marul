@@ -27,7 +27,7 @@ public class Urun {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "urunAdi", nullable = false, unique = true)
+    @Column(name = "urun_adi", nullable = false, unique = true)
     private String urunAdi;
 
     @Column(name = "fiyat", nullable = false)

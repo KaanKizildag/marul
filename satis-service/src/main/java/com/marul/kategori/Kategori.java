@@ -2,15 +2,17 @@ package com.marul.kategori;
 
 import com.marul.urun.Urun;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Table
-@Entity(name = "kategori")
+@Table(name = "kategori")
+@Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Kategori {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +21,6 @@ public class Kategori {
     @Column(name = "kategori_adi")
     private String kategoriAdi;
 
-    @OneToMany(mappedBy ="kategori" )
+    @OneToMany(mappedBy = "kategori")
     private List<Urun> urun;
 }
