@@ -1,8 +1,8 @@
 package com.marul.urun;
 
-import com.marul.dto.result.SuccessDataResult;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
+import com.marul.integration.StokServiceIntegration;
 import com.marul.kategori.Kategori;
 import com.marul.kategori.KategoriService;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class UrunServiceTest {
     private UrunMapper urunMapper;
 
     @Mock
-    private StokFeignClient stokFeignClient;
+    private StokServiceIntegration stokServiceIntegration;
     @Mock
     private KategoriService kategoriService;
 
@@ -56,7 +56,7 @@ class UrunServiceTest {
         when(urunMapper.getDto(urun)).thenReturn(urunDto);
         when(urunRepository.existsByUrunAdi(urunAdi)).thenReturn(false);
         when(kategoriService.findById_JPA(urunDto.getId())).thenReturn(new Kategori());
-        when(stokFeignClient.save(any())).thenReturn(new SuccessDataResult<>());
+        when(stokServiceIntegration.save(any())).thenReturn(null);
         when(urunRepository.save(urun)).thenReturn(urun);
 
         //when

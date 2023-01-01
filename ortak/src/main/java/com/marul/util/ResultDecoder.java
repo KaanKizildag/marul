@@ -7,7 +7,6 @@ import com.marul.exception.ServisDonusHatasiException;
 
 public interface ResultDecoder {
 
-
     static void utilServiceCheck(Result result) {
         if (!result.isSuccess()) {
             throw new ServisDonusHatasiException("servis dönüş hatası: %s", result.getMessage());

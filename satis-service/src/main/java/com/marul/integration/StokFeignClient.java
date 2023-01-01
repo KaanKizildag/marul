@@ -1,4 +1,4 @@
-package com.marul.urun;
+package com.marul.integration;
 
 import com.marul.dto.result.SuccessDataResult;
 import com.marul.dto.result.SuccessResult;
@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 @FeignClient(value = "stok-service")
-public interface StokFeignClient {
+interface StokFeignClient {
 
     @PostMapping("/stok-service/v1/stok/save")
     SuccessDataResult<StokDto> save(@RequestBody StokKaydetDto stokKaydetDto);

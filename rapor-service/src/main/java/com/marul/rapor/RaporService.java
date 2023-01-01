@@ -31,7 +31,7 @@ public class RaporService {
             String fileName = raporDizini + raporAdi;
             ClassLoader classLoader = getClass().getClassLoader();
             InputStream inputStream = classLoader.getResourceAsStream(fileName);
-            log.info("file: {}", classLoader.getResource(fileName).getFile());
+            log.debug("file: {}", classLoader.getResource(fileName).getFile());
             compileReport = JasperCompileManager.compileReport(inputStream);
         } catch (Exception e) {
             log.error("rapor oluştururken hata: {}", e.getMessage());
@@ -46,7 +46,7 @@ public class RaporService {
 
     private byte[] exportReportToPDF(JasperReport jasperReport, Map<String, Object> parameters, List<RaporDto> data) {
         try {
-            log.info("exportReportToPDF: rapor kriterleri: {} tane , parametreler: {}", data.size(), parameters);
+            log.debug("exportReportToPDF: rapor kriterleri: {} tane , parametreler: {}", data.size(), parameters);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,
                     new JRBeanCollectionDataSource(data));
 

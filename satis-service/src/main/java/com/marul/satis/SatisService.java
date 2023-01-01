@@ -8,11 +8,12 @@ import com.marul.dto.satis.SatisDto;
 import com.marul.dto.satis.SatisResponseDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.BulunamadiException;
+import com.marul.integration.MusteriServiceIntegration;
+import com.marul.integration.RaporServiceIntegration;
+import com.marul.integration.StokServiceIntegration;
 import com.marul.satis.dto.SatisInsertDto;
 import com.marul.satis.dto.SonSatisOzetiDto;
-import com.marul.urun.StokFeignClient;
 import com.marul.urun.UrunService;
-import com.marul.util.ResultDecoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -32,9 +33,9 @@ import java.util.stream.Collectors;
 public class SatisService {
 
     private final SatisRepository satisRepository;
-    private final MusteriFeignClient musteriFeignClient;
-    private final RaporServiceFeignClient raporServiceFeignClient;
-    private final StokFeignClient stokFeignClient;
+    private final MusteriServiceIntegration musteriServiceIntegration;
+    private final RaporServiceIntegration raporServiceIntegration;
+    private final StokServiceIntegration stokServiceIntegration;
     private final SatisMapper satisMapper;
     private final UrunService urunService;
     private final KafkaTemplate<String, SatisInsertDto> kafkaTemplate;
@@ -84,7 +85,7 @@ public class SatisService {
                 .map(satisDto -> {
                     Long urunId = satisDto.getUrunId();
                     Long musteriId = satisDto.getMusteriId();
-                    MusteriDto musteriDto = ResultDecoder.getDataResult(musteriFeignClient.findById(musteriId));
+                    MusteriDto musteriDto = musteriServiceIntegration.findById(musteriId);
                     UrunDto urunDto = urunService.findById(urunId);
                     return SonSatisOzetiDto.builder()
                             .musteriAdi(musteriDto.getMusteriAdi())
@@ -107,14 +108,14 @@ public class SatisService {
     private void stokGuncelle(SatisInsertDto satisInsertDto) {
         satisInsertDto.getSatisDtoList()
                 .forEach(satisDto -> {
-                    Long urunId = satisDto.getUrunId();
-                    Long satilanAdet = satisDto.getSatilanAdet();
-                    ResultDecoder.utilServiceCheck(stokFeignClient.stokGuncelle(urunId, satilanAdet));
+                    long urunId = satisDto.getUrunId();
+                    long satilanAdet = satisDto.getSatilanAdet();
+                    stokServiceIntegration.stokGuncelle(urunId, satilanAdet);
                 });
     }
 
     private void musteriKontrolu(Long musteriId) {
-        boolean musteriBulunduMu = ResultDecoder.getDataResult(musteriFeignClient.existsById(musteriId));
+        boolean musteriBulunduMu = musteriServiceIntegration.existsById(musteriId);
         if (!musteriBulunduMu) {
             throw new BulunamadiException("%s id ile müşteri bulunamadı", musteriId.toString());
         }
@@ -129,7 +130,7 @@ public class SatisService {
 
     public byte[] satisRaporuGetir(Long musteriId) {
 
-        MusteriDto musteriDto = ResultDecoder.getDataResult(musteriFeignClient.findById(musteriId));
+        MusteriDto musteriDto = musteriServiceIntegration.findById(musteriId);
 
         List<RaporDto> raporDtoList = findByMusteriId(musteriId)
                 .stream()
@@ -153,7 +154,7 @@ public class SatisService {
         raporOlusturmaDto.setRaporParametreleri(raporParametreleri);
         raporOlusturmaDto.setRaporDtoList(raporDtoList);
 
-        return ResultDecoder.getDataResult(raporServiceFeignClient.generateSimpleReport(raporOlusturmaDto));
+        return raporServiceIntegration.generateSimpleReport(raporOlusturmaDto);
     }
 
     @KafkaListener(
@@ -162,7 +163,7 @@ public class SatisService {
     )
     public void faturaOlusturVeMailAt(SatisInsertDto satisInsertDto) {
         Long musteriId = satisInsertDto.getMusteriId();
-        MusteriDto musteriDto = ResultDecoder.getDataResult(musteriFeignClient.findById(musteriId));
+        MusteriDto musteriDto = musteriServiceIntegration.findById(musteriId);
         byte[] satisFaturasi = satisRaporuGetir(musteriId);
         MailGondermeDto mailGondermeDto = new MailGondermeDto();
         mailGondermeDto.setInputStream(satisFaturasi);

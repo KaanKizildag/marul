@@ -9,6 +9,7 @@ import com.marul.dto.urun.UrunDto;
 import com.marul.dto.urun.UrunGuncellemeDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.ZatenKayitliException;
+import com.marul.integration.StokServiceIntegration;
 import com.marul.kategori.Kategori;
 import com.marul.kategori.KategoriService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class UrunService {
 
     private final UrunRepository urunRepository;
     private final UrunMapper urunMapper;
-    private final StokFeignClient stokFeignClient;
+    private final StokServiceIntegration stokServiceIntegration;
     private final KategoriService kategoriService;
 
     public UrunDto save(UrunDto urunDto) {
@@ -55,7 +56,7 @@ public class UrunService {
         stokKaydetDto.setAdet(varsayilanStok);
         stokKaydetDto.setUrunId(urunId);
         stokKaydetDto.setAciklama("Ürün ekleme");
-        stokFeignClient.save(stokKaydetDto);
+        stokServiceIntegration.save(stokKaydetDto);
     }
 
     public boolean existsByUrunAdi(String urunAdi) {
@@ -80,7 +81,7 @@ public class UrunService {
     public void deleteById(Long id) {
         Urun urun = urunRepository.findById(id)
                 .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", id.toString()));
-        stokFeignClient.stokSil(urun.getId());
+        stokServiceIntegration.stokSil(urun.getId());
         urunRepository.delete(urun);
     }
 }

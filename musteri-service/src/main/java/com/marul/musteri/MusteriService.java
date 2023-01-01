@@ -5,17 +5,14 @@
  */
 package com.marul.musteri;
 
-import com.marul.dto.mail.MailGondermeDto;
 import com.marul.dto.musteri.MusteriDto;
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
-import com.marul.dto.result.DataResult;
-import com.marul.dto.result.SuccessResult;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.EmailDahaOnceAlinmisException;
+import com.marul.musteri.integration.RaporServiceIntegration;
 import com.marul.tur.TurDto;
 import com.marul.tur.TurService;
-import com.marul.util.ResultDecoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,8 +31,7 @@ import java.util.stream.Collectors;
 public class MusteriService {
 
     private final MusteriRepository musteriRepository;
-    private final RaporServiceFeignClient raporServiceFeignClient;
-    private final MailSenderFeignClient mailSenderFeignClient;
+    private final RaporServiceIntegration raporServiceIntegration;
     private final TurService turService;
     private final MusteriMapper musteriMapper;
 
@@ -108,21 +104,7 @@ public class MusteriService {
     }
 
     public byte[] generateSimpleReport(RaporOlusturmaDto raporOlusturmaDto) {
-        DataResult<byte[]> dataResult = raporServiceFeignClient
-                .generateSimpleReport(raporOlusturmaDto);
-        return ResultDecoder.getDataResult(dataResult);
-    }
-
-    public void mailGonder(byte[] simpleReport) {
-
-        MailGondermeDto mailGondermeDto = new MailGondermeDto();
-        mailGondermeDto.setInputStream(simpleReport);
-        mailGondermeDto.setSubject("bu rapor musteri servisten gelmiştir.");
-        mailGondermeDto.setBody("bu rapor musteri servisten gelmiştir.");
-        mailGondermeDto.setEmailTo("huseyinkaan.kizildag@gmail.com");
-
-        SuccessResult successResult = mailSenderFeignClient.sendMailWithAttachment(mailGondermeDto);
-        ResultDecoder.utilServiceCheck(successResult);
+        return raporServiceIntegration.generateSimpleReport(raporOlusturmaDto);
     }
 
     public byte[] musteriRaporla() {
@@ -138,7 +120,6 @@ public class MusteriService {
         log.info("rapor feign çağrılıyor.");
         byte[] simpleReport = generateSimpleReport(raporOlusturmaDto);
         log.info("rapor oluşturuldu rapor boyutu {}B ", simpleReport.length);
-//        new Thread(() -> mailGonder(simpleReport)).start();
         return simpleReport;
     }
 }

@@ -5,7 +5,6 @@ import com.marul.exception.EmailDahaOnceAlinmisException;
 import com.marul.tur.TurDto;
 import com.marul.tur.TurService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -105,10 +104,6 @@ class MusteriServiceTest {
         verify(musteriRepository).delete(any());
     }
 
-    @Test
-    @Disabled
-    void update() {
-    }
 
     @Test
     void ayniMailIleKayitliMusteriYokIkenMusteriKaydedilebilmeli() {

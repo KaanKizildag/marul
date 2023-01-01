@@ -1,11 +1,10 @@
 package com.marul.integreation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marul.dto.result.SuccessDataResult;
 import com.marul.dto.urun.UrunDto;
+import com.marul.integration.StokServiceIntegration;
 import com.marul.kategori.Kategori;
 import com.marul.kategori.KategoriRepository;
-import com.marul.urun.StokFeignClient;
 import com.marul.urun.Urun;
 import com.marul.urun.UrunRepository;
 import lombok.SneakyThrows;
@@ -27,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -46,13 +46,14 @@ class SatisApplicationIntegrationTest {
     private KategoriRepository kategoriRepository;
 
     @MockBean
-    private StokFeignClient stokFeignClient;
+    private StokServiceIntegration stokServiceIntegration;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private MockMvc mockMvc;
 
+    @SneakyThrows
     @BeforeEach
     void cleanUp() {
         urunRepository.deleteAll();
@@ -141,13 +142,12 @@ class SatisApplicationIntegrationTest {
 
             UrunDto urunDto = getMockUrunDto();
 
-            Mockito.doReturn(new SuccessDataResult<>())
-                    .when(stokFeignClient)
-                    .stokGuncelle(Mockito.anyLong(), Mockito.anyLong());
+            Mockito.when(stokServiceIntegration.stokGuncelle(Mockito.anyLong(), Mockito.anyLong()))
+                    .thenReturn(null);
 
-            Mockito.doReturn(new SuccessDataResult<>())
-                    .when(stokFeignClient)
-                    .save(Mockito.any());
+            Mockito.when(stokServiceIntegration.save(any()))
+                    .thenReturn(null);
+
 
             mockMvc.perform(post("/v1/urun/save")
                             .contentType(MediaType.APPLICATION_JSON)

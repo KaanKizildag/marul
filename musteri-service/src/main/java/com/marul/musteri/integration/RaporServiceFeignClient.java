@@ -1,4 +1,4 @@
-package com.marul.satis;
+package com.marul.musteri.integration;
 
 import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.dto.result.SuccessDataResult;
