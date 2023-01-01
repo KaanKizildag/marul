@@ -55,6 +55,7 @@ spring:
 eureka:
   instance:
     hostname: ${API_GATEWAY_HOST}
+    prefer-ip-address: true
   client:
     fetch-registry: true
     register-with-eureka: true
@@ -68,7 +69,7 @@ resilience4j.circuitbreaker:
       registerHealthIndicator: true
       slidingWindowSize: 5
       failureRateThreshold: 50
-      waitDurationInOpenState: 1
+      waitDurationInOpenState: 10s
       permittedNumberOfCallsInHalfOpenState: 2
 
 resilience4j.timelimiter:

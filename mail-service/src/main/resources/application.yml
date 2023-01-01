@@ -26,6 +26,7 @@ eureka:
       defaultZone: http://${SERVICE_DISCOVERY_HOST:localhost}:${SERVICE_DISCOVERY_PORT:8761}/eureka
   instance:
     hostname: ${MAIL_SERVICE_HOST}
+    prefer-ip-address: true
 
 email-sender:
   basariliMesaj: Email başarıyla gönderildi
