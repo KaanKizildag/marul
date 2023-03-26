@@ -6,20 +6,15 @@
 package com.marul.musteri;
 
 import com.marul.dto.musteri.MusteriDto;
-import com.marul.dto.rapor.RaporDto;
-import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.exception.BulunamadiException;
 import com.marul.exception.EmailDahaOnceAlinmisException;
-import com.marul.musteri.integration.RaporServiceIntegration;
 import com.marul.tur.TurDto;
 import com.marul.tur.TurService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -31,18 +26,20 @@ import java.util.stream.Collectors;
 public class MusteriService {
 
     private final MusteriRepository musteriRepository;
-    private final RaporServiceIntegration raporServiceIntegration;
     private final TurService turService;
     private final MusteriMapper musteriMapper;
 
     public List<MusteriDto> findAll() {
         List<Musteri> musteriList = musteriRepository.findAll();
         List<MusteriDto> musteriDtoList = musteriMapper.getTargetList(musteriList);
-        musteriDtoList = musteriDtoList.stream().peek(musteri -> {
-            Long turId = musteri.getTurId();
-            TurDto turDto = turService.findById(turId);
-            musteri.setTurAdi(turDto.getTurAdi());
-        }).collect(Collectors.toList());
+        musteriDtoList = musteriDtoList.stream()
+                .map(musteriDto -> {
+                    Long turId = musteriDto.getTurId();
+                    TurDto turDto = turService.findById(turId);
+                    musteriDto.setTurAdi(turDto.getTurAdi());
+                    return musteriDto;
+                })
+                .collect(Collectors.toList());
         return musteriDtoList;
     }
 
@@ -57,7 +54,8 @@ public class MusteriService {
     }
 
     public void deleteById(Long id) {
-        Musteri deletedMusteri = musteriRepository.findById(id).orElseThrow(() -> new BulunamadiException("Müsteri bulunamadi"));
+        Musteri deletedMusteri = musteriRepository.findById(id)
+                .orElseThrow(() -> new BulunamadiException("Müsteri bulunamadi id:%s ", id));
         musteriRepository.delete(deletedMusteri);
     }
 //
@@ -77,21 +75,21 @@ public class MusteriService {
 
     public MusteriDto save(MusteriDto musteriDto) {
         emailAlinmisMiKontrol(musteriDto.getEmail());
-        turMevcutMuKontrol(musteriDto.getTurId());
+        turVarMi(musteriDto.getTurId());
         Musteri musteri = musteriMapper.getSource(musteriDto);
         musteri = musteriRepository.save(musteri);
         return musteriMapper.getTarget(musteri);
     }
 
     public MusteriDto update(MusteriDto musteriDto) {
-        turMevcutMuKontrol(musteriDto.getTurId());
-        musteriRepository.findById(musteriDto.getId()).orElseThrow(() -> new BulunamadiException("Müsteri bulunamadi"));
+        turVarMi(musteriDto.getTurId());
+        findById(musteriDto.getId());
         Musteri musteri = musteriMapper.getSource(musteriDto);
         musteriRepository.save(musteri);
         return musteriDto;
     }
 
-    private void turMevcutMuKontrol(long turId) {
+    private void turVarMi(long turId) {
         if (!turService.existsByTurId(turId)) {
             throw new BulunamadiException("%s id ile tur bulunamadı.", String.valueOf(turId));
         }
@@ -101,25 +99,5 @@ public class MusteriService {
         if (musteriRepository.existsByEmail(email)) {
             throw new EmailDahaOnceAlinmisException("%s bu email daha önce alınmış.", email);
         }
-    }
-
-    public byte[] generateSimpleReport(RaporOlusturmaDto raporOlusturmaDto) {
-        return raporServiceIntegration.generateSimpleReport(raporOlusturmaDto);
-    }
-
-    public byte[] musteriRaporla() {
-        List<MusteriDto> musteriDtoList = findAll();
-        List<RaporDto> raporDtoList = musteriMapper.getRaporDtoList(musteriDtoList);
-        log.info("{} tane müşteri raporlanacak ", raporDtoList.size());
-        RaporOlusturmaDto raporOlusturmaDto = new RaporOlusturmaDto();
-        raporOlusturmaDto.setRaporAdi("musteri_email_rapor.jrxml");
-        raporOlusturmaDto.setRaporDtoList(raporDtoList);
-        Map<String, Object> raporParametreleri = new HashMap<>();
-        raporParametreleri.put("turAdi", "Ankara");
-        raporOlusturmaDto.setRaporParametreleri(raporParametreleri);
-        log.info("rapor feign çağrılıyor.");
-        byte[] simpleReport = generateSimpleReport(raporOlusturmaDto);
-        log.info("rapor oluşturuldu rapor boyutu {}B ", simpleReport.length);
-        return simpleReport;
     }
 }

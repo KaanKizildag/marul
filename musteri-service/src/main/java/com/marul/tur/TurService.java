@@ -17,7 +17,6 @@ public class TurService {
     private final TurMapper turMapper;
     private final TurRepository turRepository;
 
-
     public List<TurDto> findAll() {
         List<Tur> turList = turRepository.findAll();
         return turMapper.getTargetList(turList);
@@ -25,10 +24,11 @@ public class TurService {
 
     public TurDto findById(Long id) {
         Optional<Tur> tur = turRepository.findById(id);
-        return tur.map(turMapper::getTarget).orElseThrow(() -> new BulunamadiException("%s id ile tur bulunamadı", id.toString()));
+        return tur.map(turMapper::getTarget)
+                .orElseThrow(() -> new BulunamadiException("%s id ile tur bulunamadı", id.toString()));
     }
 
-    public Boolean existsByTurId(Long id) {
+    public boolean existsByTurId(Long id) {
         return turRepository.existsById(id);
     }
 
