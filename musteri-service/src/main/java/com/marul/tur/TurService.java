@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +22,9 @@ public class TurService {
     }
 
     public TurDto findById(Long id) {
-        Optional<Tur> tur = turRepository.findById(id);
-        return tur.map(turMapper::getTarget)
-                .orElseThrow(() -> new BulunamadiException("%s id ile tur bulunamadı", id.toString()));
+        return turRepository.findById(id)
+                .map(turMapper::getTarget)
+                .orElseThrow(() -> new BulunamadiException("Tur bulunamadı. id: %d", id));
     }
 
     public boolean existsByTurId(Long id) {
@@ -33,9 +32,10 @@ public class TurService {
     }
 
     public void save(TurDto turDto) {
-        if (turRepository.existsByTurAdi(turDto.getTurAdi())) {
-            log.error("{} ile kaydedilmiş bir tur sisteme kayıtlıdır.", turDto.getTurAdi());
-            throw new ZatenKayitliException("%s ile kaydedilmiş bir tur sisteme kayıtlıdır.", turDto.getTurAdi());
+        String turAdi = turDto.getTurAdi();
+        if (turRepository.existsByTurAdi(turAdi)) {
+            log.error("{} ile kaydedilmiş bir tur sisteme kayıtlıdır.", turAdi);
+            throw new ZatenKayitliException("%s ile kaydedilmiş bir tur sisteme kayıtlıdır.", turAdi);
         }
         Tur tur = turMapper.getSource(turDto);
         turRepository.save(tur);
