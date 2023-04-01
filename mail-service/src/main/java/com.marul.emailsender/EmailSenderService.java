@@ -3,6 +3,8 @@ package com.marul.emailsender;
 import com.marul.dto.mail.MailGondermeDto;
 import com.marul.emailsender.config.EmailSenderConfigData;
 import com.marul.exception.EmailGonderirkenException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
@@ -12,8 +14,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.InputStream;
 
