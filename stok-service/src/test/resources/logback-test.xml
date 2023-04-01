@@ -4,6 +4,6 @@
     <property name="DEV_HOME" value="./logs"/>
     <property name="APP_NAME" value="stok-service"/>
 
-    <include resource="logback-common.xml"/>
+<!--    <include resource="logback-common.xml"/>-->
 
 </configuration>

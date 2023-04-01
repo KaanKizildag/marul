@@ -1,10 +1,10 @@
 package com.marul.stokservice.stokhareketi;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

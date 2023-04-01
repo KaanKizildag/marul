@@ -5,6 +5,7 @@ import com.marul.dto.result.SuccessDataResult;
 import com.marul.dto.satis.SatisResponseDto;
 import com.marul.satis.dto.SatisInsertDto;
 import com.marul.satis.dto.SonSatisOzetiDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -14,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;

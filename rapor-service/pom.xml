@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>Marul</artifactId>
@@ -11,98 +11,92 @@
 
     <artifactId>rapor-service</artifactId>
 
-    <!--    <dependencies>-->
-    <!--        <dependency>-->
-    <!--            <groupId>org.springframework.boot</groupId>-->
-    <!--            <artifactId>spring-boot-starter-web</artifactId>-->
-    <!--        </dependency>-->
-    <!--        <dependency>-->
-    <!--            <groupId>net.sf.jasperreports</groupId>-->
-    <!--            <artifactId>jasperreports</artifactId>-->
-    <!--            <exclusions>-->
-    <!--                <exclusion>-->
-    <!--                    <groupId>com.lowagie</groupId>-->
-    <!--                    <artifactId>itext</artifactId>-->
-    <!--                </exclusion>-->
-    <!--                <exclusion>-->
-    <!--                    <groupId>org.bouncycastle</groupId>-->
-    <!--                    <artifactId>bcmail-jdk15on</artifactId>-->
-    <!--                </exclusion>-->
-    <!--                <exclusion>-->
-    <!--                    <groupId>org.bouncycastle</groupId>-->
-    <!--                    <artifactId>bcpkix-jdk15on</artifactId>-->
-    <!--                </exclusion>-->
-    <!--            </exclusions>-->
-    <!--        </dependency>-->
-    <!--        <dependency>-->
-    <!--            <groupId>com.lowagie</groupId>-->
-    <!--            <artifactId>itext</artifactId>-->
-    <!--            <version>2.1.7.js9</version>-->
-    <!--            <scope>compile</scope>-->
-    <!--            <optional>false</optional>-->
-    <!--        </dependency>-->
-    <!--        <dependency>-->
-    <!--            <groupId>org.springframework.cloud</groupId>-->
-    <!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
-    <!--        </dependency>-->
-    <!--        <dependency>-->
-    <!--            <groupId>org.example</groupId>-->
-    <!--            <artifactId>ortak</artifactId>-->
-    <!--        </dependency>-->
-    <!--        &lt;!&ndash; swagger open-api-3.0&ndash;&gt;-->
-    <!--        <dependency>-->
-    <!--            <groupId>org.springdoc</groupId>-->
-    <!--            <artifactId>springdoc-openapi-ui</artifactId>-->
-    <!--            <version>1.6.5</version>-->
-    <!--        </dependency>-->
-    <!--        <dependency>-->
-    <!--            <groupId>net.logstash.logback</groupId>-->
-    <!--            <artifactId>logstash-logback-encoder</artifactId>-->
-    <!--        </dependency>-->
-    <!--        <dependency>-->
-    <!--            <groupId>net.sf.jasperreports</groupId>-->
-    <!--            <artifactId>jasperreports-fonts</artifactId>-->
-    <!--            <version>6.18.1</version>-->
-    <!--        </dependency>-->
-    <!--    </dependencies>-->
-    <!--    <build>-->
-    <!--        <plugins>-->
-    <!--            <plugin>-->
-    <!--                <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                <artifactId>maven-jar-plugin</artifactId>-->
-    <!--                <version>3.0.2</version>-->
-    <!--            </plugin>-->
-    <!--            <plugin>-->
-    <!--                <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                <artifactId>maven-compiler-plugin</artifactId>-->
-    <!--                <version>3.5.1</version>-->
-    <!--                <configuration>-->
-    <!--                    <annotationProcessorPaths>-->
-    <!--                        <path>-->
-    <!--                            <groupId>org.projectlombok</groupId>-->
-    <!--                            <artifactId>lombok</artifactId>-->
-    <!--                            <version>${lombok.version}</version>-->
-    <!--                        </path>-->
-    <!--                        <path>-->
-    <!--                            <groupId>org.mapstruct</groupId>-->
-    <!--                            <artifactId>mapstruct-processor</artifactId>-->
-    <!--                            <version>${mapstruct.version}</version>-->
-    <!--                        </path>-->
-    <!--                    </annotationProcessorPaths>-->
-    <!--                </configuration>-->
-    <!--            </plugin>-->
-    <!--            <plugin>-->
-    <!--                <groupId>org.springframework.boot</groupId>-->
-    <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-    <!--                <configuration>-->
-    <!--                    <excludes>-->
-    <!--                        <exclude>-->
-    <!--                            <groupId>org.projectlombok</groupId>-->
-    <!--                            <artifactId>lombok</artifactId>-->
-    <!--                        </exclude>-->
-    <!--                    </excludes>-->
-    <!--                </configuration>-->
-    <!--            </plugin>-->
-    <!--        </plugins>-->
-    <!--    </build>-->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.lowagie</groupId>
+                    <artifactId>itext</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcmail-jdk15on</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcpkix-jdk15on</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.1.7.js9</version>
+            <scope>compile</scope>
+            <optional>false</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!-- swagger open-api-3.0-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+            <version>6.18.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>ortak</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

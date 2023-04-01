@@ -2,11 +2,11 @@ package com.marul.tur;
 
 import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -35,5 +35,4 @@ public class TurController {
         Result result = new Result(true, "Tur basariyla kaydedildi");
         return ResponseEntity.ok(result);
     }
-
 }

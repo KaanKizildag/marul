@@ -14,13 +14,13 @@ import com.marul.integration.StokServiceIntegration;
 import com.marul.satis.dto.SatisInsertDto;
 import com.marul.satis.dto.SonSatisOzetiDto;
 import com.marul.urun.UrunService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;

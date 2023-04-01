@@ -4,11 +4,10 @@ import com.marul.dto.result.Result;
 import com.marul.dto.result.SuccessDataResult;
 import com.marul.dto.satis.KasaHareketiDto;
 import com.marul.dto.satis.KasaHareketiInsertDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor

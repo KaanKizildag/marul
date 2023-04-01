@@ -19,9 +19,11 @@
         <module>satis-service</module>
         <module>stok-service</module>
     </modules>
+
     <properties>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
     </properties>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -43,20 +45,20 @@
                 <artifactId>logstash-logback-encoder</artifactId>
                 <version>6.6</version>
             </dependency>
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports</artifactId>
+                <version>6.20.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>ortak</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!--        <dependency>-->
-        <!--            <groupId>net.sf.jasperreports</groupId>-->
-        <!--            <artifactId>jasperreports</artifactId>-->
-        <!--            <version>${jasperreports.version}</version>-->
-        <!--        </dependency>-->
-        <dependency>
-            <groupId>org.example</groupId>
-            <artifactId>ortak</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>

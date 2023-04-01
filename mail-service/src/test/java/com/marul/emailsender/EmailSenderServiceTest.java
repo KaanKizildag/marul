@@ -2,16 +2,16 @@ package com.marul.emailsender;
 
 import com.marul.dto.mail.MailGondermeDto;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
-@SpringBootTest
+//@SpringBootTest
 class EmailSenderServiceTest {
 
     @Autowired
@@ -19,6 +19,7 @@ class EmailSenderServiceTest {
 
     @SneakyThrows
     @Test
+    @Disabled("mail göndermemesi için")
     void bodysiDoluOlanEmailGonderilebilmeli() {
 
         String emailTo = "huseyinkaan.kizildag@gmail.com";
@@ -40,6 +41,7 @@ class EmailSenderServiceTest {
 
     @SneakyThrows
     @Test
+    @Disabled("mail göndermemesi için")
     void bodysiBosOlanEmailGonderilebilmeli() {
 
         String emailTo = "huseyinkaan.kizildag@gmail.com";
