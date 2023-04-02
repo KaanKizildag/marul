@@ -7,7 +7,7 @@ package com.marul.urun;
 import com.marul.dto.stok.StokKaydetDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.dto.urun.UrunGuncellemeDto;
-import com.marul.exception.BulunamadiException;
+import com.marul.exception.NotFoundException;
 import com.marul.exception.ZatenKayitliException;
 import com.marul.integration.StokServiceIntegration;
 import com.marul.kategori.Kategori;
@@ -74,13 +74,13 @@ public class UrunService {
 
     public UrunDto findById(Long id) {
         Urun urun = urunRepository.findById(id)
-                .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", id.toString()));
+                .orElseThrow(() -> new NotFoundException("%s id ile ürün bulunamadı", id.toString()));
         return urunMapper.getDto(urun);
     }
 
     public void deleteById(Long id) {
         Urun urun = urunRepository.findById(id)
-                .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", id.toString()));
+                .orElseThrow(() -> new NotFoundException("%s id ile ürün bulunamadı", id.toString()));
         stokServiceIntegration.stokSil(urun.getId());
         urunRepository.delete(urun);
     }

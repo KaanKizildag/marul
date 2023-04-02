@@ -47,10 +47,11 @@ class EmailSenderServiceTest {
         String emailTo = "huseyinkaan.kizildag@gmail.com";
         String body = "marul projesi email test";
         String subject = "email-service test";
-        MailGondermeDto mailGondermeDto = new MailGondermeDto();
-        mailGondermeDto.setEmailTo(emailTo);
-        mailGondermeDto.setBody(body);
-        mailGondermeDto.setSubject(subject);
+        MailGondermeDto mailGondermeDto = MailGondermeDto.builder()
+                .emailTo(emailTo)
+                .body(body)
+                .subject(subject)
+                .build();
         emailSenderService.sendMailWithoutAttachment(mailGondermeDto);
     }
 }

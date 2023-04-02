@@ -1,6 +1,6 @@
 package com.marul.tur;
 
-import com.marul.exception.BulunamadiException;
+import com.marul.exception.NotFoundException;
 import com.marul.exception.ZatenKayitliException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class TurService {
     public TurDto findById(Long id) {
         return turRepository.findById(id)
                 .map(turMapper::getTarget)
-                .orElseThrow(() -> new BulunamadiException("Tur bulunamadı. id: %d", id));
+                .orElseThrow(() -> new NotFoundException("Tur bulunamadı. id: %d", id));
     }
 
     public boolean existsByTurId(Long id) {

@@ -1,6 +1,6 @@
 package com.marul.kategori;
 
-import com.marul.exception.BulunamadiException;
+import com.marul.exception.NotFoundException;
 import com.marul.exception.ZatenKayitliException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +18,12 @@ public class KategoriService {
 
     public Kategori findById_JPA(Long id) {
         return kategoriRepository.findById(id)
-                .orElseThrow(() -> new BulunamadiException("%s id ile kategori bulunamadı", id.toString()));
+                .orElseThrow(() -> new NotFoundException("%s id ile kategori bulunamadı", id.toString()));
     }
 
     public KategoriDto findById(Long id) {
         Kategori kategori = kategoriRepository.findById(id)
-                .orElseThrow(() -> new BulunamadiException("%s id ile kategori bulunamadı", id.toString()));
+                .orElseThrow(() -> new NotFoundException("%s id ile kategori bulunamadı", id.toString()));
         return kategoriMapper.getDto(kategori);
     }
 

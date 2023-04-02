@@ -1,5 +1,6 @@
 package com.marul.dto.rapor;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
+@Builder
 public class RaporDto implements Serializable {
     // burada tanımlanan field'lar jrxml dosyasındaki isimlerle aynı olmalıdır.
     private String musteriAdi;
@@ -20,7 +22,7 @@ public class RaporDto implements Serializable {
 
     private String urunAdi;
     private Long miktar;
-    private BigDecimal tutar;
+    private BigDecimal birimFiyati;
 
     private Date hareketZamani;
     private String aciklama;

@@ -8,8 +8,8 @@ import com.marul.satis.dto.SonSatisOzetiDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -59,21 +59,22 @@ public class SatisController {
 
     @GetMapping("/satis-faturasi")
     public Result satisFaturasiGetir(@RequestParam("musteriId") Long musteriId) {
-        byte[] satisRaporu = satisService.satisRaporuGetir(musteriId);
+        byte[] satisRaporu = satisService.generateSalesReport(musteriId);
         return new SuccessDataResult<>(satisRaporu, "satis raporu oluşturuldu");
     }
 
-    @GetMapping("/satis-faturasi-dev")
-    public ResponseEntity satisFaturasiGetirDev(@RequestParam("musteriId") Long musteriId) {
-        byte[] satisRaporu = satisService.satisRaporuGetir(musteriId);
+    @GetMapping(value = "/satis-faturasi-dev", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> satisFaturasiGetirDev(@RequestParam("musteriId") Long musteriId) {
+        byte[] satisRaporu = satisService.generateSalesReport(musteriId);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        // Here you have to set the actual filename of your pdf
-        String filename = "output.pdf";
-        headers.setContentDispositionFormData(filename, filename);
-        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-        return new ResponseEntity<>(satisRaporu, headers, HttpStatus.OK);
+//        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=output.pdf");
+        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(satisRaporu);
     }
 
     @GetMapping("/son-satislari-getir")

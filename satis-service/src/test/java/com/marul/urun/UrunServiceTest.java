@@ -1,7 +1,7 @@
 package com.marul.urun;
 
 import com.marul.dto.urun.UrunDto;
-import com.marul.exception.BulunamadiException;
+import com.marul.exception.NotFoundException;
 import com.marul.integration.StokServiceIntegration;
 import com.marul.kategori.Kategori;
 import com.marul.kategori.KategoriService;
@@ -179,9 +179,9 @@ class UrunServiceTest {
         urun.setFiyat(BigDecimal.ZERO);
         urun.setKdv(0);
 
-        when(urunRepository.findById(urunId)).thenThrow(BulunamadiException.class);
+        when(urunRepository.findById(urunId)).thenThrow(NotFoundException.class);
         //when
-        assertThrows(BulunamadiException.class, () -> urunService.findById(urunId));
+        assertThrows(NotFoundException.class, () -> urunService.findById(urunId));
         //then
         verify(urunMapper, times(0)).getDto(urun);
         verify(urunRepository, times(1)).findById(urunId);

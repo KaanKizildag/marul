@@ -6,8 +6,8 @@
 package com.marul.musteri;
 
 import com.marul.dto.musteri.MusteriDto;
-import com.marul.exception.BulunamadiException;
 import com.marul.exception.EmailDahaOnceAlinmisException;
+import com.marul.exception.NotFoundException;
 import com.marul.tur.TurDto;
 import com.marul.tur.TurService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class MusteriService {
 
     public MusteriDto findById(Long id) {
         Musteri musteri = musteriRepository.findById(id)
-                .orElseThrow(() -> new BulunamadiException("%s ile bir müşteri bulunamadı", id.toString()));
+                .orElseThrow(() -> new NotFoundException("%s ile bir müşteri bulunamadı", id.toString()));
         return musteriMapper.getTarget(musteri);
     }
 
@@ -55,7 +55,7 @@ public class MusteriService {
 
     public void deleteById(Long id) {
         Musteri deletedMusteri = musteriRepository.findById(id)
-                .orElseThrow(() -> new BulunamadiException("Müsteri bulunamadi id:%s ", id));
+                .orElseThrow(() -> new NotFoundException("Müsteri bulunamadi id:%s ", id));
         musteriRepository.delete(deletedMusteri);
     }
 //
@@ -91,7 +91,7 @@ public class MusteriService {
 
     private void turVarMi(long turId) {
         if (!turService.existsByTurId(turId)) {
-            throw new BulunamadiException("%s id ile tur bulunamadı.", String.valueOf(turId));
+            throw new NotFoundException("%s id ile tur bulunamadı.", String.valueOf(turId));
         }
     }
 

@@ -7,22 +7,25 @@ import com.marul.dto.rapor.RaporOlusturmaDto;
 import com.marul.dto.satis.SatisDto;
 import com.marul.dto.satis.SatisResponseDto;
 import com.marul.dto.urun.UrunDto;
-import com.marul.exception.BulunamadiException;
+import com.marul.exception.NotFoundException;
 import com.marul.integration.MusteriServiceIntegration;
 import com.marul.integration.RaporServiceIntegration;
 import com.marul.integration.StokServiceIntegration;
 import com.marul.satis.dto.SatisInsertDto;
+import com.marul.satis.dto.SatisUrunDto;
 import com.marul.satis.dto.SonSatisOzetiDto;
 import com.marul.urun.UrunService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,27 +53,31 @@ public class SatisService {
     public List<SatisDto> findByMusteriId(Long musteriId) {
         List<Satis> satisList = satisRepository.findByMusteriId(musteriId);
         if (satisList.isEmpty()) {
-            throw new BulunamadiException("%s musteriId ile hiç satış bulunamadı", musteriId.toString());
+            throw new NotFoundException("%s musteriId ile hiç satış bulunamadı", musteriId.toString());
         }
         return satisMapper.getDtoList(satisList);
     }
 
     public List<SatisResponseDto> save(@Valid SatisInsertDto satisInsertDto) {
         Long musteriId = satisInsertDto.getMusteriId();
-        List<Satis> satisList = satisInsertDto.getSatisDtoList()
-                .stream().map(satisDto -> {
-                    Long urunId = satisDto.getUrunId();
-                    musteriKontrolu(musteriId);
-                    urunKontrolu(urunId);
-                    Satis satis = new Satis();
-                    satis.setUrunId(urunId);
-                    satis.setMusteriId(musteriId);
-                    satis.setSatilanAdet(satisDto.getSatilanAdet());
-                    satis.setSatisZamani(LocalDateTime.now());
-                    return satisRepository.save(satis);
-                }).collect(Collectors.toList());
+        musteriKontrolu(musteriId);
+
+        List<Satis> satisList = new ArrayList<>();
+        for (SatisUrunDto satisDto : satisInsertDto.getSatisDtoList()) {
+            Long urunId = satisDto.getUrunId();
+            urunKontrolu(urunId);
+
+            Satis satis = new Satis();
+            satis.setUrunId(urunId);
+            satis.setMusteriId(musteriId);
+            satis.setSatilanAdet(satisDto.getSatilanAdet());
+            satis.setSatisZamani(LocalDateTime.now());
+            satisList.add(satisRepository.save(satis));
+        }
+
         stokGuncelle(satisInsertDto);
         kafkayaBildir(satisInsertDto);
+
         return satisMapper.getResponseDtoList(satisList);
     }
 
@@ -80,24 +87,26 @@ public class SatisService {
 
 
     public List<SonSatisOzetiDto> sonSatislariGetir() {
-        List<Satis> satis = satisRepository.findAll(Pageable.ofSize(20)).toList();
-        return satis.stream()
-                .map(satisDto -> {
-                    Long urunId = satisDto.getUrunId();
-                    Long musteriId = satisDto.getMusteriId();
-                    MusteriDto musteriDto = musteriServiceIntegration.findById(musteriId);
-                    UrunDto urunDto = urunService.findById(urunId);
-                    return SonSatisOzetiDto.builder()
-                            .musteriAdi(musteriDto.getMusteriAdi())
-                            .urunAdi(urunDto.getUrunAdi())
-                            .satisTutari(urunDto.getFiyat().multiply(BigDecimal.valueOf(satisDto.getSatilanAdet())))
-                            .build();
-                }).collect(Collectors.toList());
+        Page<Satis> page = satisRepository.findAll(PageRequest.of(0, 20));
+        List<Satis> satisList = page.getContent();
+        List<SonSatisOzetiDto> result = new ArrayList<>();
+
+        for (Satis satis : satisList) {
+            Long urunId = satis.getUrunId();
+            Long musteriId = satis.getMusteriId();
+            MusteriDto musteriDto = musteriServiceIntegration.findById(musteriId);
+            UrunDto urunDto = urunService.findById(urunId);
+            BigDecimal satisTutari = urunDto.getFiyat().multiply(BigDecimal.valueOf(satis.getSatilanAdet()));
+            SonSatisOzetiDto sonSatisOzetiDto = new SonSatisOzetiDto(musteriDto.getMusteriAdi(), urunDto.getUrunAdi(), satisTutari);
+            result.add(sonSatisOzetiDto);
+        }
+
+        return result;
     }
 
     public String findUrunAdiBySatisId(Long satisId) {
         return satisRepository.findUrunAdiBySatisId(satisId)
-                .orElseThrow(() -> new BulunamadiException("%s satis id ile urun bulunamadı.", satisId.toString()));
+                .orElseThrow(() -> new NotFoundException("%s satis id ile urun bulunamadı.", satisId.toString()));
     }
 
     public List<SatisDto> baslangicVeBitisZamaninaGoreSatisGetir(LocalDateTime baslangiZamani, LocalDateTime bitisZamani) {
@@ -106,55 +115,50 @@ public class SatisService {
     }
 
     private void stokGuncelle(SatisInsertDto satisInsertDto) {
-        satisInsertDto.getSatisDtoList()
-                .forEach(satisDto -> {
-                    long urunId = satisDto.getUrunId();
-                    long satilanAdet = satisDto.getSatilanAdet();
-                    stokServiceIntegration.stokGuncelle(urunId, satilanAdet);
-                });
+        for (SatisUrunDto satisDto : satisInsertDto.getSatisDtoList()) {
+            long urunId = satisDto.getUrunId();
+            long satilanAdet = satisDto.getSatilanAdet();
+            stokServiceIntegration.stokGuncelle(urunId, satilanAdet);
+        }
     }
 
     private void musteriKontrolu(Long musteriId) {
-        boolean musteriBulunduMu = musteriServiceIntegration.existsById(musteriId);
-        if (!musteriBulunduMu) {
-            throw new BulunamadiException("%s id ile müşteri bulunamadı", musteriId.toString());
+        if (!musteriServiceIntegration.existsById(musteriId)) {
+            throw new NotFoundException("%s id ile müşteri bulunamadı", musteriId.toString());
         }
     }
 
     private void urunKontrolu(Long urunId) {
-        boolean urunBulunduMu = urunService.existsById(urunId);
-        if (!urunBulunduMu) {
-            throw new BulunamadiException("%s id ile ürün bulunamadı", urunId.toString());
+        if (!urunService.existsById(urunId)) {
+            throw new NotFoundException("%s id ile ürün bulunamadı", urunId.toString());
         }
     }
 
-    public byte[] satisRaporuGetir(Long musteriId) {
+    public byte[] generateSalesReport(Long customerId) {
+        // Get customer data
+        MusteriDto customer = musteriServiceIntegration.findById(customerId);
 
-        MusteriDto musteriDto = musteriServiceIntegration.findById(musteriId);
-
-        List<RaporDto> raporDtoList = findByMusteriId(musteriId)
+        // Map sales data to report data
+        List<RaporDto> reportData = findByMusteriId(customerId)
                 .stream()
-                .map(satisDto -> {
-                    RaporDto raporDto = new RaporDto();
-                    Long urunId = satisDto.getUrunId();
-                    Long satilanAdet = satisDto.getSatilanAdet();
-                    raporDto.setMiktar(satilanAdet);
-                    UrunDto urunDto = urunService.findById(urunId);
-                    raporDto.setTutar(urunDto.getFiyat().multiply(BigDecimal.valueOf(satilanAdet)));
-                    raporDto.setUrunAdi(urunDto.getUrunAdi());
-                    return raporDto;
+                .map(sales -> {
+                    UrunDto product = urunService.findById(sales.getUrunId());
+                    BigDecimal totalAmount = product.getFiyat().multiply(BigDecimal.valueOf(sales.getSatilanAdet()));
+                    return RaporDto.builder()
+                            .urunAdi(product.getUrunAdi())
+                            .miktar(sales.getSatilanAdet())
+                            .birimFiyati(totalAmount)
+                            .build();
                 })
                 .collect(Collectors.toList());
 
+        // Prepare report parameters
+        Map<String, Object> reportParams = new HashMap<>();
+        reportParams.put("musteriAdi", customer.getMusteriAdi());
 
-        RaporOlusturmaDto raporOlusturmaDto = new RaporOlusturmaDto();
-        Map<String, Object> raporParametreleri = new HashMap<>();
-        raporParametreleri.put("musteriAdi", musteriDto.getMusteriAdi());
-        raporOlusturmaDto.setRaporAdi("satis-faturasi.jrxml");
-        raporOlusturmaDto.setRaporParametreleri(raporParametreleri);
-        raporOlusturmaDto.setRaporDtoList(raporDtoList);
-
-        return raporServiceIntegration.generateSimpleReport(raporOlusturmaDto);
+        // Generate report
+        return raporServiceIntegration.generateSimpleReport(new RaporOlusturmaDto(
+                "satis-faturasi.jrxml", reportData, reportParams));
     }
 
     @KafkaListener(
@@ -164,11 +168,14 @@ public class SatisService {
     public void faturaOlusturVeMailAt(SatisInsertDto satisInsertDto) {
         Long musteriId = satisInsertDto.getMusteriId();
         MusteriDto musteriDto = musteriServiceIntegration.findById(musteriId);
-        byte[] satisFaturasi = satisRaporuGetir(musteriId);
-        MailGondermeDto mailGondermeDto = new MailGondermeDto();
-        mailGondermeDto.setInputStream(satisFaturasi);
-        mailGondermeDto.setEmailTo(musteriDto.getEmail());
-        mailGondermeDto.setBody("Sayın " + musteriDto.getMusteriAdi() + ",\nSatış raporunuz ekte sunulmuştur.");
+        byte[] satisFaturasi = generateSalesReport(musteriId);
+        String body = String.format("Sayın %s,%nSatış raporunuz ekte sunulmuştur.", musteriDto.getMusteriAdi());
+        MailGondermeDto mailGondermeDto = MailGondermeDto.builder()
+                .emailTo(musteriDto.getEmail())
+                .body(body)
+                .subject("Marul satış raporu")
+                .inputStream(satisFaturasi)
+                .build();
         mailGondermeDto.setSubject("Marul satış raporu");
         mailKafkaTemplate.send("marul-mail", mailGondermeDto);
     }

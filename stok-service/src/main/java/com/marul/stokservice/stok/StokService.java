@@ -3,7 +3,7 @@ package com.marul.stokservice.stok;
 import com.marul.dto.stok.StokDto;
 import com.marul.dto.stok.StokKaydetDto;
 import com.marul.dto.urun.UrunDto;
-import com.marul.exception.BulunamadiException;
+import com.marul.exception.NotFoundException;
 import com.marul.exception.YeterliStokYokException;
 import com.marul.stokservice.stok.dto.KritikStokDurumDto;
 import com.marul.stokservice.stokhareketi.StokHareketiDto;
@@ -34,7 +34,7 @@ public class StokService {
         boolean urunVarMi = ResultDecoder.getDataResult(satisFeignClient.existsUrunById(urunId));
         if (!urunVarMi) {
             log.error("{} id ile ürün bulunamadı", urunId);
-            throw new BulunamadiException("%s id ile ürün bulunamadı", urunId.toString());
+            throw new NotFoundException("%s id ile ürün bulunamadı", urunId.toString());
         }
         return stokRepository.yeterliStokVarMi(urunId, stok);
     }
@@ -76,7 +76,7 @@ public class StokService {
      */
     public boolean stokGuncelle(Long urunId, Long satilanAdet) {
         Stok stok = stokRepository.findByUrunId(urunId)
-                .orElseThrow(() -> new BulunamadiException("%s id ile ürün bulunamadı", urunId.toString()));
+                .orElseThrow(() -> new NotFoundException("%s id ile ürün bulunamadı", urunId.toString()));
         long stokAdet = stok.getAdet();
 
         boolean yeterliStokVarMi = yeterliStokVarMi(urunId, satilanAdet);
@@ -102,7 +102,7 @@ public class StokService {
 
     public Long findUrunIdByStokId(Long stokId) {
         return stokRepository.findUrunIdById(stokId)
-                .orElseThrow(() -> new BulunamadiException("Stok Id ile ürün bulunamadı"));
+                .orElseThrow(() -> new NotFoundException("Stok Id ile ürün bulunamadı"));
     }
 
     public List<KritikStokDurumDto> findAllByOrOrderByAdetAsc() {
@@ -127,7 +127,7 @@ public class StokService {
 
     public void urunIdIleStokSil(Long urunId) {
         Stok stok = stokRepository.findStokByUrunId(urunId)
-                .orElseThrow(() -> new BulunamadiException("%s ürün id ile stok bulunamadı", urunId.toString()));
+                .orElseThrow(() -> new NotFoundException("%s ürün id ile stok bulunamadı", urunId.toString()));
 
         stokHareketiService.save(StokHareketiDto.builder()
                 .stokId(stok.getId())

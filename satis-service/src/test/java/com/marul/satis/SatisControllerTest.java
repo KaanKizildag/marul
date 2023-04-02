@@ -3,8 +3,8 @@ package com.marul.satis;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marul.dto.satis.SatisDto;
 import com.marul.dto.satis.SatisResponseDto;
-import com.marul.exception.BulunamadiException;
 import com.marul.exception.GeneralExceptionHandler;
+import com.marul.exception.NotFoundException;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,13 +96,13 @@ class SatisControllerTest {
         SatisResponseDto satisResponseDto = getMockSatisDto();
 
         Mockito.when(satisService.save(any()))
-                .thenThrow(new BulunamadiException("1 id ile ürün bulunamadı"));
+                .thenThrow(new NotFoundException("1 id ile ürün bulunamadı"));
 
         mockMvc.perform(post("/v1/satis/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(satisResponseDto))
                 )
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BulunamadiException))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotFoundException))
                 .andExpect(status().is(HttpStatus.INTERNAL_SERVER_ERROR.value()))
                 .andDo(print());
     }
