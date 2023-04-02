@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author kaan
@@ -32,16 +31,14 @@ public class MusteriService {
     public List<MusteriDto> findAll() {
         List<Musteri> musteriList = musteriRepository.findAll();
         List<MusteriDto> musteriDtoList = musteriMapper.getTargetList(musteriList);
-        musteriDtoList = musteriDtoList.stream()
-                .map(musteriDto -> {
-                    Long turId = musteriDto.getTurId();
-                    TurDto turDto = turService.findById(turId);
-                    musteriDto.setTurAdi(turDto.getTurAdi());
-                    return musteriDto;
-                })
-                .collect(Collectors.toList());
+        for (MusteriDto musteriDto : musteriDtoList) {
+            Long turId = musteriDto.getTurId();
+            TurDto turDto = turService.findById(turId);
+            musteriDto.setTurAdi(turDto.getTurAdi());
+        }
         return musteriDtoList;
     }
+
 
     public MusteriDto findById(Long id) {
         Musteri musteri = musteriRepository.findById(id)
@@ -58,31 +55,21 @@ public class MusteriService {
                 .orElseThrow(() -> new NotFoundException("Müsteri bulunamadi id:%s ", id));
         musteriRepository.delete(deletedMusteri);
     }
-//
-//    public void update(Long musteriId, MusteriDto musteriDto) {
-//        MusteriDto byId = findById(musteriId);
-//
-//        byId.setMusteriAdi(musteriDto.getMusteriAdi());
-//        byId.setBorc(musteriDto.getBorc());
-//        byId.setTelefonNo(musteriDto.getTelefonNo());
-//        byId.setTurId(musteriDto.getTurId());
-//        byId.setTeslimatNoktasi(musteriDto.getTeslimatNoktasi());
-//        byId.setEmail(musteriDto.getEmail());
-//
-//        Musteri musteri = musteriMapper.getSource(byId);
-//        musteriRepository.save(musteri);
-//    }
 
     public MusteriDto save(MusteriDto musteriDto) {
-        emailAlinmisMiKontrol(musteriDto.getEmail());
-        turVarMi(musteriDto.getTurId());
+        validateMusteriDto(musteriDto);
         Musteri musteri = musteriMapper.getSource(musteriDto);
         musteri = musteriRepository.save(musteri);
         return musteriMapper.getTarget(musteri);
     }
 
-    public MusteriDto update(MusteriDto musteriDto) {
+    private void validateMusteriDto(MusteriDto musteriDto) {
+        emailAlinmisMiKontrol(musteriDto.getEmail());
         turVarMi(musteriDto.getTurId());
+    }
+
+    public MusteriDto update(MusteriDto musteriDto) {
+        validateMusteriDto(musteriDto);
         findById(musteriDto.getId());
         Musteri musteri = musteriMapper.getSource(musteriDto);
         musteriRepository.save(musteri);

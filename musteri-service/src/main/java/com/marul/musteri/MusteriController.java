@@ -43,7 +43,7 @@ public class MusteriController {
     @DeleteMapping("/delete")
     public Result delete(@RequestParam Long id) {
         musteriService.deleteById(id);
-        return new SuccessDataResult<>( "Müşteri başarıyla silindi.");
+        return new SuccessDataResult<>("Müşteri başarıyla silindi.");
     }
 
     @PutMapping("/update")
