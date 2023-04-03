@@ -51,7 +51,9 @@ spring:
               args:
                 name: circuit-breaker
                 fallbackUri: forward://${APPNAME_API_GATEWAY}/v1/api-gateway/common-fallback
-
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
 eureka:
   instance:
     hostname: ${API_GATEWAY_HOST}
@@ -76,4 +78,3 @@ resilience4j.timelimiter:
   configs:
     default:
       timeoutDuration: 30s
-
