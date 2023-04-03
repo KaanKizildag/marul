@@ -5,10 +5,10 @@ import com.marul.dto.stok.StokKaydetDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.exception.NotFoundException;
 import com.marul.exception.YeterliStokYokException;
+import com.marul.stokservice.integration.SatisServiceIntegration;
 import com.marul.stokservice.stok.dto.KritikStokDurumDto;
-import com.marul.stokservice.stokhareketi.StokHareketiDto;
 import com.marul.stokservice.stokhareketi.StokHarektiService;
-import com.marul.util.ResultDecoder;
+import com.marul.stokservice.stokhareketi.dto.StokHareketiDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -24,20 +24,11 @@ import java.util.stream.Collectors;
 public class StokService {
 
     private final StokRepository stokRepository;
-    private final SatisFeignClient satisFeignClient;
+    private final SatisServiceIntegration satisServiceIntegration;
     private final StokMapper stokMapper;
     private final StokHarektiService stokHareketiService;
 
     private final int KRITIK_STOK_LIMIT = 10;
-
-    public boolean yeterliStokVarMi(Long urunId, Long stok) {
-        boolean urunVarMi = ResultDecoder.getDataResult(satisFeignClient.existsUrunById(urunId));
-        if (!urunVarMi) {
-            log.error("{} id ile ürün bulunamadı", urunId);
-            throw new NotFoundException("%s id ile ürün bulunamadı", urunId.toString());
-        }
-        return stokRepository.yeterliStokVarMi(urunId, stok);
-    }
 
     public StokDto save(StokKaydetDto stokKaydetDto) {
         Stok stok = stokMapper.getEntity(stokKaydetDto);
@@ -76,13 +67,15 @@ public class StokService {
      */
     public boolean stokGuncelle(Long urunId, Long satilanAdet) {
         Stok stok = stokRepository.findByUrunId(urunId)
-                .orElseThrow(() -> new NotFoundException("%s id ile ürün bulunamadı", urunId.toString()));
+                .orElseThrow(() -> new NotFoundException(String.format("%s id ile ürün bulunamadı", urunId)));
+
         long stokAdet = stok.getAdet();
 
-        boolean yeterliStokVarMi = yeterliStokVarMi(urunId, satilanAdet);
-        if (!yeterliStokVarMi) {
-            log.error("yeterli stok yok stok durumu: {}, satilmak istenen {}", stokAdet, satilanAdet);
-            throw new YeterliStokYokException("%d idli üründen yeterli stok yok stok durumu: %d, satilmak istenen %d.", urunId, stokAdet, satilanAdet);
+        if (!yeterliStokVarMi(urunId, satilanAdet)) {
+            String errorMsg = String.format("%d idli üründen yeterli stok yok stok durumu: %d, satılmak istenen %d.",
+                    urunId, stokAdet, satilanAdet);
+            log.error(errorMsg);
+            throw new YeterliStokYokException(errorMsg);
         }
 
         stok.setAdet(stokAdet - satilanAdet);
@@ -100,9 +93,17 @@ public class StokService {
         return stok.getId() != null;
     }
 
-    public Long findUrunIdByStokId(Long stokId) {
-        return stokRepository.findUrunIdById(stokId)
-                .orElseThrow(() -> new NotFoundException("Stok Id ile ürün bulunamadı"));
+    private boolean yeterliStokVarMi(Long urunId, Long satilanAdet) {
+        Stok stok = stokRepository.findByUrunId(urunId)
+                .orElseThrow(() -> new NotFoundException(String.format("%s id ile ürün bulunamadı", urunId)));
+        long stokAdet = stok.getAdet();
+        return stokAdet >= satilanAdet;
+    }
+
+    public StokDto findById(Long stokId) {
+        return stokRepository.findById(stokId)
+                .map(stokMapper::getDto)
+                .orElseThrow(() -> new NotFoundException("Stok bulunamadı stokId: %d", stokId));
     }
 
     public List<KritikStokDurumDto> findAllByOrOrderByAdetAsc() {
@@ -115,7 +116,7 @@ public class StokService {
     }
 
     private KritikStokDurumDto getKritikStokDurumDto(Stok stok) {
-        UrunDto urunDto = ResultDecoder.getDataResult(satisFeignClient.findById(stok.getUrunId()));
+        UrunDto urunDto = satisServiceIntegration.findUrunById(stok.getUrunId());
         return KritikStokDurumDto.builder()
                 .adet(stok.getAdet())
                 .urunId(stok.getUrunId())

@@ -2,10 +2,14 @@ package com.marul.stokservice.stokhareketi;
 
 import com.marul.dto.rapor.RaporDto;
 import com.marul.dto.rapor.RaporOlusturmaDto;
-import com.marul.stokservice.stok.SatisFeignClient;
+import com.marul.dto.stok.StokDto;
+import com.marul.dto.urun.UrunDto;
+import com.marul.stokservice.integration.RaporServiceIntegration;
+import com.marul.stokservice.integration.SatisServiceIntegration;
 import com.marul.stokservice.stok.StokService;
+import com.marul.stokservice.stokhareketi.dto.StokHareketRaporDto;
+import com.marul.stokservice.stokhareketi.dto.StokHareketiDto;
 import com.marul.util.DateUtil;
-import com.marul.util.ResultDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -23,21 +27,21 @@ public class StokHarektiService {
     private final StokHareketiRepository stokHareketiRepository;
     private final StokHareketiMapper stokHareketiMapper;
     private final Clock clock;
-    private final RaporServiceFeignClient raporServiceFeignClient;
-    private final SatisFeignClient satisFeignClient;
+    private final RaporServiceIntegration raporServiceIntegration;
+    private final SatisServiceIntegration satisServiceIntegration;
     private final StokService stokService;
 
     public StokHarektiService(StokHareketiRepository stokHareketiRepository,
                               StokHareketiMapper stokHareketiMapper,
                               Clock clock,
-                              RaporServiceFeignClient raporServiceFeignClient,
-                              SatisFeignClient satisFeignClient,
+                              RaporServiceIntegration raporServiceIntegration,
+                              SatisServiceIntegration satisServiceIntegration,
                               @Lazy StokService stokService) {
         this.stokHareketiRepository = stokHareketiRepository;
         this.stokHareketiMapper = stokHareketiMapper;
         this.clock = clock;
-        this.raporServiceFeignClient = raporServiceFeignClient;
-        this.satisFeignClient = satisFeignClient;
+        this.raporServiceIntegration = raporServiceIntegration;
+        this.satisServiceIntegration = satisServiceIntegration;
         this.stokService = stokService;
     }
 
@@ -71,21 +75,25 @@ public class StokHarektiService {
         List<StokHareketiDto> stokHareketiDtoList = findAll();
         List<StokHareketRaporDto> hareketRaporDtos = getHareketRaporDtos(stokHareketiDtoList);
         RaporOlusturmaDto raporOlusturmaDto = getRaporOlusturmaDto(hareketRaporDtos);
-        return ResultDecoder.getDataResult(raporServiceFeignClient.generateSimpleReport(raporOlusturmaDto));
+        return raporServiceIntegration.generateSimpleReport(raporOlusturmaDto);
     }
 
     private List<StokHareketRaporDto> getHareketRaporDtos(List<StokHareketiDto> stokHareketiDtoList) {
-        return stokHareketiDtoList.stream().map(stokHareketiDto -> {
-            Long stokId = stokHareketiDto.getStokId();
-            Long urunId = stokService.findUrunIdByStokId(stokId);
-            String urunAdi = ResultDecoder.getDataResult(satisFeignClient.findUrunAdiById(urunId));
-            return StokHareketRaporDto.builder()
-                    .urunAdi(urunAdi)
-                    .miktar(stokHareketiDto.getMiktar())
-                    .aciklama(stokHareketiDto.getAciklama())
-                    .hareketZamani(DateUtil.dateFromLocalDateTime(stokHareketiDto.getHareketZamani()))
-                    .build();
-        }).collect(Collectors.toList());
+        return stokHareketiDtoList.stream()
+                .map(this::createStokHareketRaporDto)
+                .collect(Collectors.toList());
+    }
+
+    private StokHareketRaporDto createStokHareketRaporDto(StokHareketiDto stokHareketiDto) {
+        Long stokId = stokHareketiDto.getStokId();
+        StokDto stokDto = stokService.findById(stokId);
+        UrunDto urunDto = satisServiceIntegration.findUrunById(stokDto.getUrunId());
+        return StokHareketRaporDto.builder()
+                .urunAdi(urunDto.getUrunAdi())
+                .miktar(stokHareketiDto.getMiktar())
+                .aciklama(stokHareketiDto.getAciklama())
+                .hareketZamani(DateUtil.dateFromLocalDateTime(stokHareketiDto.getHareketZamani()))
+                .build();
     }
 
     private RaporOlusturmaDto getRaporOlusturmaDto(List<StokHareketRaporDto> stokHareketiDtoList) {

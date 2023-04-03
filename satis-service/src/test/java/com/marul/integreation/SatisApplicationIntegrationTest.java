@@ -82,35 +82,6 @@ class SatisApplicationIntegrationTest {
                     .andDo(print());
         }
 
-        @SneakyThrows
-        @Test
-        @DisplayName("ürün id ile ürün adı bulunabilmeli")
-        void urunAdiIleUrunSorgula() {
-            Urun urun = getMockUrun();
-            urun = urunRepository.save(urun);
-
-            mockMvc.perform(get("/v1/urun/findUrunAdiById?id=" + urun.getId())
-                            .contentType(MediaType.APPLICATION_JSON)
-                    ).andExpect(status().isOk())
-                    .andExpect(jsonPath("$.success", is(Boolean.TRUE)))
-                    .andExpect(jsonPath("$.data", is(urun.getUrunAdi())))
-                    .andDo(print());
-        }
-
-        @SneakyThrows
-        @Test
-        @DisplayName("ürün id ile urun sorgulaması yapılabilmeli")
-        void urunIdIdIleUrunVarMi() {
-            Urun urun = getMockUrun();
-            urun = urunRepository.save(urun);
-
-            mockMvc.perform(get("/v1/urun/existsById?id=" + urun.getId())
-                            .contentType(MediaType.APPLICATION_JSON)
-                    ).andExpect(status().isOk())
-                    .andExpect(jsonPath("$.success", is(Boolean.TRUE)))
-                    .andExpect(jsonPath("$.data", is(Boolean.TRUE)))
-                    .andDo(print());
-        }
 
         @SneakyThrows
         @Test

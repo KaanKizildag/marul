@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface StokRepository extends JpaRepository<Stok, Long> {
+interface StokRepository extends JpaRepository<Stok, Long> {
     @Query("Select (s.adet >= :stok) From Stok s Where s.urunId = :urunId")
     Boolean yeterliStokVarMi(@Param("urunId") Long urunId,
                              @Param("stok") Long stok);

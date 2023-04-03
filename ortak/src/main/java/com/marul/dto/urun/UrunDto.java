@@ -23,4 +23,6 @@ public class UrunDto {
     private Long kategoriId;
 
     private String kategoriAdi;
+
+    private BirimEnum birim;
 }

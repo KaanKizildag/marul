@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface StokHareketiRepository extends JpaRepository<StokHareketi, Long> {
+interface StokHareketiRepository extends JpaRepository<StokHareketi, Long> {
     List<StokHareketi> findStokHareketiByHareketZamaniBetween(LocalDateTime baslangic, LocalDateTime bitis);
 
     List<StokHareketi> findStokHareketiByHareketZamaniBefore(LocalDateTime bitis);

@@ -7,6 +7,7 @@ package com.marul.urun;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.marul.dto.urun.BirimEnum;
 import com.marul.kategori.Kategori;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -38,10 +39,13 @@ public class Urun {
 
     @JsonProperty(access = Access.WRITE_ONLY)
     @ManyToOne(targetEntity = Kategori.class)
-    @JoinColumn(name="kategori_id")
+    @JoinColumn(name = "kategori_id")
     private Kategori kategori;
 
     @Column(name = "barkod")
     private String barkod;
 
+    @Column(name = "birim")
+    @Enumerated(EnumType.ORDINAL)
+    private BirimEnum birim;
 }

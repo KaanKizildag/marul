@@ -1,4 +1,4 @@
-package com.marul.stokservice.stokhareketi;
+package com.marul.stokservice.stokhareketi.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

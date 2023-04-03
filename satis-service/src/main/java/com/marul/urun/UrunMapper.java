@@ -9,6 +9,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UrunMapper {
+
     @Mapping(source = "kategori.id", target = "kategoriId")
     @Mapping(source = "kategori.kategoriAdi", target = "kategoriAdi")
     UrunDto getDto(Urun urun);

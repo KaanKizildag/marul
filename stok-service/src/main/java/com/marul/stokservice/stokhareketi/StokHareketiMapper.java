@@ -1,6 +1,8 @@
 package com.marul.stokservice.stokhareketi;
 
 import com.marul.dto.rapor.RaporDto;
+import com.marul.stokservice.stokhareketi.dto.StokHareketRaporDto;
+import com.marul.stokservice.stokhareketi.dto.StokHareketiDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,4 +29,7 @@ public class Satis {
 
     @Column(name = "satis_zamani", nullable = false)
     private LocalDateTime satisZamani;
+
+    @Column(name = "satis_fiyati", nullable = false)
+    private BigDecimal satisFiyati;
 }

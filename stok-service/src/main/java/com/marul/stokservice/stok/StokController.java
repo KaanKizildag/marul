@@ -28,18 +28,6 @@ public class StokController {
         return new SuccessDataResult<>(stokDto);
     }
 
-    @GetMapping("/yeterli-stok-var-mi")
-    /**
-     * @deprecated iş kuralları stok servisi içinde yapılacağı için dışarı açılması gereksiz.
-     */
-    @Deprecated
-    public Result yeterliStokVarMi(@RequestParam(value = "urunId") Long urunId,
-                                   @RequestParam(value = "stok") Long stok) {
-        boolean stokVarMi = stokService.yeterliStokVarMi(urunId, stok);
-        log.info("stok sorgulandı");
-        return new SuccessDataResult<>(stokVarMi, "stok başarıyla sorgulandı.");
-    }
-
     @PutMapping("/stok-guncelle")
     public Result stokGuncelle(@RequestParam(value = "urunId") Long urunId,
                                @RequestParam(value = "stok") Long stok) {

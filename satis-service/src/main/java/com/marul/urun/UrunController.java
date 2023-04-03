@@ -35,20 +35,6 @@ public class UrunController {
         return new SuccessDataResult<>(urunDto, "ürün başarıyla getirildi.");
     }
 
-    @GetMapping("/findUrunAdiById")
-    public Result findUrunAdiById(@RequestParam(value = "id") Long id) {
-        UrunDto urunDto = urunService.findById(id);
-        String urunAdi = urunDto.getUrunAdi();
-        return new SuccessDataResult<>(urunAdi, "ürün başarıyla getirildi.");
-    }
-
-    @GetMapping("/existsById")
-    public Result existsById(@RequestParam(value = "id") Long id) {
-        boolean exists = urunService.existsById(id);
-        log.info("{} id ile ürün başarıyla bulundu", id);
-        return new SuccessDataResult<>(exists, "ürün bilgisi başarıyla getirildi.");
-    }
-
     @PostMapping("/save")
     public Result save(@Valid @RequestBody UrunDto urunDto) {
         urunDto = urunService.save(urunDto);
