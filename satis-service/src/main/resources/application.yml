@@ -22,7 +22,7 @@ spring:
     init:
       mode: always
   kafka:
-    bootstrap-servers: 127.0.0.1:9092
+    bootstrap-servers: ${BOOTSTRAP_SERVER}
 eureka:
   client:
     fetch-registry: true
@@ -31,4 +31,4 @@ eureka:
       defaultZone: http://${SERVICE_DISCOVERY_HOST:localhost}:${SERVICE_DISCOVERY_PORT:8761}/eureka
   instance:
     hostname: ${SATIS_SERVICE_HOST}
-    prefer-ip-address: true
+#    prefer-ip-address: true

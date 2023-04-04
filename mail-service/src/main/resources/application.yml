@@ -6,7 +6,7 @@ spring:
   application:
     name: ${APPNAME_MAIL_SERVICE:mail-service}
   kafka:
-    bootstrap-servers: 127.0.0.1:9092
+    bootstrap-servers: ${BOOTSTRAP_SERVER}
   mail:
     host: smtp.gmail.com
     port: 587
@@ -28,7 +28,9 @@ eureka:
     hostname: ${MAIL_SERVICE_HOST}
     prefer-ip-address: true
 
-email-sender:
+mail-properties:
   basariliMesaj: Email başarıyla gönderildi
   basarisizMesaj: Email gönderirken hata
   ekAdi: rapor.pdf
+  adSoyad: '${AD_SOYAD:Hüseyin Kaan Kızıldağ}'
+  from: com.tr.marul@gmail.com

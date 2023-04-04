@@ -4,7 +4,7 @@ eureka:
     register-with-eureka: false
   instance:
     hostname: ${SERVICE_DISCOVERY_HOST}
-    prefer-ip-address: true
+#    prefer-ip-address: true
 
 server:
   port: ${SERVICE_DISCOVERY_PORT:8761}

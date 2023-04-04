@@ -57,7 +57,7 @@ spring:
 eureka:
   instance:
     hostname: ${API_GATEWAY_HOST}
-    prefer-ip-address: true
+#    prefer-ip-address: true
   client:
     fetch-registry: true
     register-with-eureka: true

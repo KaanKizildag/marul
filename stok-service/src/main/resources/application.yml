@@ -30,5 +30,5 @@ eureka:
       defaultZone: http://${SERVICE_DISCOVERY_HOST:localhost}:${SERVICE_DISCOVERY_PORT:8761}/eureka
   instance:
     hostname: ${STOK_SERVICE_HOST}
-    prefer-ip-address: true
+#    prefer-ip-address: true
 
