@@ -1,7 +1,7 @@
 package com.marul.emailsender;
 
 import com.marul.dto.mail.MailGondermeDto;
-import com.marul.emailsender.config.EmailSenderConfigData;
+import com.marul.emailsender.config.EmailConfigData;
 import com.marul.exception.EmailGonderirkenException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -14,54 +14,45 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class EmailSenderService {
 
     private final JavaMailSender javaMailSender;
-    private final EmailSenderConfigData emailSenderConfigData;
+    private final EmailConfigData emailConfigData;
 
 
     public void sendMailWithAttachment(String toEmail,
-                                       String body,
                                        String subject,
-                                       InputStream attachment) {
-
+                                       String htmlBody,
+                                       byte[] attachmentStream) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = null;
+        MimeMessageHelper mimeMessageHelper;
+        String attachmentName = emailConfigData.getEkAdi();
         try {
             mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setFrom("com.tr.marul@gmail.com");
+            mimeMessageHelper.setFrom(emailConfigData.getFrom());
             mimeMessageHelper.setTo(toEmail);
-            mimeMessageHelper.setText(body);
             mimeMessageHelper.setSubject(subject);
-            mimeMessageHelper.addAttachment(emailSenderConfigData.getEkAdi(), new ByteArrayResource(attachment.readAllBytes()));
-        } catch (MessagingException | IOException | IllegalArgumentException e) {
-            log.error(emailSenderConfigData.getBasarisizMesaj());
-            throw new EmailGonderirkenException(emailSenderConfigData.getBasarisizMesaj(), e.getMessage());
+            mimeMessageHelper.setText(htmlBody, true); // true parametresi HTML gövde olduğunu belirtir
+            mimeMessageHelper.addAttachment(attachmentName, new ByteArrayResource(attachmentStream));
+        } catch (MessagingException | IllegalArgumentException e) {
+            log.error(emailConfigData.getBasarisizMesaj());
+            throw new EmailGonderirkenException(emailConfigData.getBasarisizMesaj(), e.getMessage());
         }
         javaMailSender.send(mimeMessage);
-        log.info(emailSenderConfigData.getBasariliMesaj());
+        log.info(emailConfigData.getBasariliMesaj());
     }
 
     @KafkaListener(
             topics = "marul-mail",
             groupId = "group-id"
     )
-    public void sendMailWithoutAttachment(@Payload MailGondermeDto mailGondermeDto) throws MessagingException {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = null;
-        mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessageHelper.setFrom("com.tr.marul@gmail.com");
-        mimeMessageHelper.setTo(mailGondermeDto.getEmailTo());
-        mimeMessageHelper.setText(mailGondermeDto.getBody());
-        mimeMessageHelper.setSubject(mailGondermeDto.getSubject());
-        mimeMessageHelper.addAttachment(emailSenderConfigData.getEkAdi(), new ByteArrayResource(mailGondermeDto.getInputStream()));
-        javaMailSender.send(mimeMessage);
-        log.info(emailSenderConfigData.getBasariliMesaj());
+    public void sendMailWithoutAttachment(@Payload MailGondermeDto mailGondermeDto) {
+        sendMailWithAttachment(mailGondermeDto.getEmailTo(),
+                mailGondermeDto.getSubject(),
+                mailGondermeDto.getBody(),
+                mailGondermeDto.getInputStream());
     }
 }

@@ -7,6 +7,7 @@
 			  topMargin="20" bottomMargin="20" uuid="af8b874c-367e-4c8d-a316-7f29ab7c0308">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="musteriAdi" class="java.lang.String"/>
+	<parameter name="borc" class="java.lang.Double"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -14,7 +15,7 @@
 	<field name="miktar" class="java.lang.Long"/>
 	<field name="birimFiyati" class="java.math.BigDecimal"/>
 	<field name="birim" class="java.lang.String"/>
-	<variable name="genelToplam" class="java.math.BigDecimal" calculation="Sum">
+	<variable name="araToplam" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression>
 			<![CDATA[$F{birimFiyati}.multiply( java.math.BigDecimal.valueOf($F{miktar}) )]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
@@ -23,14 +24,18 @@
 		<variableExpression>
 			<![CDATA[$F{birimFiyati}.multiply( java.math.BigDecimal.valueOf($F{miktar}) )]]></variableExpression>
 	</variable>
+	<variable name="genelToplam" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{araToplam}.add(java.math.BigDecimal.valueOf($P{borc}))]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="85" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="49" width="200" height="30" uuid="da93a526-ae23-472e-8c5e-d6f21a9819af">
+				<reportElement x="0" y="50" width="200" height="30" uuid="da93a526-ae23-472e-8c5e-d6f21a9819af">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="15" isBold="false"/>
@@ -38,7 +43,9 @@
 				<textFieldExpression><![CDATA[$P{musteriAdi}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="0" width="200" height="49" uuid="3ec892e9-a32a-4f26-970c-d5c95dc7c500"/>
+				<reportElement x="0" y="0" width="200" height="50" uuid="3ec892e9-a32a-4f26-970c-d5c95dc7c500">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="20" isBold="false" pdfEncoding="Cp1254"/>
 				</textElement>
@@ -50,7 +57,7 @@
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<graphicElement>
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<image hAlign="Center" vAlign="Middle">
@@ -69,7 +76,9 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="15"/>
+				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
@@ -85,7 +94,7 @@
 				<textElement>
 					<font fontName="SansSerif" size="13" isBold="true" pdfEncoding="Cp1254"/>
 				</textElement>
-				<text><![CDATA[Ürün adı]]></text>
+				<text><![CDATA[Ürün Adı]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="200" y="0" width="100" height="20" uuid="81fa8149-7811-4051-ab6e-93d2ab8ea317">
@@ -104,7 +113,7 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<graphicElement>
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<staticText>
@@ -173,20 +182,22 @@
 		</band>
 	</detail>
 	<lastPageFooter>
-		<band height="75">
+		<band height="125">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
-				<reportElement x="0" y="0" width="130" height="25" uuid="f3574231-3f50-4221-ba8b-e14c6686f611">
+				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="130" height="25"
+							   uuid="f3574231-3f50-4221-ba8b-e14c6686f611">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="13" isBold="true" pdfEncoding="Cp1254"/>
 				</textElement>
-				<text><![CDATA[Genel Toplam]]></text>
+				<text><![CDATA[Ara Toplam]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="400" y="0" width="100" height="25" uuid="c37d20fe-06aa-4ce9-940f-5e1fc782aab5">
+				<reportElement positionType="FixRelativeToBottom" x="400" y="0" width="100" height="25"
+							   uuid="c37d20fe-06aa-4ce9-940f-5e1fc782aab5">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -194,33 +205,120 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="13" pdfEncoding="Cp1254"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{genelToplam} + " TL"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{araToplam} + " TL"]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="0" width="500" height="1" uuid="2fde4f77-e5ef-4386-83bb-2e9bc422a33c">
+				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="500" height="1"
+							   uuid="2fde4f77-e5ef-4386-83bb-2e9bc422a33c">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<graphicElement>
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="25" width="500" height="1" uuid="776ccc6e-3a01-455d-ba79-054db53c572d">
+				<reportElement positionType="FixRelativeToBottom" x="0" y="25" width="500" height="1"
+							   uuid="776ccc6e-3a01-455d-ba79-054db53c572d">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<graphicElement>
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<image>
-				<reportElement x="0" y="25" width="50" height="50" uuid="3b24febb-6e9c-45e0-b5e9-961f074e91a4">
+				<reportElement positionType="FixRelativeToBottom" x="0" y="75" width="50" height="50"
+							   uuid="3b24febb-6e9c-45e0-b5e9-961f074e91a4">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<imageExpression>
 					<![CDATA["https://raw.githubusercontent.com/KaanKizildag/marul/master/logo.png"]]></imageExpression>
 			</image>
+			<componentElement>
+				<reportElement positionType="FixRelativeToBottom" x="450" y="75" width="50" height="50"
+							   uuid="4f932707-9c16-45fb-a6d1-ffb70871a131">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components"
+						   xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<jr:codeExpression>
+						<![CDATA["https://i1.imgiz.com/rshots/10245/kameraya-nah-ceken-dayi-vol-4-4k-uhd-2160p_10245347-17390_1200x630.jpg"]]></jr:codeExpression>
+				</jr:QRCode>
+			</componentElement>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="400" y="25" width="100" height="25"
+							   uuid="38f03f14-1d4c-4d2c-8458-74a7ed1cd274">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="13" pdfEncoding="Cp1254"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{borc} + " TL"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="25" width="130" height="25"
+							   uuid="058a2e4c-a97d-4fda-be5b-935d8145fa7c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="13" isBold="true" pdfEncoding="Cp1254"/>
+				</textElement>
+				<text><![CDATA[Müşteri Borcu]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="400" y="50" width="100" height="25"
+							   uuid="5964d5f6-a540-4c06-9941-16d889d846cf">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="13" pdfEncoding="Cp1254"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{genelToplam} + " TL"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="50" width="130" height="25"
+							   uuid="4511335c-22da-4f98-9d4a-794cb37e0a93">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="13" isBold="true" pdfEncoding="Cp1254"/>
+				</textElement>
+				<text><![CDATA[Genel Toplam]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="75" width="500" height="1"
+							   uuid="39c273fd-0b62-4060-952c-d2932eb36761">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="50" width="500" height="1"
+							   uuid="39ed9eb3-bb32-4012-a55e-2792b6023b52">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
 		</band>
 	</lastPageFooter>
 </jasperReport>

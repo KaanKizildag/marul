@@ -3,12 +3,15 @@ package com.marul.emailsender.config;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "email-sender")
+@ConfigurationProperties(prefix = "mail-properties")
 @Data
-public class EmailSenderConfigData {
+@RefreshScope
+public class EmailConfigData {
+
     @Value("basariliMesaj")
     private String basariliMesaj;
 
@@ -17,4 +20,7 @@ public class EmailSenderConfigData {
 
     @Value("ekAdi")
     private String ekAdi;
+
+    @Value("from")
+    private String from;
 }

@@ -15,6 +15,7 @@ import com.marul.satis.dto.SatisInsertDto;
 import com.marul.satis.dto.SatisUrunDto;
 import com.marul.satis.dto.SonSatisOzetiDto;
 import com.marul.urun.UrunService;
+import com.marul.util.MailUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -156,6 +157,7 @@ public class SatisService {
         // Prepare report parameters
         Map<String, Object> reportParams = new HashMap<>();
         reportParams.put("musteriAdi", customer.getMusteriAdi());
+        reportParams.put("borc", customer.getBorc());
 
         // Generate report
         return raporServiceIntegration.generateSimpleReport(new RaporOlusturmaDto(
@@ -171,7 +173,10 @@ public class SatisService {
         UUID grupId = satisInsertDto.getGrupId();
         MusteriDto musteriDto = musteriServiceIntegration.findById(musteriId);
         byte[] satisFaturasi = generateSalesReport(musteriId, grupId);
-        String body = String.format("Sayın %s,%nSatış raporunuz ekte sunulmuştur.", musteriDto.getMusteriAdi());
+        Map<String, String> parametreMap = new HashMap<>();
+        parametreMap.put("musteriAdi", musteriDto.getMusteriAdi());
+        parametreMap.put("adSoyad", "Marul uygulaması");
+        String body = MailUtils.getMailBodyWithParameters("fatura-mail-sablonu.html", parametreMap);
         MailGondermeDto mailGondermeDto = new MailGondermeDto(musteriDto.getEmail(), body, "Marul satış raporu", satisFaturasi);
         mailGondermeDto.setSubject("Marul satış raporu");
         mailKafkaTemplate.send("marul-mail", mailGondermeDto);
