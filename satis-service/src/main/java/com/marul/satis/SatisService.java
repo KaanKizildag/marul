@@ -65,13 +65,14 @@ public class SatisService {
         List<Satis> satisList = new ArrayList<>();
         for (SatisUrunDto satisDto : satisInsertDto.getSatisDtoList()) {
             Long urunId = satisDto.getUrunId();
-            urunKontrolu(urunId);
+            UrunDto urunDto = urunService.findById(urunId);
 
             Satis satis = new Satis();
             satis.setUrunId(urunId);
             satis.setMusteriId(musteriId);
             satis.setSatilanAdet(satisDto.getSatilanAdet());
             satis.setSatisZamani(LocalDateTime.now());
+            satis.setSatisFiyati(urunDto.getFiyat());
             satisList.add(satisRepository.save(satis));
         }
 
@@ -128,11 +129,6 @@ public class SatisService {
         }
     }
 
-    private void urunKontrolu(Long urunId) {
-        if (!urunService.existsById(urunId)) {
-            throw new NotFoundException("%s id ile ürün bulunamadı", urunId.toString());
-        }
-    }
 
     public byte[] generateSalesReport(Long customerId) {
         // Get customer data
@@ -148,6 +144,7 @@ public class SatisService {
                             .urunAdi(product.getUrunAdi())
                             .miktar(sales.getSatilanAdet())
                             .birimFiyati(totalAmount)
+                            .birim(product.getBirim().toString())
                             .build();
                 })
                 .collect(Collectors.toList());

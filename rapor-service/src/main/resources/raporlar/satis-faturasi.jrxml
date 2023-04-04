@@ -13,6 +13,7 @@
 	<field name="urunAdi" class="java.lang.String"/>
 	<field name="miktar" class="java.lang.Long"/>
 	<field name="birimFiyati" class="java.math.BigDecimal"/>
+	<field name="birim" class="java.lang.String"/>
 	<variable name="genelToplam" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression>
 			<![CDATA[$F{birimFiyati}.multiply( java.math.BigDecimal.valueOf($F{miktar}) )]]></variableExpression>
@@ -147,7 +148,7 @@
 				<textElement>
 					<font fontName="SansSerif" size="13" pdfEncoding="Cp1254"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{miktar}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{miktar} + " " + $F{birim}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="400" y="0" width="100" height="30" uuid="ead9c033-da7f-43e2-9ccd-c88fa0819b38">

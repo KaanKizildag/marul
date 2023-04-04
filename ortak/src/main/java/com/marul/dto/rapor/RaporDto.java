@@ -23,6 +23,7 @@ public class RaporDto implements Serializable {
     private String urunAdi;
     private Long miktar;
     private BigDecimal birimFiyati;
+    private String birim;
 
     private Date hareketZamani;
     private String aciklama;

@@ -45,7 +45,7 @@ public class Urun {
     @Column(name = "barkod")
     private String barkod;
 
-    @Column(name = "birim")
+    @Column(name = "birim", updatable = false)
     @Enumerated(EnumType.ORDINAL)
     private BirimEnum birim;
 }
