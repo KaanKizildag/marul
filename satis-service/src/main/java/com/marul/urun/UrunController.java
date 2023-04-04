@@ -41,7 +41,7 @@ public class UrunController {
         return new SuccessDataResult<>(urunDto, "ürün başarıyla kaydedildi.");
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public Result update(@Valid @RequestBody UrunGuncellemeDto urunGuncellemeDto) {
         UrunDto urunDto = urunService.guncelle(urunGuncellemeDto);
         return new SuccessDataResult<>(urunDto, "ürün başarıyla güncellendi.");

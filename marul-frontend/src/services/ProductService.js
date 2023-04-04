@@ -11,7 +11,7 @@ export class ProductService {
     }
 
     updateProduct(product) {
-        return httpRequest.post("/satis-service/v1/urun/update", product)
+        return httpRequest.put("/satis-service/v1/urun/update", product)
     }
 
     haftalikSatislariGetir() {
