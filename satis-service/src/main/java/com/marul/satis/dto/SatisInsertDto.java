@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,4 +18,5 @@ public class SatisInsertDto {
     private Long musteriId;
     @NotEmpty
     private List<@Valid SatisUrunDto> satisDtoList;
+    private UUID grupId;
 }

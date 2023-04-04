@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/satis")
@@ -57,15 +58,15 @@ public class SatisController {
         return new SuccessDataResult<>(kategoriSatisAnalizDtoList, message);
     }
 
-    @GetMapping("/satis-faturasi")
-    public Result satisFaturasiGetir(@RequestParam("musteriId") Long musteriId) {
-        byte[] satisRaporu = satisService.generateSalesReport(musteriId);
-        return new SuccessDataResult<>(satisRaporu, "satis raporu oluşturuldu");
-    }
+//    @GetMapping("/satis-faturasi")
+//    public Result satisFaturasiGetir(@RequestParam("musteriId") Long musteriId) {
+//        byte[] satisRaporu = satisService.generateSalesReport(musteriId);
+//        return new SuccessDataResult<>(satisRaporu, "satis raporu oluşturuldu");
+//    }
 
     @GetMapping(value = "/satis-faturasi-dev", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> satisFaturasiGetirDev(@RequestParam("musteriId") Long musteriId) {
-        byte[] satisRaporu = satisService.generateSalesReport(musteriId);
+    public ResponseEntity<byte[]> satisFaturasiGetirDev(@RequestParam("musteriId") Long musteriId, @RequestParam("grupId") UUID grupId) {
+        byte[] satisRaporu = satisService.generateSalesReport(musteriId, grupId);
 
         HttpHeaders headers = new HttpHeaders();
 //        headers.setContentType(MediaType.APPLICATION_PDF);

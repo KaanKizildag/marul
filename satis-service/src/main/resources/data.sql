@@ -41,32 +41,32 @@ INSERT INTO public.urun (id, barkod, birim, fiyat, kdv, urun_adi, kategori_id)
 VALUES (8, null, 0, 70.00, 18, 'KAHVE', 4);
 
 
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 2, 2, '2022-10-15 21:09:58.603556', 6, 19.00);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 1, 2, '2022-10-15 21:10:01.141705', 2, 17.5);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 1, 2, '2022-10-15 21:15:50.908758', 3, 17.5);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 2, 1, '2022-10-15 21:15:55.195020', 4, 17.5);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 1, 1, '2022-10-15 21:09:40.923920', 7, 17.5);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 2, 5, '2022-10-15 21:09:43.456125', 8, 17.5);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 2, 2, '2022-10-15 21:09:46.962158', 5, 17.5);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 1, 1, '2022-10-30 00:01:02.831704', 1, 17.5);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 1, 1, '2022-10-30 00:01:02.873119', 2, 17.5);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 1, 1, '2022-10-30 00:01:02.889700', 3, 17.5);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 1, 1, '2022-10-30 00:01:02.905714', 4, 17.5);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 2, 1, '2022-10-30 00:01:17.891070', 1, 17.5);
-INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati)
-VALUES (nextval('satis_id_seq'), 2, 1, '2022-10-30 00:01:17.913258', 5, 17.5);
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 2, 2, current_timestamp, 6, 19.00, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 1, 2, current_timestamp, 2, 17.5, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 1, 2, current_timestamp, 3, 17.5, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 2, 1, current_timestamp, 4, 17.5, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 1, 1, current_timestamp, 7, 17.5, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 2, 5, current_timestamp, 8, 17.5, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 2, 2, current_timestamp, 5, 17.5, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 1, 1, current_timestamp, 1, 17.5, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 1, 1, current_timestamp, 2, 17.5, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 1, 1, current_timestamp, 3, 17.5, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 1, 1, current_timestamp, 4, 17.5, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 2, 1, current_timestamp, 1, 17.5, gen_random_uuid());
+INSERT INTO satis (id, musteri_id, satilan_adet, satis_zamani, urun_id, satis_fiyati, grup_id)
+VALUES (nextval('satis_id_seq'), 2, 1, current_timestamp, 5, 17.5, gen_random_uuid());
 
 
 INSERT INTO kasa_hareketi (id, aciklama, tutar)

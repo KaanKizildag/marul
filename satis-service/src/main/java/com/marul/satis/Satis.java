@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "satis")
@@ -32,4 +33,7 @@ public class Satis {
 
     @Column(name = "satis_fiyati", nullable = false)
     private BigDecimal satisFiyati;
+
+    @Column(name = "grup_id", nullable = false)
+    private UUID grup_id;
 }

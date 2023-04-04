@@ -1,12 +1,14 @@
 package com.marul.dto.mail;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MailGondermeDto {
     private String emailTo;
     private String body;

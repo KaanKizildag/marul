@@ -17,6 +17,7 @@ import com.marul.satis.dto.SonSatisOzetiDto;
 import com.marul.urun.UrunService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -25,14 +26,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SatisService {
 
     private final SatisRepository satisRepository;
@@ -50,10 +49,12 @@ public class SatisService {
                 .collect(Collectors.toList());
     }
 
-    public List<SatisDto> findByMusteriId(Long musteriId) {
-        List<Satis> satisList = satisRepository.findByMusteriId(musteriId);
+    public List<SatisDto> findByMusteriId(Long musteriId, UUID grupId) {
+        List<Satis> satisList = satisRepository.findByMusteriIdAndGrupId(musteriId, grupId);
         if (satisList.isEmpty()) {
-            throw new NotFoundException("%s musteriId ile hiç satış bulunamadı", musteriId.toString());
+            String message = String.format("%d musteriId, grupId %s ile hiç satış bulunamadı", musteriId, grupId);
+            log.error(message);
+            throw new NotFoundException(message);
         }
         return satisMapper.getDtoList(satisList);
     }
@@ -63,6 +64,8 @@ public class SatisService {
         musteriKontrolu(musteriId);
 
         List<Satis> satisList = new ArrayList<>();
+        UUID grupId = UUID.randomUUID();
+        satisInsertDto.setGrupId(grupId);
         for (SatisUrunDto satisDto : satisInsertDto.getSatisDtoList()) {
             Long urunId = satisDto.getUrunId();
             UrunDto urunDto = urunService.findById(urunId);
@@ -73,12 +76,13 @@ public class SatisService {
             satis.setSatilanAdet(satisDto.getSatilanAdet());
             satis.setSatisZamani(LocalDateTime.now());
             satis.setSatisFiyati(urunDto.getFiyat());
+            satis.setGrup_id(grupId);
             satisList.add(satisRepository.save(satis));
         }
 
         stokGuncelle(satisInsertDto);
         kafkayaBildir(satisInsertDto);
-
+        faturaOlusturVeMailAt(satisInsertDto);
         return satisMapper.getResponseDtoList(satisList);
     }
 
@@ -130,12 +134,12 @@ public class SatisService {
     }
 
 
-    public byte[] generateSalesReport(Long customerId) {
+    public byte[] generateSalesReport(Long customerId, UUID grupId) {
         // Get customer data
         MusteriDto customer = musteriServiceIntegration.findById(customerId);
 
         // Map sales data to report data
-        List<RaporDto> reportData = findByMusteriId(customerId)
+        List<RaporDto> reportData = findByMusteriId(customerId, grupId)
                 .stream()
                 .map(sales -> {
                     UrunDto product = urunService.findById(sales.getUrunId());
@@ -164,15 +168,11 @@ public class SatisService {
     )
     public void faturaOlusturVeMailAt(SatisInsertDto satisInsertDto) {
         Long musteriId = satisInsertDto.getMusteriId();
+        UUID grupId = satisInsertDto.getGrupId();
         MusteriDto musteriDto = musteriServiceIntegration.findById(musteriId);
-        byte[] satisFaturasi = generateSalesReport(musteriId);
+        byte[] satisFaturasi = generateSalesReport(musteriId, grupId);
         String body = String.format("Sayın %s,%nSatış raporunuz ekte sunulmuştur.", musteriDto.getMusteriAdi());
-        MailGondermeDto mailGondermeDto = MailGondermeDto.builder()
-                .emailTo(musteriDto.getEmail())
-                .body(body)
-                .subject("Marul satış raporu")
-                .inputStream(satisFaturasi)
-                .build();
+        MailGondermeDto mailGondermeDto = new MailGondermeDto(musteriDto.getEmail(), body, "Marul satış raporu", satisFaturasi);
         mailGondermeDto.setSubject("Marul satış raporu");
         mailKafkaTemplate.send("marul-mail", mailGondermeDto);
     }
