@@ -70,8 +70,8 @@ services:
     build:
       context: ../musteri-service
       dockerfile: ../musteri-service/Dockerfile
-    volumes:
-      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
+    #    volumes:
+    #      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
     ports:
       - "${MUSTERI_SERVICE_PORT}:${MUSTERI_SERVICE_PORT}"
     environment:
@@ -107,9 +107,10 @@ services:
       - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
       - MAIL_SERVICE_PORT=${MAIL_SERVICE_PORT}
       - MAIL_SERVICE_HOST=${MAIL_SERVICE_HOST}
+      - BOOTSTRAP_SERVER=${BOOTSTRAP_SERVER}
     networks:
-      - postgres
       - spring
+      - kafka
 
   api-gateway:
     container_name: api-gateway
@@ -181,8 +182,8 @@ services:
     build:
       context: ../stok-service
       dockerfile: ../stok-service/Dockerfile
-    volumes:
-      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
+    #    volumes:
+    #      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
     ports:
       - "${STOK_SERVICE_PORT}:${STOK_SERVICE_PORT}"
     environment:
@@ -208,8 +209,8 @@ services:
     build:
       context: ../satis-service
       dockerfile: ../satis-service/Dockerfile
-    volumes:
-      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
+    #    volumes:
+    #      - ./wait-for-it.sh/:/usr/share/wait-for-it.sh
     ports:
       - "${SATIS_SERVICE_PORT}:${SATIS_SERVICE_PORT}"
     environment:
@@ -223,16 +224,50 @@ services:
       - APPNAME_SERVICE_DISCOVERY=${APPNAME_SERVICE_DISCOVERY}
       - SATIS_SERVICE_HOST=${SATIS_SERVICE_HOST}
       - SERVICE_DISCOVERY_HOST=${SERVICE_DISCOVERY_HOST}
+      - BOOTSTRAP_SERVER=${BOOTSTRAP_SERVER}
     depends_on:
       - postgres-satis
     networks:
       - postgres
       - spring
+      - kafka
+  zookeeper:
+    container_name: zookeeper
+    image: docker.io/bitnami/zookeeper:3.8
+    ports:
+      - "2181:2181"
+    volumes:
+      - "zookeeper_data:/bitnami"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - kafka
+  kafka:
+    container_name: kafka
+    image: docker.io/bitnami/kafka:3.3
+    ports:
+      - "9092:9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ADVERTISED_LISTENERS=INSIDE://kafka:9093,OUTSIDE://${BOOTSTRAP_SERVER}
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      - KAFKA_LISTENERS=INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INSIDE
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    depends_on:
+      - zookeeper
+    networks:
+      - kafka
 
 networks:
   postgres:
     driver: bridge
   spring:
+    driver: bridge
+  kafka:
     driver: bridge
 
 volumes:
@@ -240,3 +275,7 @@ volumes:
   postgres_satis:
   postgres_stok:
   pgadmin:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
