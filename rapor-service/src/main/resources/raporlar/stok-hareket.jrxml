@@ -196,7 +196,7 @@
                     <property name="com.jaspersoft.studio.unit.y" value="px"/>
                 </reportElement>
                 <imageExpression>
-                    <![CDATA["https://raw.githubusercontent.com/KaanKizildag/marul/master/logo.png"]]></imageExpression>
+                    <![CDATA["https://raw.githubusercontent.com/KaanKizildag/marul/master/resources/logo.png"]]></imageExpression>
             </image>
             <textField pattern="HH:mm:ss">
                 <reportElement x="659" y="27" width="100" height="25" uuid="02f5ae00-f47f-4c97-9c95-e44c6644871c">

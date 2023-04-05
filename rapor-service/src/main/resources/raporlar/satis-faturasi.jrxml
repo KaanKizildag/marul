@@ -233,7 +233,7 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<imageExpression>
-					<![CDATA["https://raw.githubusercontent.com/KaanKizildag/marul/master/logo.png"]]></imageExpression>
+					<![CDATA["https://raw.githubusercontent.com/KaanKizildag/marul/master/resources/logo.png"]]></imageExpression>
 			</image>
 			<componentElement>
 				<reportElement positionType="FixRelativeToBottom" x="450" y="75" width="50" height="50"
