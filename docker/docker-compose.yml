@@ -108,6 +108,7 @@ services:
       - MAIL_SERVICE_PORT=${MAIL_SERVICE_PORT}
       - MAIL_SERVICE_HOST=${MAIL_SERVICE_HOST}
       - BOOTSTRAP_SERVER=${BOOTSTRAP_SERVER}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
     networks:
       - spring
       - kafka
