@@ -103,7 +103,7 @@ class SatisControllerTest {
                         .content(new ObjectMapper().writeValueAsString(satisResponseDto))
                 )
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotFoundException))
-                .andExpect(status().is(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
                 .andDo(print());
     }
 

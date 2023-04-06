@@ -6,7 +6,7 @@
 package com.marul.musteri;
 
 import com.marul.dto.musteri.MusteriDto;
-import com.marul.exception.EmailDahaOnceAlinmisException;
+import com.marul.exception.AlreadyExistsException;
 import com.marul.exception.NotFoundException;
 import com.marul.tur.TurDto;
 import com.marul.tur.TurService;
@@ -69,7 +69,7 @@ public class MusteriService {
     }
 
     public MusteriDto update(MusteriDto musteriDto) {
-        validateMusteriDto(musteriDto);
+        turVarMi(musteriDto.getTurId());
         findById(musteriDto.getId());
         Musteri musteri = musteriMapper.getSource(musteriDto);
         musteriRepository.save(musteri);
@@ -84,7 +84,7 @@ public class MusteriService {
 
     private void emailAlinmisMiKontrol(String email) {
         if (musteriRepository.existsByEmail(email)) {
-            throw new EmailDahaOnceAlinmisException("%s bu email daha önce alınmış.", email);
+            throw new AlreadyExistsException("%s bu email daha önce alınmış.", email);
         }
     }
 }

@@ -52,6 +52,18 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return new ErrorResult(exception.getMessage());
     }
 
+    @ExceptionHandler(value = {NotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Result genelServisHatasi(NotFoundException exception) {
+        return new ErrorResult(exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {AlreadyExistsException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result genelServisHatasi(AlreadyExistsException exception) {
+        return new ErrorResult(exception.getMessage());
+    }
+
     @ExceptionHandler(value = {ServisDonusHatasiException.class})
     public Result genelServisHatasi(ServisDonusHatasiException exception) {
         log.error("Servis adı: {}", appname);

@@ -6,6 +6,7 @@
 package com.marul.tur;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import lombok.Setter;
 @Setter
 @Table(name = "tur")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Tur {
 
     @Id
@@ -27,9 +29,8 @@ public class Tur {
 
     @Column(name = "tur_adi")
     private String turAdi;
-//
-//    public Tur(Long id) {
-//        this.id = id;
-//    }
 
+    public Tur(String turAdi) {
+        this.turAdi = turAdi;
+    }
 }

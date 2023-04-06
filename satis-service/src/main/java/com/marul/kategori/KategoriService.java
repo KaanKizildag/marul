@@ -1,7 +1,7 @@
 package com.marul.kategori;
 
+import com.marul.exception.AlreadyExistsException;
 import com.marul.exception.NotFoundException;
-import com.marul.exception.ZatenKayitliException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class KategoriService {
         Boolean kategoriVarMi = kategoriRepository.existsByKategoriAdi(kategoriAdi);
         if (Boolean.TRUE.equals(kategoriVarMi)) {
             log.warn("{} isimli kategori zaten kayıtlı", kategoriAdi);
-            throw new ZatenKayitliException("%s kategori zaten kayıtlı", kategoriAdi);
+            throw new AlreadyExistsException("%s kategori zaten kayıtlı", kategoriAdi);
         }
         kategori = kategoriRepository.save(kategori);
         return kategoriMapper.getDto(kategori);

@@ -7,7 +7,9 @@ package com.marul.musteri;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -20,6 +22,8 @@ import java.io.Serializable;
 @Table(name = "musteri")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Musteri implements Serializable {
 
     @Id

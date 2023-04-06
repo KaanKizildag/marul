@@ -7,8 +7,8 @@ package com.marul.urun;
 import com.marul.dto.stok.StokKaydetDto;
 import com.marul.dto.urun.UrunDto;
 import com.marul.dto.urun.UrunGuncellemeDto;
+import com.marul.exception.AlreadyExistsException;
 import com.marul.exception.NotFoundException;
-import com.marul.exception.ZatenKayitliException;
 import com.marul.integration.StokServiceIntegration;
 import com.marul.kategori.Kategori;
 import com.marul.kategori.KategoriService;
@@ -32,7 +32,7 @@ public class UrunService {
     public UrunDto save(UrunDto urunDto) {
         String urunAdi = urunDto.getUrunAdi();
         if (existsByUrunAdi(urunAdi)) {
-            throw new ZatenKayitliException("%s adıyla bir ürün zaten sisteme kayıtlı", urunAdi);
+            throw new AlreadyExistsException("%s adıyla bir ürün zaten sisteme kayıtlı", urunAdi);
         }
         Kategori kategori = kategoriService.findById_JPA(urunDto.getKategoriId());
         Urun urun = urunMapper.getEntity(urunDto);

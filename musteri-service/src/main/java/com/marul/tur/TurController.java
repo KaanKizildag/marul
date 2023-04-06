@@ -31,8 +31,8 @@ public class TurController {
 
     @PostMapping("/save")
     public ResponseEntity<Result> save(@RequestBody @Valid TurDto turDto) {
-        turService.save(turDto);
-        Result result = new Result(true, "Tur basariyla kaydedildi");
+        turDto = turService.save(turDto);
+        Result result = new SuccessDataResult<>(turDto, "Tur basariyla kaydedildi");
         return ResponseEntity.ok(result);
     }
 }

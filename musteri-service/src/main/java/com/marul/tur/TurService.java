@@ -1,7 +1,7 @@
 package com.marul.tur;
 
+import com.marul.exception.AlreadyExistsException;
 import com.marul.exception.NotFoundException;
-import com.marul.exception.ZatenKayitliException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,13 +31,15 @@ public class TurService {
         return turRepository.existsById(id);
     }
 
-    public void save(TurDto turDto) {
+    public TurDto save(TurDto turDto) {
         String turAdi = turDto.getTurAdi();
         if (turRepository.existsByTurAdi(turAdi)) {
-            log.error("{} ile kaydedilmiş bir tur sisteme kayıtlıdır.", turAdi);
-            throw new ZatenKayitliException("%s ile kaydedilmiş bir tur sisteme kayıtlıdır.", turAdi);
+            String errorMessage = String.format("%s ile kaydedilmiş bir tur sisteme kayıtlıdır.", turAdi);
+            log.error(errorMessage);
+            throw new AlreadyExistsException(errorMessage);
         }
         Tur tur = turMapper.getSource(turDto);
-        turRepository.save(tur);
+        tur = turRepository.save(tur);
+        return turMapper.getTarget(tur);
     }
 }

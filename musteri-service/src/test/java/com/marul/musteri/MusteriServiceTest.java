@@ -1,7 +1,7 @@
 package com.marul.musteri;
 
 import com.marul.dto.musteri.MusteriDto;
-import com.marul.exception.EmailDahaOnceAlinmisException;
+import com.marul.exception.AlreadyExistsException;
 import com.marul.tur.TurDto;
 import com.marul.tur.TurService;
 import org.junit.jupiter.api.Assertions;
@@ -148,7 +148,7 @@ class MusteriServiceTest {
         when(musteriRepository.existsByEmail(email))
                 .thenReturn(Boolean.TRUE);
 
-        Assertions.assertThrows(EmailDahaOnceAlinmisException.class, () -> musteriService.save(musteriDto));
+        Assertions.assertThrows(AlreadyExistsException.class, () -> musteriService.save(musteriDto));
 
         verify(musteriRepository, times(0)).save(musteri);
         verify(musteriMapper, times(0)).getSource(musteriDto);

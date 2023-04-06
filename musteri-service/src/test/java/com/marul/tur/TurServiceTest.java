@@ -1,7 +1,7 @@
 package com.marul.tur;
 
+import com.marul.exception.AlreadyExistsException;
 import com.marul.exception.NotFoundException;
-import com.marul.exception.ZatenKayitliException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -119,7 +119,7 @@ class TurServiceTest {
         when(turRepository.existsByTurAdi(turAdi)).thenReturn(true);
 
         // When
-        Assertions.assertThrows(ZatenKayitliException.class, () -> turService.save(turDto));
+        Assertions.assertThrows(AlreadyExistsException.class, () -> turService.save(turDto));
 
         // Then an exception is thrown
     }
