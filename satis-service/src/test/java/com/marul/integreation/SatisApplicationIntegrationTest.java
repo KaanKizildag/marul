@@ -19,6 +19,7 @@ import com.marul.satis.dto.SatisUrunDto;
 import com.marul.urun.Urun;
 import com.marul.urun.UrunRepository;
 import lombok.SneakyThrows;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -38,8 +39,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.is;
@@ -115,6 +118,21 @@ class SatisApplicationIntegrationTest {
         kategori.setKategoriAdi("Yiyecek");
         kategoriRepository.save(kategori);
         urun.setKategori(kategori);
+        return urun;
+    }
+
+    private Urun getUrun() {
+        Urun urun = new Urun();
+        urun.setFiyat(BigDecimal.ONE);
+        urun.setUrunAdi("ürün adı");
+        Kategori kategori = new Kategori();
+        kategori.setKategoriAdi("Kategori");
+        kategori = kategoriRepository.save(kategori);
+        urun.setKategori(kategori);
+        urun.setKdv(18);
+        urun.setBirim(BirimEnum.KG);
+
+        urun = urunRepository.save(urun);
         return urun;
     }
 
@@ -322,20 +340,34 @@ class SatisApplicationIntegrationTest {
             Assertions.assertTrue(all.isEmpty());
         }
 
-        private Urun getUrun() {
-            Urun urun = new Urun();
-            urun.setFiyat(BigDecimal.ZERO);
-            urun.setUrunAdi("ürün adı");
-            Kategori kategori = new Kategori();
-            kategori.setKategoriAdi("Kategori");
-            kategori = kategoriRepository.save(kategori);
-            urun.setKategori(kategori);
-            urun.setKdv(18);
-            urun.setBirim(BirimEnum.KG);
 
-            urun = urunRepository.save(urun);
-            return urun;
+    }
+
+    @Nested
+    class SatisAnaliz {
+
+        @Test
+        void haftalikSatislariGetir_ReturnsSalesMap_WhenRequestIsValid() throws Exception {
+            Urun urun = getUrun();
+            long musteriId = 1L;
+
+            Satis satis = new Satis();
+            satis.setSatisFiyati(urun.getFiyat());
+            satis.setGrup_id(UUID.randomUUID());
+            satis.setSatisZamani(LocalDateTime.now());
+            satis.setSatilanAdet(10L);
+            satis.setMusteriId(musteriId);
+            satis.setUrunId(urun.getId());
+
+            satisRepository.save(satis);
+
+            mockMvc.perform(get("/v1/satis/onceki-haftaya-gore-satis-dustu-mu")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.success", is(Boolean.TRUE)))
+                    .andExpect(jsonPath("$.data", Matchers.aMapWithSize(1)))
+                    .andDo(print());
+
         }
-
     }
 }
