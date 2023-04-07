@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -60,6 +61,7 @@ public class SatisService {
         return satisMapper.getDtoList(satisList);
     }
 
+    @Transactional
     public List<SatisResponseDto> save(@Valid SatisInsertDto satisInsertDto) {
         Long musteriId = satisInsertDto.getMusteriId();
         musteriKontrolu(musteriId);
