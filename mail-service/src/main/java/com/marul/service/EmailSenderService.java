@@ -1,7 +1,7 @@
-package com.marul.emailsender;
+package com.marul.service;
 
+import com.marul.config.EmailConfigData;
 import com.marul.dto.mail.MailGondermeDto;
-import com.marul.emailsender.config.EmailConfigData;
 import com.marul.exception.EmailGonderirkenException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

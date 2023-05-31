@@ -1,4 +1,4 @@
-package com.marul.emailsender.config;
+package com.marul.config;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
