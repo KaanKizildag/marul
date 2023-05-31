@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/api-gateway")
 @Slf4j
 public class FallbackController {
+
     @GetMapping("/common-fallback")
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResult commonFallback(Exception exception) {

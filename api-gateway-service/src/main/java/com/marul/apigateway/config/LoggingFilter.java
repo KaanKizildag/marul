@@ -25,8 +25,9 @@ public class LoggingFilter implements GlobalFilter {
         String originalUri = (uris.isEmpty()) ? "Unknown" : uris.iterator().next().toString();
         Route route = exchange.getAttribute(GATEWAY_ROUTE_ATTR);
         URI routeUri = exchange.getAttribute(GATEWAY_REQUEST_URL_ATTR);
-        log.info("Gelen istek: " + originalUri + " yönlendirildi: " + route.getId()
-                + ", uri:" + routeUri);
+        log.info("Gelen istek: " + originalUri);
+        log.info("Yönlendirildi: " + route.getId());
+        log.info("Uri:" + routeUri);
         return chain.filter(exchange);
     }
 }
