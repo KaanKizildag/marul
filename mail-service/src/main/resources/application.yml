@@ -1,0 +1,50 @@
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://${SERVICE_DISCOVERY_HOST:localhost}:${SERVICE_DISCOVERY_PORT:8761}/eureka
+  instance:
+    hostname: ${MAIL_SERVICE_HOST}
+    prefer-ip-address: true
+mail:
+  properties:
+    ad_soyad: ${AD_SOYAD:Hüseyin Kaan Kızıldağ}
+    basarili_mesaj: Email başarıyla gönderildi yeni mesaj
+    basarisiz_mesaj: Email gönderirken hata
+    ek_adi: rapor.pdf
+    from: com.tr.marul@gmail.com
+server:
+  port: ${MAIL_SERVER_PORT:8083}
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  application:
+    name: ${APPNAME_MAIL_SERVICE:mail-service}
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVER:localhost:9092}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:organik.marul.tk@gmail.com}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: "refresh"
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    refresh:
+      enabled: true

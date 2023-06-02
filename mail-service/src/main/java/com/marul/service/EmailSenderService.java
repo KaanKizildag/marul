@@ -1,11 +1,13 @@
 package com.marul.service;
 
 import com.marul.config.EmailConfigData;
+import com.marul.dto.SendMailWithoutAttachmentDto;
 import com.marul.dto.mail.MailGondermeDto;
 import com.marul.exception.EmailGonderirkenException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -45,11 +47,25 @@ public class EmailSenderService {
         log.info(emailConfigData.getBasariliMesaj());
     }
 
+    @SneakyThrows
+    public void sendMailWithoutAttachment(SendMailWithoutAttachmentDto mailGondermeDto) {
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+        mimeMessageHelper.setFrom(emailConfigData.getFrom());
+        mimeMessageHelper.setTo(mailGondermeDto.getEmailTo());
+        mimeMessageHelper.setText(mailGondermeDto.getBody());
+        mimeMessageHelper.setSubject(mailGondermeDto.getSubject());
+
+        javaMailSender.send(mimeMessage);
+        log.info("Mail with attachment sent successfully..");
+    }
+
     @KafkaListener(
             topics = "marul-mail",
             groupId = "group-id"
     )
-    public void sendMailWithoutAttachment(@Payload MailGondermeDto mailGondermeDto) {
+    public void sendMailWithAttachment(@Payload MailGondermeDto mailGondermeDto) {
         sendMailWithAttachment(mailGondermeDto.getEmailTo(),
                 mailGondermeDto.getSubject(),
                 mailGondermeDto.getBody(),
