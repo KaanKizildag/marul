@@ -26,7 +26,7 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME}
+    username: ${MAIL_USERNAME:organik.marul.tk@gmail.com}
     password: ${MAIL_PASSWORD}
     properties:
       mail:
@@ -40,9 +40,11 @@ management:
     enabled-by-default: false
     web:
       exposure:
-        include: "health"
+        include: "*"
   endpoint:
     info:
       enabled: true
     health:
+      enabled: true
+    refresh:
       enabled: true
