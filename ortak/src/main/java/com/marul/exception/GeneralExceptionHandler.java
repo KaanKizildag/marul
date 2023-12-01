@@ -65,6 +65,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = {ServisDonusHatasiException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result genelServisHatasi(ServisDonusHatasiException exception) {
         log.error("Servis adı: {}", appname);
         return new ErrorResult(exception.getMessage());

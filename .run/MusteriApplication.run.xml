@@ -6,10 +6,11 @@
             <env name="APPNAME_MUSTERI_SERVICE" value="musteri-service"/>
             <env name="LOGSTASH_HOST" value="localhost"/>
             <env name="LOGSTASH_PORT" value="5000"/>
+            <env name="MUSTERI_SERVICE_HOST" value="localhost"/>
             <env name="POSTGRES_MUSTERI_HOST" value="localhost"/>
             <env name="POSTGRES_MUSTERI_PORT" value="5432"/>
             <env name="SERVICE_DISCOVERY_HOST" value="localhost"/>
-            <env name="MUSTERI_SERVICE_HOST" value="localhost"/>
+            <env name="MUSTERI_SERVICE_PORT" value="8089"/>
         </envs>
         <module name="musteri-service"/>
         <option name="SPRING_BOOT_MAIN_CLASS" value="com.marul.MusteriApplication"/>

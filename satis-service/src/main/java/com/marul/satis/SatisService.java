@@ -24,11 +24,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.marul.kafka.MarulTopicNames.MARUL_MAIL;
+import static com.marul.kafka.MarulTopicNames.MARUL_SATIS;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +64,7 @@ public class SatisService {
         return satisMapper.getDtoList(satisList);
     }
 
+    @Transactional
     public List<SatisResponseDto> save(@Valid SatisInsertDto satisInsertDto) {
         Long musteriId = satisInsertDto.getMusteriId();
         musteriKontrolu(musteriId);
@@ -88,7 +93,7 @@ public class SatisService {
     }
 
     private void kafkayaBildir(SatisInsertDto satisInsertDto) {
-        kafkaTemplate.send("marul-satis", satisInsertDto);
+        kafkaTemplate.send(MARUL_SATIS, satisInsertDto);
     }
 
 
@@ -136,10 +141,8 @@ public class SatisService {
 
 
     public byte[] generateSalesReport(Long customerId, UUID grupId) {
-        // Get customer data
         MusteriDto customer = musteriServiceIntegration.findById(customerId);
 
-        // Map sales data to report data
         List<RaporDto> reportData = findByMusteriId(customerId, grupId)
                 .stream()
                 .map(sales -> {
@@ -154,20 +157,15 @@ public class SatisService {
                 })
                 .collect(Collectors.toList());
 
-        // Prepare report parameters
         Map<String, Object> reportParams = new HashMap<>();
         reportParams.put("musteriAdi", customer.getMusteriAdi());
         reportParams.put("borc", customer.getBorc());
 
-        // Generate report
-        return raporServiceIntegration.generateSimpleReport(new RaporOlusturmaDto(
-                "satis-faturasi.jrxml", reportData, reportParams));
+        RaporOlusturmaDto raporOlusturmaDto = new RaporOlusturmaDto("satis-faturasi.jrxml", reportData, reportParams);
+        return raporServiceIntegration.generateSimpleReport(raporOlusturmaDto);
     }
 
-    @KafkaListener(
-            topics = "marul-satis",
-            groupId = "group-id2"
-    )
+    @KafkaListener(topics = MARUL_MAIL, groupId = "group-id2")
     public void faturaOlusturVeMailAt(SatisInsertDto satisInsertDto) {
         Long musteriId = satisInsertDto.getMusteriId();
         UUID grupId = satisInsertDto.getGrupId();
@@ -179,6 +177,6 @@ public class SatisService {
         String body = MailUtils.getMailBodyWithParameters("fatura-mail-sablonu.html", parametreMap);
         MailGondermeDto mailGondermeDto = new MailGondermeDto(musteriDto.getEmail(), body, "Marul satış raporu", satisFaturasi);
         mailGondermeDto.setSubject("Marul satış raporu");
-        mailKafkaTemplate.send("marul-mail", mailGondermeDto);
+        mailKafkaTemplate.send(MARUL_MAIL, mailGondermeDto);
     }
 }

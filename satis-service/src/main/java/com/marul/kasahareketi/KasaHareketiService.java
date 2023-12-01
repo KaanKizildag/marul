@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+import static com.marul.kafka.MarulTopicNames.MARUL_SATIS;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -27,10 +29,7 @@ public class KasaHareketiService {
         return kasaHareketiMapper.getDto(kasaHareketi);
     }
 
-    @KafkaListener(
-            topics = "marul-satis",
-            groupId = "group-id"
-    )
+    @KafkaListener(topics = MARUL_SATIS, groupId = "group-id")
     private void kasaHareketiOlustur(SatisInsertDto satisInsertDto) {
         satisInsertDto.getSatisDtoList()
                 .forEach(satisDto -> {

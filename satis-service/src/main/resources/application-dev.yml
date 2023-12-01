@@ -22,7 +22,7 @@ spring:
     init:
       mode: always
   kafka:
-    bootstrap-servers: ${BOOTSTRAP_SERVER}
+    bootstrap-servers: ${BOOTSTRAP_SERVER:localhost:9092}
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
 eureka:

@@ -1,6 +1,7 @@
 package com.marul.emailsender;
 
-import com.marul.dto.mail.MailGondermeDto;
+import com.marul.dto.SendMailWithoutAttachmentDto;
+import com.marul.service.EmailSenderService;
 import com.marul.util.MailUtils;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Disabled;
@@ -37,14 +38,9 @@ class EmailSenderServiceTest {
         URL url = Thread.currentThread().getContextClassLoader().getResource("test.pdf");
         File file = new File(url.getPath());
 
-        InputStream inputStream = new FileInputStream(file);
-
-        emailSenderService.sendMailWithAttachment(
-                emailTo,
-                subject,
-                body,
-                inputStream.readAllBytes()
-        );
+        try (InputStream inputStream = new FileInputStream(file)) {
+            emailSenderService.sendMailWithAttachment(emailTo, subject, body, inputStream.readAllBytes());
+        }
     }
 
     @SneakyThrows
@@ -55,7 +51,7 @@ class EmailSenderServiceTest {
         String emailTo = "huseyinkaan.kizildag@gmail.com";
         String body = "marul projesi email test";
         String subject = "email-service test";
-        MailGondermeDto mailGondermeDto = new MailGondermeDto();
+        SendMailWithoutAttachmentDto mailGondermeDto = new SendMailWithoutAttachmentDto();
         mailGondermeDto.setEmailTo(emailTo);
         mailGondermeDto.setBody(body);
         mailGondermeDto.setSubject(subject);

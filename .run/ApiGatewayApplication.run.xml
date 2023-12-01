@@ -14,11 +14,15 @@
       <env name="LOGSTASH_PORT" value="5000"/>
       <env name="SERVICE_DISCOVERY_HOST" value="localhost"/>
     </envs>
-
-    <module name="api-gateway-service" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.marul.apigateway.ApiGatewayApplication" />
+    <module name="api-gateway-service"/>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.marul.apigateway.ApiGatewayApplication"/>
+    <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+      <option name="credential"/>
+      <option name="region"/>
+      <option name="useCurrentConnection" value="false"/>
+    </extension>
     <method v="2">
-      <option name="Make" enabled="true" />
+      <option name="Make" enabled="true"/>
     </method>
   </configuration>
 </component>

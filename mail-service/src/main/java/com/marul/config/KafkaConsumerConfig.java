@@ -1,4 +1,4 @@
-package com.marul.emailsender.config;
+package com.marul.config;
 
 import com.marul.dto.mail.MailGondermeDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

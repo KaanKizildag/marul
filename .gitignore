@@ -63,4 +63,5 @@ pnpm-debug.log*
 *.log
 /logs/*
 package-lock.json
+.run
 
